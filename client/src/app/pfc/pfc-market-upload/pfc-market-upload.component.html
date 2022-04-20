@@ -1,0 +1,68 @@
+
+  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#UploadPfc">Upload Pfc Market</button>
+  <!-- Modal -->
+  <div class="modal fade owerflow-y" id="UploadPfc" role="dialog">
+  <div class="modal-dialog modal-sm-6 mt-140">
+    <div class="modal-content">
+      <div class="mymodal-header">
+        <i class="close_popup fa pull-right" id="cancel-btn" data-dismiss="modal" >&#xf00d;</i>       
+        <h4 class="modal-title white">Upload Pfc  Market files</h4>
+      </div>
+      <div class="modal-body">     
+        <!-- Body -->
+        <form [formGroup]="uploadForm" class="from-group" (ngSubmit)="onSubmit(uploadForm.value)">
+            <div [ngClass]="{
+                    'has-danger': date.invalid && (date.dirty || date.touched),
+                    'has-success': date.valid && (date.dirty || date.touched)
+                  }">
+              <div>
+              <h5 class="cat-head">Data</h5>
+                    <div class="text-right col-md-6" style="padding-left:0;padding-right:0;">
+                      <div class="input-group date" id="datetimepicker3">
+                          <input class="form-control reference"
+                                  ngx-mydatepicker 
+                                  formControlName="date"
+                                  [(ngModel)]="currentDate" 
+                                  [options]="myOptions" 
+                                  #dp="ngx-mydatepicker"
+                                  (dateChanged)="onDateChanged($event)"
+                                  required>
+                        <span class="input-group-addon" class="input-group-addon pointer" (click)="dp.toggleCalendar()"> <i class="fa fa-calendar"></i> </span> </div>
+                  </div>
+            </div>
+          </div><br><br>
+         <h5 class="cat-head" for="data_file">Files to upload:</h5>
+            <div class="file-area myselect" style="height: 86px;" (change)="fileEvent($event.target.files)">                            
+                <input type="file" 
+                      style="height: 86px;"
+                      id="data_file"
+                      multiple="multiple" 
+                      required="required" 
+                      name="file" 
+                      id="fileToUpload"
+                      (change)="fileEvent($event.target.files)" 
+                      multiple 
+                      required
+                      accept=".xlsx"
+                />
+                    <div class="file-dummy">
+                        <span class="success">Les fichiers ont été uploadés.</span>
+                        <span class="default">Ajouter des fichiers</span>
+                    </div>
+            </div> 
+            <br>
+            <span *ngIf="fileValid && !loading">
+                <button type="submit" class="btn btn-primary pull-right" value="Upload" name="submit" [disabled]="uploadForm.invalid">Télécharger</button>  
+            </span>
+              <button *ngIf="loading" type="button" class="btn btn-primary">
+                  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>Télécharger
+              </button>  
+            <span *ngIf="!fileValid">
+              <button  type="submit" class="btn btn-danger pull-right" value="Upload" name="submit" disabled>Télécharger</button>
+            </span>
+        </form>
+        <br><br>
+      </div><!--  End body -->
+    </div>
+  </div>
+</div>

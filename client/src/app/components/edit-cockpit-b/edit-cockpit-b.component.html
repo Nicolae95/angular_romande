@@ -1,0 +1,228 @@
+<!-- <app-header></app-header> -->
+    <div style="padding: 0px 0px 0px 235px; margin-top: -20px;">
+	<!-- Content -->
+			<div class="setflexdiv ">
+			<span style="color: #00b0f0; cursor: pointer; padding-left: 30px;" routerLink="/cockpit"><i class="fa fa-chevron-circle-left"></i> <span class="txtHoverUnderline">Retour</span></span>
+				<div class="cktitlediv">
+					<span class="cktitlespan">Edit Viorel_cockpit Cockpit</span>
+					<button class="btn btn-sm btn-primary text-uppercase pull-right" >Delete cockpit</button>
+				</div>
+			<div style="display:flex; flex:1; flex-direction: row; align-items:flex-start;">
+				<div class="setdiv">
+					<ul class="ulset">
+						<li [ngClass]="{'active': nameMenu == 'general'}" ><a href="javascript:void()" (click)="nameMenu = 'general'">General settings								</a></li>
+						<li [ngClass]="{'active': nameMenu == 'markets'}" ><a href="javascript:void()" (click)="nameMenu = 'markets'">Manage markets								</a></li>
+						<li [ngClass]="{'active': nameMenu == 'hedge__'}" ><a href="javascript:void()" (click)="nameMenu = 'hedge__'">Manage hedge <br>reporting linked				</a></li>
+						<li [ngClass]="{'active': nameMenu == 'hedge_c'}" ><a href="javascript:void()" (click)="nameMenu = 'hedge_c'">Manage consolidated <br>hedge reporting linked</a></li>
+						<li [ngClass]="{'active': nameMenu == 'hedge_tp'}"><a href="javascript:void()" (click)="nameMenu = 'hedge_tp'">Manage top consolidated<br>hedge reporting linked</a></li>
+						<li [ngClass]="{'active': nameMenu == 'libraryy'}"><a href="javascript:void()" (click)="nameMenu = 'libraryy'">Manage library linked						</a></li>
+						<li [ngClass]="{'active': nameMenu == 'mcontent'}"><a href="javascript:void()" (click)="nameMenu = 'mcontent'">Manage content								</a></li>
+					</ul>
+				</div>
+				<div *ngIf="nameMenu == 'general'" class="generalset"><span>General settings</span>
+					<form *ngIf="nameMenu == 'general'">
+						<div class="clearboth">
+							<label class="slist">energy cockpit name :</label>
+							<input type="text" name="cname" class="whinput" id="dgr1" value="Viorel_cockpit">
+						</div>
+						<div class="clearboth">
+							<label class="slist">created on :</label>
+							<input type="text" name="cdate" class="whinput" readonly="" value="07-09-18 08:46:53">
+						</div>
+						<div class="clearboth">
+							<label class="slist"># of users attached :</label>
+							<span>1</span>
+						</div>
+						<div class="clearboth">
+							<label class="slist">emp news included :</label>
+							<label class="switch">
+								<input type="checkbox" name="switchme" id="dnewson" checked=""><div class="sw"><span><i class="fa fa-check"></i></span><span><i class="fa fa-times"></i></span></div>
+							</label>
+						</div>
+						<div class="clearboth">
+							<label class="slist">send automatically :</label>
+							<label class="switch">
+								<input type="checkbox" name="switchme" id="sendauto"><div class="sw"><span><i class="fa fa-check"></i></span><span><i class="fa fa-times"></i></span></div>
+							</label>
+						</div>
+						<div class="clearboth">
+						<label class="slist">frequency :</label>
+						<select id="cps_period1" style="cursor:not-allowed">
+							<option value="1">Daily</option>
+							<option value="2">Weekly</option>
+							<option value="3">&nbsp;&nbsp;&nbsp;-Monday</option>
+							<option value="4">&nbsp;&nbsp;&nbsp;-Tuesday</option>
+							<option value="5">&nbsp;&nbsp;&nbsp;-Wednesday</option>
+							<option value="6">&nbsp;&nbsp;&nbsp;-Thursday</option>
+							<option value="7">&nbsp;&nbsp;&nbsp;-Friday</option>
+							<option value="8">Biweekly</option>
+						</select>
+						</div>
+						<div class="clearboth">
+							<div style="display: inline-block; position: relative; top:-80px;">
+								<label class="slist">email subject line :</label>
+							</div>
+							<div style="display: inline-block; width:calc(100% - 270px);">
+								<input type="radio" name="remailsub" checked="" value="0"><label>Default : [FIRSTNAME], here's your energy market report</label><br>
+								<input type="radio" name="remailsub" value="1"><label>Custom email subject line</label><br>
+								<input type="text" name="emailsub" id="emailsub" style="margin-left: 22px; width: calc(100% - 22px); height: 30px;visibility:hidden;"><br>
+								<span class="spamnot" style="visibility:hidden">Remember to keep your subject line relevant and non-spammy to avoid SPAM filters.</span>
+							</div>
+						</div>
+						<div class="clearboth">
+							<label class="slist">from email address :</label>
+							<input type="email" name="email" readonly="" class="whinput" value="customer.page@energymarketprice.com">
+								<input type="hidden" id="cps_lang" value="En">
+						</div>
+						<div class="clearboth" style="padding-top:20px;">
+						<button class="saveset buttonwithplus" rel="1594">Save settings</button>
+						</div>
+					</form>
+				</div>
+					<div *ngIf="nameMenu == 'mcontent'" class="generalset">
+							<span style='font-size: 21px; padding: 20px 0; display: block'>Manage content</span>
+						 	<div style='margin-top:20px;'>
+								<ul class='mnewsul'>
+									<li [ngClass]="{'active': contenTab == 'manag'}" (click)="contenTab = 'manag'"><a href='javascript:void()'>NEWS MANAGEMENT</a></li>
+									<li [ngClass]="{'active': contenTab == 'add_w'}" (click)="contenTab = 'add_w'"><a href='javascript:void()'><i class='fa fa-plus plusi'></i>ADD NEWS</a></li>
+									<li [ngClass]="{'active': contenTab == 'comme'}" (click)="contenTab = 'comme'"><a href='javascript:void()'><i class='fa fa-plus plusi'></i>ADD COMMENTS</a></li>
+								</ul>
+								<div class='newssea'>
+									<input type='text' id='search_for_news' placeholder='Search for a news'><i class='fa fa-search'></i>
+								</div>
+							</div>
+							{{contenTab}}
+					<!--
+									<div class='newssort'>
+									<span id='textspan'></span>
+									<span class='withpopup' act='deletecknews' rel='1594'  popup='reqdel' id='delselnews'><i class='fa fa-trash-o'></i>Delete</span>
+									<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=1&sub=4'><button class='buttonwithplus active' style='margin:0'>All News</button></a>
+									<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=1&pg=1&sub=4'><button class='buttonwithplus'>EMP News</button></a>
+									<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=2&pg=1&sub=4'><button class='buttonwithplus'>My News</button></a>
+									</div>
+									<div class='newstable'>
+										<div id='newsajaxtable'>
+							<div style='height:calc(100vh - 485px); overflow-y:scroll'>
+									<table style='width:100%'>
+										<tr>
+											<th style='width: 25px;'><input type='checkbox' class='regular-checkbox takeallhr'></th>
+											<th style='width: 500px'>NEWS NAME</th>
+											<th style='width: 100px;'>EDIT</th>
+											<th style='width: 100px;'>DELETE</th>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Daily (13.09.2018): German spot power prices gained 12% on Wednesday, on predictions of lower wind generation...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27296'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>PGNiG extends cooperation with Ukrtransgaz...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27295'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>‘Half of Belgium’s power to be renewable by 2030’...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27294'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Russia to build nuclear reactors for China & Egypt...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27293'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Daily (12.09.2018): Brent crude soared by 2.2% on Tuesday, due to stronger demand ahead of November sanctions...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27286'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Sudan, Turkey strike $100 million oil investment deal...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27285'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Russian gas megaproject to China close to completion...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27284'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>German Senvion secures 80-megawatt wind project in US...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27283'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Daily (11.09.2018): UK gas contracts hit new peaks on Monday, due to an undersupplied system and bullish carbon markets...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27276'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+									<td></td>
+											<td>Cubico soaks in Algarve sun...
+											<span class='showfancynews'><a href='http://www.energymarketprice.com/SitePage.asp?act=ArticleView&ID=27275'>Preview news</a></span></td>
+											<td>
+											</td>
+											<td>
+											</td>
+										</tr>
+										</table>
+							</div>
+									<span>
+									<span class='pagspan'>
+									<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=1&sub=4'><span class='pagbtn'>First</span></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=1&sub=4'><button class='pagbtn active'>1</button></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=2&sub=4'><button class='pagbtn'>2</button></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=3&sub=4'><button class='pagbtn'>3</button></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=4&sub=4'><button class='pagbtn'>4</button></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=5&sub=4'><button class='pagbtn'>5</button></a>
+										<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=6&sub=4'><button class='pagbtn'>6</button></a>
+									<a href='SitePage.asp?act=editckdata&ckn=Viorel_cockpit&ckid=1594&type=0&pg=2&sub=4'><span class='pagbtn'>Next<i class='fa  fa-chevron-right' style='margin-left:5px'></i></span></a>
+									</span>
+							<script type='text/javascript'>$('.showfancynews a').fancybox({'hideOnContentClick':false,'autoDimensions':false,'width':740,'height':390, 'fontFamily': 'montserratlight'});</script>
+										</div>
+							
+									</div>
+							 -->
+
+					
+				<div>
+			</div>
+		</div>
+	</div>
+</div>
+

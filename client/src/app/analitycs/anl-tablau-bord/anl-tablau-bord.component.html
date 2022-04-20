@@ -1,0 +1,395 @@
+<div class="tab-content">
+    <div class="row">
+        <div class="col-md-12 d-i">
+            <div class="m-b-20 col-md-7">
+                <ul class="time-btns1 list-inline">
+                    <li [ngClass]="{'active': showResume}">
+                        <a (click)="showResume=true;allOrUne=false;userActiv = null;" href="javascript:;">Résumé</a>
+                    </li>
+                    <li [ngClass]="{'active': !showResume}">
+                        <a (click)="getClientLog(dateFromS,dateToS,pag,nr);showResume=false;" href="javascript:;">Derniére activite</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="m-b-20 col-md-5" *ngIf="!allOrUne">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="select-wrap form-group">
+                            <!-- <span class="select-arrow"><i class="fa fa-angle-down"></i></span> -->
+                            <select class="form-control input-sm">
+                                <option>Toutes les offres</option>
+                                <option>Le offre 01</option>
+                                <option>Le offre 02</option>
+                                <option>Le offre 03</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-8 calender-wrap d-i p-r-20 p-l-0" style="height: 37px;">
+                    
+                            <div class="input-group date m-r-5" id="datetimepicker3">
+                                <input  class="form-control reference"
+                                      ngx-mydatepicker 
+                                      [(ngModel)]="dateFrom" 
+                                      [options]="myOptions" 
+                                      #dp1="ngx-mydatepicker"
+                                      (dateChanged)="dateFromC($event)">
+                                <span class="input-group-addon pointer" style="background-color:#008080; border: 0px;" (click)="dp1.toggleCalendar()"> 
+                                    <i class="fa fa-calendar" style="color: white;"></i> 
+                                </span> 
+                            </div>
+                 
+                            <div class="input-group date" id="datetimepicker3" style="margin-left: 7px;">
+                                <input  class="form-control reference"
+                                      ngx-mydatepicker 
+                                      [(ngModel)]="dateTo" 
+                                      [options]="myOptions" 
+                                      #dp="ngx-mydatepicker"
+                                      (dateChanged)="dateToC($event)">
+                                <span class="input-group-addon pointer" style="background-color:#008080; border: 0px;" (click)="dp.toggleCalendar()"> 
+                                    <i class="fa fa-calendar" style="color: white;"></i> 
+                                </span> 
+                             </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+            
+            <!--Resume-->
+    <div class='tab-pane active' *ngIf='showResume'>
+                <!--Evolution-->
+        <section class="company_info">
+            <div>
+                <div class="row">
+                    <div class="col-md-12 d-i">
+                        <div class="figure_item figure_item_01">
+                            <span class="figure_item_num">
+                                <!-- <i class="fa fa-file-text"></i> -->
+                                <i class="far fa-file-alt"></i>
+                            </span>
+                            <h3>OFFRES CRÉÉES</h3>
+                            <h4 *ngIf="offerInfo">{{offerInfo.created}}</h4>
+                            <h4 *ngIf="!offerInfo">0</h4>
+                        </div>
+                        <div class="figure_item figure_item_01">
+                            <span class="figure_item_num"><i class="far fa-file"></i></span>
+                            <h3>OFFRES ENVOYÉES</h3>
+                            <h4 *ngIf="offerInfo">{{offerInfo.offers_send}}</h4>
+                            <h4 *ngIf="!offerInfo">0</h4>
+                        </div>
+                        <div class="figure_item figure_item_01">
+                            <span class="figure_item_num"><i class="fa fa-envelope"></i></span>
+                            <h3>EMAILS OUVERTS</h3>
+                            <h4 *ngIf="offerInfo">{{offerInfo.email_open}}</h4>
+                            <h4 *ngIf="!offerInfo">0</h4>
+                        </div>
+                        <div class="figure_item figure_item_01">
+                            <span class="figure_item_num"><i class="fa fa-envelope"></i></span>
+                            <h3>CLICS DE L'EMAIL</h3>
+                            <h4 *ngIf="offerInfo">{{offerInfo.email_click}}</h4>
+                            <h4 *ngIf="!offerInfo">0</h4>
+                        </div>
+                        <div class="figure_item figure_item_01">
+                            <span class="figure_item_num"><i class="fa fa-check-square"></i></span>
+                            <h3>OFFRES SIGNÉES</h3>
+                            <h4 *ngIf="offerInfo">{{offerInfo.signee_offers}}</h4>
+                            <h4 *ngIf="!offerInfo">0</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--The most active-->
+        <section class="actif_sur">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="schem">
+                        <div class="title_box">Plus actif le:</div>
+                        <section class="day_active">                                                   
+                         <!--   <div class="row">-->
+                                <div class="col-sm-4 day_day">
+                                    <ul class="time-btns1 list-inline" *ngIf="offerInfo">
+                                        <li><i class="fa fa-calendar" style="margin-left:20px;font-size:25px;"></i></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 1"><div class="day_of_week">Lundi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 2"><div class="day_of_week">Mardi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 3"><div class="day_of_week">Mercredi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 4"><div class="day_of_week">Jeudi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 5"><div class="day_of_week">Vendredi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 6 "><div class="day_of_week">Samedi</div></li>
+                                        <li *ngIf="offerInfo.max_weekday.weekday === 7 "><div class="day_of_week">Dimanche</div></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-5 day_number">
+                                    <div class="entries_percent">{{pecent | number : '.1-1'}}%</div>
+                                </div>
+                                <div class="col-sm-4 day_comp">
+                                    <ul class="time-btns1 list-inline">
+                                        <li><i class="fa fa-desktop" style="margin-left:20px;font-size:25px;"></i></li>
+                                        <!-- <li><i class="fas fa-mobile-alt" style="margin-left:20px;font-size:25px;"></i></li> -->
+                                        <li><div class="day_of_week">DESKTOP</div></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-5 day_number">
+                                    <div class="entries_percent"> {{percentDesc | number : '.1-1'}}%</div>
+                                </div>
+                           <!-- </div>-->                                             
+                    </section>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+                        
+        <!--Top utilisateaurs-->
+        <section class="actif_sur" *ngIf="offerInfo">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="schem">
+                            <div class="title_box">TOP 3 utilisateurs par nombre d'accès et de clics</div>
+                            <section class="day_active">                                            
+                                 <!--   <div class="row">-->
+                                        <div class="col-sm-5 tops" *ngFor="let top of offerInfo.group_sorted">
+                                            <div class="kkk"></div>
+                                            <div class="utilis_name">{{top.client__nom_entrepise}}</div>
+                                            <!-- <div class="utilis_name">{{top.client__surname}} {{top.client__name}}</div> -->
+                                            <div class="utilis_percent">{{top.count}}</div>
+                                        </div>                                              
+                            </section>
+                        </div>
+                    </div>
+            </div>
+        </section>
+
+
+        <!--Map-->
+        <section *ngIf="offerInfo" class="actif_sur m-b-20">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="map1 d-i">
+                            <div class="col-md-6" >
+                                <div class="title_box">TOP 3 villes par nombre d'accès</div>
+                                <div  *ngFor="let city of offerInfo.group_city">
+                                    <div class="city_title">{{city.city}}</div>
+                                    <div class="hr_bar"></div>
+                                </div>
+                                <!-- <div class="city_title"> Aargau</div>
+                                <div class="hr_bar"></div>
+                                <div class="city_title">   Neuchatel</div>
+                                <div class="hr_bar"></div>
+                                <div class="city_title"> Ticino</div> -->
+                                <!-- <div class="hr_bar"></div> -->
+                            </div>
+                            <div class="col-md-6">
+                                    <app-anl-interet-bar-chart></app-anl-interet-bar-chart>
+                                <!-- <img src="../../../assets/images/world-map-146505_960_720.png" alt=""> -->
+                              <!-- <app-world-map [data]="offerInfo.all_country"></app-world-map> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- <div class="row">
+                <div class="col-md-6">
+                        <div class="text-center">
+                           
+                        </div>
+                </div>
+                <div class="col-md-6"></div>
+        </div>            -->
+        
+        <section class="actif_sur">
+
+               <!-- <div class="row">-->
+                    <div class="schem">
+                        <div class="title_box">Actualités les plus populaires</div>
+                        <div class="row">
+                                <div class="col-md-12 box">
+                                    <div class="col-sm-6 col-md-6 news">
+                                        <div class="news_title">
+                                            <b>
+                                                Contracting Mircrogrid : autonomie et économies
+                                            </b>
+                                        </div>
+                                        <div class="hr_bar_red"></div>
+                                        <div class="news_content">
+                                            Pour répondre aux impératifs écologiques et légaux, nous avons
+                                            imaginé une solution globale.
+                                            <a > Plus d'informations</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 news">
+                                        <div class="news_title">
+                                            <b>
+                                                Les investissements de Gazprom Neft sont estimés à environ
+                                                6,6 milliards de dollars en 2018
+                                            </b>
+                                        </div>
+                                        <div class="hr_bar_red"></div>
+                                        <div class="news_content">
+                                            Les investissements totaux de Gazprom Neft en 2018 pourraient
+                                            atteindre environ 6,6 milliards de dollar.
+                                            <a >Plus d'informations</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 box">
+                                    <div class="col-sm-6 col-md-6 news">
+                                        <div class="news_title">
+                                            <b>
+                                                La Chine et l'Irak développeront un champ de pétrole à Bagdad
+                                            </b>
+                                        </div>
+                                        <div class="hr_bar_red"></div>
+                                        <div class="news_content">
+                                            L'Irak finalise un accord initial avec la société chinoise ZhenHua Oil
+                                            visant le développement du gisement de pétrole East Bagdad.
+                                            <a > Plus d'informations</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 news">
+                                        <div class="news_title">
+                                            <b>
+                                                L’énergie chinoise à base de renouvelables compte pour 17,6%
+                                                en 2017
+                                            </b>
+                                        </div>
+                                        <div class="hr_bar_red"></div>
+                                        <div class="news_content">
+                                            Les sources alternatives d'énergie atteignent 17,6% de l'énergie
+                                            chinoise.
+                                            qui indiquent une croissance
+                                            <a >Plus d'informations</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                <!--</div>-->
+        </section>
+    </div>
+
+    <div *ngIf="loading" class="text-center">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+    <!--Last activity-->
+    <div class='tab-pane active' *ngIf='!showResume&&!allOrUne&&!loading'>
+        <!--Table-->
+
+
+        <!-- <div class="table-responsive table--no-card m-b-30"  style="max-height: calc(100ch - 241px);">
+                <table class="table table-borderless table-striped table-earning" style="width: 100%"> -->
+
+        <section class="actif_sur">
+            <div  class="mysections border0">
+                <div *ngIf="clientPagination" class="table-responsive table--no-card m-b-30" style="max-height: calc(100ch - 241px);">
+                    <table class="table table-borderless table-striped table-earning">
+                        <thead>
+                            <tr>
+                                <th>Nom du client    </th>
+                                <th>Derniere activite</th>
+                                <th>Offre            </th>
+                                <th>Adresse E-Mail   </th>
+                                <th>Activite         </th>
+                                <th>Dispositif       </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of clientPagination.result">
+                                <td>
+                                    <img class="img_border" src="../../../assets/images/img_avatar.png">
+                                    <ul class="tab_prop">
+                                        <li (click)="userActiv = item; allOrUne = true;" class="txtHoverUnderline pointer">{{item.client.nom_entrepise}}</li>
+                                        <li>{{item.client.surname}} {{item.client.name}}</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="block_display">
+                                        <li>{{item.created  | date: 'dd/MM/yyyy' }}</li>
+                                        <li>{{item.created  | date: 'HH:mm' }}</li>
+                                    </ul>
+                                </td>
+                                <td>{{item.offer_name}}</td>
+                                <td><a class="utilis_email" href="javascript:void(0)">{{item.client.email}}</a></td>
+                                <td>
+                                    <div *ngIf="item.log_type === 'signee'"  class="icons i_signee">  <i class="fas fa-file-signature"></i></div>
+                                    <div *ngIf="item.log_type === 'signer'"  class="icons i_signer">  <i class="fas fa-file-alt">     </i></div>
+                                    <div *ngIf="item.log_type === 'click'"   class="icons i_click">   <i class="fa fa-mouse-pointer"> </i></div>
+                                    <div *ngIf="item.log_type === 'send'"    class="icons i_send">    <i class="fa fa-envelope">      </i></div>
+                                    <div *ngIf="item.log_type === 'open'"    class="icons i_open">    <i class="fa fa-envelope-open"> </i></div>
+                                    <div *ngIf="item.log_type === 'created'" class="icons i_created"> <i class="fa fa-check">         </i></div>
+                                    <div *ngIf="item.log_type === 'confirmer'
+                                               ||item.log_type=== 'aconfirmer'" class="icons i_aconfirmer"><i class="fa fa-hourglass-half"></i></div>
+                                    <div *ngIf="item.log_type === 'refuse'" class="icons i_refused"> <i class="fas fa-file-prescription"></i></div>
+
+                  
+                                    <ul class="tab_prop1">
+                                        <!-- <li><b>Lu l'actualites:<  -->
+                                        <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                                        <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté l'offre.</span>
+                                        <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                                        <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                                        <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                                        <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                                                <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                                                <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                                        </span>
+                                        <span *ngIf="item.log_type === 'refuse'" > <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                                        <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                                    </ul> 
+                                </td>
+                                <td>
+                                    <div *ngIf="item.device === 'mobile'" ><i class="fa fa-mobile" style="color: #2994eb;"></i><span>&nbsp;Mobile </span></div>
+                                    <div *ngIf="item.device === 'desktop'"><i class="fa fa-desktop"></i><span>&nbsp;Desktop </span></div>
+                                </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                <div *ngIf="clientPagination" class="text-center">
+                    <ul class="pagination" style="display: inline-flex; height: 34px;">
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag>1&&clientPagination.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag>1&&clientPagination.pages>5"><a><i class="material-icons">..</i></a></li>                
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag>2" (click)="pags(clientPagination.pag-2)"><a>{{clientPagination.pag-2}}</a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag>1" (click)="pags(clientPagination.pag-1)"><a>{{clientPagination.pag-1}}</a></li>
+                            <li class="btn btn-primary m-l-5"><a>{{clientPagination.pag}}</a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag<clientPagination.pages" (click)="pags(clientPagination.pag+1)"><a>{{clientPagination.pag+1}}</a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag+1<clientPagination.pages" (click)="pags(clientPagination.pag+2)"><a>{{clientPagination.pag+2}}</a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag<clientPagination.pages&&clientPagination.pages>5"><a><i class="material-icons">..</i></a></li>
+                            <li class="btn btn-outline-primary m-l-5" *ngIf="clientPagination.pag<clientPagination.pages&&clientPagination.pages>1" (click)="pags(clientPagination.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+                            <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                              <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                              <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                              <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                              <option [selected]="nr == 100" [value]="100">100</option>
+                            </select>
+                            <p style="margin: 5px;">Objets par page</p>
+                          </ul>
+                        </div>
+
+                    </div>
+            </section>
+    </div>
+
+
+<div *ngIf='allOrUne'>
+    <div class='row'>
+        <div class="col-md-2">
+            <span class="pointer" style="color: #2994eb" (click)="allOrUne =  false;userActiv = null;">
+                <i class="fa fa-chevron-circle-left pointer"></i> <span class="txtHoverUnderline">Retour</span>
+            </span>
+        </div>
+    </div>
+    <br />
+
+    <app-user-activity-analytics *ngIf="userActiv" [userActiv]="userActiv" [type]="2"></app-user-activity-analytics>
+</div>

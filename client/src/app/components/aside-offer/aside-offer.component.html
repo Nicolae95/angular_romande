@@ -1,0 +1,69 @@
+
+<aside class="sidebar" *ngIf="offer" style="padding: 0px;">
+    <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
+        <div class="au-card-title" style="background-image:url('../../../assets/images/bg-title-01.jpg');">
+            <div class="bg-overlay bg-overlay--blue text-center">
+            </div>
+        </div>
+        <div class="au-task js-list-load">
+            <div class="au-task-list js-scrollbar3" style="height: auto">
+                <div class="au-task__item">
+                    <div class="au-task__item-inner">
+                        <h5 class="task"><a href="javascript:void(0)">Nom du client </a></h5>
+                        <span class="time">{{offer.company}}</span>
+                    </div>
+                </div>  
+
+                <div class="au-task__item" *ngIf="company">
+                    <div class="au-task__item-inner">
+                        <h5 class="task"><a href="javascript:void(0)">ID du client</a></h5>
+                        <span class="time" *ngIf="company.surname">{{company.surname}} {{company.name}}</span>
+                    </div>
+                </div>            
+                <div class="au-task__item">
+                    <div class="au-task__item-inner">
+                        <h5 class="task"><a href="javascript:void(0)">Adresse email</a></h5>
+                        <span class="time" *ngIf="company">{{company.email}}</span>
+                    </div>
+                </div>                    
+                <div class="au-task__item">
+                    <div class="au-task__item-inner">
+                        <h5 class="task"><a href="javascript:void(0)">Statut du client</a></h5>
+                        <span class="time">Inactif</span>
+                    </div>
+                </div>     
+                <!-- <div class="au-task__item" *ngIf="company">
+                    <div class="au-task__item-inner">
+                        <h5 class="task"><a href="javascript:void(0)">ID Client CRM</a></h5>
+                        <span class="time" *ngIf="company.crm_id">{{company.crm_id}}</span>
+                    </div>
+                </div>    -->
+                 <div class="au-task__item">
+                  <div class="au-task__item-inner">
+                      <h5 class="task"><a href="javascript:void(0)">Offres actives pour</a></h5>
+                      <span class="time">{{offer.years}}</span>
+                  </div>
+                </div>
+                <div class="au-task__item">
+                  <div class="au-task__item-inner">
+                      <h5 class="task"><a href="javascript:void(0)">Nr d’opportunité</a></h5>
+                      <span class="time">{{offer.nr_opportunite}}</span>
+                  </div>
+                </div>    
+                <div class="au-task__item">
+                  <div class="au-task__item-inner">
+                      <h5 class="task"><a href="javascript:void(0)">Id EMP</a></h5>
+                      <span class="time">{{offer.emp_id}}</span>
+                  </div>
+                </div>    
+            </div>
+            <div class="au-task__footer" *ngIf="company" >
+              <button data-toggle="modal" data-target="#editO" (click)="editOffer();edit=true" [disabled]="loading" class="btn  btn-outline-secondary"> &nbsp; Edit &nbsp;</button>
+            </div>
+        </div>
+    </div>
+  </aside>
+
+<div *ngIf="edit">
+  <app-edit-offer></app-edit-offer>                      
+</div>

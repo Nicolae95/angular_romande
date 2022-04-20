@@ -1,0 +1,97 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+    <!--<form action="{% url 'tool:upload_report' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+      <button type="submit" class="save btn btn-primary">Save</button>
+  </form> -->
+
+    <form action="{% url 'tool:upload_translation' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.errors }}
+            <label for="{{ form.title.id_title }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            {{ form.translation_meter.errors }}
+            <label>CC:</label>
+            {{ form.translation_meter }}
+        </div>
+
+        <!--<div class="form-group">
+            {{ form.year.errors }}
+            <div for="{{ form.year.id_year }}">Source Year:</div>
+                <div class='input-group date' id='year'>
+                    <input type='text' name="year" id="year" class="form-control" required="required"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            {{ form.translated_year.errors }}
+            <label for="{{ form.translated_year.id_translated_year }}">CCT:</label>
+                <div class='input-group date' id='translated_year'>
+                    <input type='text' name="translated_year" id="translated_year" class="form-control" required="required"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>-->
+
+        <script type="text/javascript">
+        $('#locations').change(function () {
+        var val = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: '/country/'+ val,
+            success: function (data) {
+                // the next thing you want to do
+                var $shedules = $('#shedules');
+                $shedules.empty();
+                for (var i = 0; i < data.length; i++) {
+                    $shedules.append('<option value=' + data[i].pk + '>' + data[i].fields.title + '</option>');
+                    $shedules.selectpicker('refresh');
+                }
+            }
+            });
+        });
+
+        $(function () {
+            $('#year').datetimepicker({
+                format: 'YYYY',
+            });
+        });
+        $(function () {
+            $('#translated_year').datetimepicker({
+                format: 'YYYY',
+            });
+        });
+        $(function () {
+            $('#time_peak').datetimepicker({
+                format: 'HH:mm'
+            });
+        });
+        $(function () {
+            $('#time_peakoff').datetimepicker({
+                format: 'HH:mm'
+            });
+        });
+        $(function() {
+            $('#type').change(function(){
+                if($('#type').val() == 'gas') {
+                    $('#peak').hide('slow');
+                } else {
+                    $('#peak').show('slow');
+                }
+            });
+        });
+        </script>
+
+      <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+
+
+
+{% endblock %}

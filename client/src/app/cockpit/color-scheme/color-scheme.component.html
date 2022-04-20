@@ -1,0 +1,36 @@
+
+<div *ngIf="active" class="color-scheme" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+    
+<div class="popup-title"><b>Adjust color scheme</b><i class="fa fa-times closeme" (click)="cmon=!cmon;offMe()"></i></div>
+    <form (ngSubmit)="onSubmit()" #editForm="ngForm" class="form-inline color-form">
+        <div>
+            <label for="name"><b>Background color:</b></label>
+             <span style="font-size: 14px">
+                <input type="color" name="bg-color" class="form-control color-palet" (change)="changeColorBG()" [(ngModel)]="colorBG">
+                Current color
+              </span>
+            <input type="text" class='color-hex' value='{{ colorBG }}'>
+            <span class='reset-btn clear-color' (click)="colorBG='#ffffff';changeColorBG()"><i class="fa fa-times"></i>Clear</span>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="name"><b>Header text color:</b></label>
+             <span style="font-size: 14px">
+                <input type="color" name="font-color" class="form-control color-palet"  (change)="changeColorF()" [(ngModel)]="colorFont">
+                Current color
+              </span>
+            <input type="text" class='color-hex' value='{{ colorFont }}'>
+            <span class='reset-btn clear-color' (click)="colorFont='#37475a';changeColorF()"><i class="fa fa-times"></i>Clear</span>
+        </div>
+
+        <hr>
+
+        <div style="text-align: right">
+            <button type="reset" class='reset-btn'>Cancel</button>
+            <button type="submit" class="submit-btn"  [disabled]="!editForm.form.valid">Save Settings</button>
+        </div>
+
+    </form>
+</div>

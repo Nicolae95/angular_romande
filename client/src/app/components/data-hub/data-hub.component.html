@@ -1,0 +1,125 @@
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tabs-wrapper">            
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active">
+                <div class="row">
+                      <div class="col-md-7">
+                        <ul class="time-btns list-inline d-i">
+                          <li class="d-i" *ngFor="let tb of timeButtons;let ind=index">
+                            <button type="button" class="btn m-l-5" 
+                                    [ngClass]="{'btn-warning': ind==btnIndex,'btn-outline-warning': ind!=btnIndex}"
+                                    (click)="changeDates(tb.id, ind, true)">{{tb.name}}</button>
+                          </li>                     
+                        </ul>
+                      </div>
+                      <div class="col-md-5 calender-wrap">
+                        <div class="row row-small">
+                          <div class="col-sm-2 text-right">
+                            <!-- <label>Select Date </label> -->
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-group">
+                                <div class="input-group date" id="datetimepicker1">
+                                      <input class="form-control reference"
+                                            ngx-mydatepicker                                        
+                                            [(ngModel)]="dateFrom" 
+                                            [options]="myOptions" 
+                                            #dp="ngx-mydatepicker"
+                                            (dateChanged)="onDateFromChanged($event)"
+                                            required />
+                                      <span class="input-group-addon" class="input-group-addon pointer" (click)="dp.toggleCalendar()"> 
+                                        <i class="fa fa-calendar"></i> 
+                                      </span> 
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-group">
+                                <div class="input-group date" id="datetimepicker2">
+                                    <input class="form-control reference"
+                                          ngx-mydatepicker                                        
+                                          [(ngModel)]="dateTo" 
+                                          [options]="myOptions" 
+                                          #dp1="ngx-mydatepicker"
+                                          (dateChanged)="onDateToChanged($event)"
+                                          required />
+
+                                    <span class="input-group-addon" class="input-group-addon pointer" (click)="dp1.toggleCalendar()"> 
+                                      <i class="fa fa-calendar"></i> 
+                                    </span> 
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>                
+                <!--Added lines-->
+                <div class="row">
+                    <div class="col-sm-8 secondchartdataa">
+                      <span *ngFor='let sml of selectedMarketsList;let y=index'>
+                        <span class="btn-outline-info m-l-5">{{sml.market_name}}</span>
+                        <a class='point' (click)='removeSelMarket(y);'>
+                          <i class="fa fa-times-circle-o remchart1"></i>
+                        </a>
+                      </span>
+                    </div>
+                </div>
+
+                <!--Select lists-->
+                <div class="row row-min row-seven-cols select-wrp">
+                    <div class="col-sm-2">
+                       <select class="form-control" [(ngModel)]="marketCommodity" (change)="changeCommodity(marketCommodity);">
+                         <option *ngFor='let en of commodities' [ngValue]="(en.ID)">{{en.Name}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-2">
+                       <select class="form-control" [(ngModel)]="marketCountry" (change)="changeCountry(marketCommodity, marketCountry);">
+                          <option *ngFor='let cn of countries' [ngValue]="(cn.ID)">{{cn.Name}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-2">
+                       <select class="form-control" [(ngModel)]="marketTimeperiod" (change)="changeTimeperiod(marketCommodity, marketCountry, marketTimeperiod);">
+                          <option *ngFor='let tp of timePeriods' [ngValue]="(tp.ID)">{{tp.Name}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-2" *ngIf="basepeaks.length>0">
+                       <select class="form-control" [(ngModel)]="marketBasepeak" (change)="changeBasePeak(marketCommodity, marketCountry, marketTimeperiod, marketBasepeak);">
+                          <option *ngFor='let bp of basepeaks' [ngValue]="(bp.ID)">{{bp.Name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" [(ngModel)]="marketMarket" (change)="marketChange($event, marketMarket)">
+                          <option *ngFor='let mk of markets' [ngValue]="(mk.Market_ID)">{{mk.Market_Name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-1 m-b-5">
+                        <button (click)='getChartData(true);' class="btn btn-warning"><i class="fa fa-eye"></i> View Chart</button>
+                    </div>
+
+                    <div class="col-sm-1 m-b-5">
+                        <button (click)="addNewLine();" class="btn btn-primary"><i class="fa fa-line-chart"></i> Add Curve</button>
+                    </div>
+                  </div>   
+               
+               
+
+                <!--The chart *ngIf="chartByYears"-->
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <div class="graph-wrap">
+                            <h3 class="graph-title text-center">&nbsp;</h3>
+                            <div class="text-center" *ngIf="chartByMarkets">
+                                <app-chart-for-datahub [data]="chartByMarkets"></app-chart-for-datahub>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

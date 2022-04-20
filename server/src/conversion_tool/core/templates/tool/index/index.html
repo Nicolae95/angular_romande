@@ -1,0 +1,85 @@
+{% extends 'tool/base.html' %}
+
+{% block tool_content %}
+
+        <div class="row">
+            <div class="col-md-2" style="font-size: 29px;padding-left: 31px;">
+                Reports
+            </div>
+            <div class="col-md-6">
+                <a href="/report/upload/"><button class="btn btn-info">Upload Report</button></a>
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <form action="" method="GET">
+                <input type="text" name="title" placeholder='Search reports' value="{{ title.title }}">
+                <input type="submit" name="" value="Search">
+            </form>
+        <div class="row">
+            <div class="col-md-12">
+                {% if reports %}
+                <table class="table table-striped">
+                    <thead>
+                    <td>Name</td>
+                    <td>Site</td>
+                    <td>From</td>
+                    <td>To</td>
+                    <td>Report</td>
+                    <td>Chart</td>
+                    <td></td>
+                    </thead>
+                    <tbody>
+                    {% for report in reports%}
+                        <tr>
+                            <td>{{report.title}}</td>
+                            <td style="width: 30%">{{report.meter}}</td>
+                            <td style="width: 13%">{{report.datetime_from}}</td>
+                            <td style="width: 13%">{{report.datetime_to}}</td>
+                            <td><a href="/media/{{report.result_file}}"><img src="/static/tool/images/down.png" style="width: 43px;" title="{{report.result_file}}"></a></td>
+                            {% if report.shedules.all.0.id %}
+                                <td><a href="/chart/{{report.meter.meter_id}}/{{report.datetime_from | date:"Ymd"}}/{{report.datetime_to| date:"Ymd"}}/{{report.shedules.all.0.id}}/{{report.unit_rep}}/" target="_blank"><img src="/static/tool/images/chart.png" style="width: 43px;" title="{{report.title}}"></a></td>
+                            {% else %}
+                                <td><a href="/chart/{{report.meter.meter_id}}/{{report.datetime_from | date:"Ymd"}}/{{report.datetime_to| date:"Ymd"}}/0/{{report.unit_rep}}/" target="_blank"><button class="btn btn-warning">Chart</button></a></td>
+                            {% endif %}
+                            <td><a href="/report/edit/{{report.id}}/"><button class="btn btn-warning">Edit</button></a></td>
+                            <td><a class="confirm-delete" href="/report/delete/{{report.id}}/"><button class="btn btn-danger">Delete</button></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h2 style="color:red">There are no reports !!!</h2>
+                {% endif %}
+            </div>
+            {% if reports.has_other_pages %}
+            <ul class="pagination">
+                {% if reports.has_previous %}
+                <li><a href="?page={{ reports.previous_page_number }}&title={{ title.title }}">&laquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in reports_range %}
+                {% if reports.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a href="?page={{ i }}&title={{ title.title }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if reports.has_next %}
+                <li><a href="?page={{ reports.next_page_number }}&title={{ title.title }}">&raquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this?');
+        })
+    </script>
+{% endblock %}

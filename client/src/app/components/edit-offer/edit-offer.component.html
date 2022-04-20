@@ -1,0 +1,118 @@
+<!-- modal large -->
+<div class="modal fade" id="editO" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editer l'offre</h4>
+                <button type="button" class="close" data-dismiss="modal" id="cancelEditform"  aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div *ngIf="offer" class="modal-body">
+                <form [formGroup]="editOfferForm" class="from-group needs-validation" 
+                      (ngSubmit)="editOffre(editOfferForm.value)">
+                      <div class="form-row">
+                          <div class="col-md-12 mb-4"
+                                  [ngClass]="{'has-danger': nomOffer.invalid && (nomOffer.dirty || nomOffer.touched),
+                                              'has-success': nomOffer.valid && (nomOffer.dirty || nomOffer.touched)}">
+                              <h5 class="cat-head">Nom de l'offre</h5>
+                              <input class="form-control" formControlName='nomOffer' placeholder="Nom de l'Offer" required>
+                              <div class="valid-feedback" *ngIf="nomOffer.errors && (nomOffer.dirty || nomOffer.touched)">
+                                  <span *ngIf="nomOffer.errors.required">Nom de l'offre</span>
+                              </div>
+                          </div>
+            
+                
+                      <style>.places:focus::-webkit-input-placeholder { color: transparent; }</style>
+                      <p *ngIf="offer.offer_status == 'signee' || offer.offer_status == 'signer'">&nbsp;</p>
+                      <div *ngIf="selectedYearsLisage.length!=0&&(offer.offer_status != 'signee' && offer.offer_status != 'signer')" class="table-responsive col-md-12" style="margin-top: 10px; padding-left: 10px;">
+                          <table class="tableR table-bordered table-decore2" style="margin-left: 5px;">
+                              <tr style="height: 30px;">
+                                  <td class="text-right">&nbsp;</td>
+                                  <td class="text-center" *ngFor="let y of yearsSplits">{{y}}</td>   
+                              </tr>
+                              <tr>
+                                  <td class="text-center">
+                                      <select class="form-control white text-center" formControlName="energy_type"
+                                              style="color: white;background: #2e3336;border: 0px; height: 34px; border: 0px solid rgba(0, 255, 0, 0.1);"
+                                              (change)="getEcoEnergy(energy_type.value)">
+                                          <option class="form-control text-center" value="energy1">Hydro suisse Naturemade Star   </option>
+                                          <option class="form-control text-center" value="energy2">Hydro suisse                   </option>
+                                          <option class="form-control text-center" value="energy3">Nucléaire suisse               </option>
+                                          <option class="form-control text-center" value="energy4">Mix hydro-solaire suisse       </option>
+                                          <option class="form-control text-center" value="energy5">Hydro romand Naturemade Star   </option>
+                                          <option class="form-control text-center" value="energy6">Hydro européens                </option>
+                                          <option class="form-control text-center" value="energy7">Hydro suisse Naturemade Basic  </option>
+                                          <option class="form-control text-center" value="energy8">Solaire suisse Naturemade Star </option>
+                                          <option class="form-control text-center" value="energy9">Custom                         </option>
+                                      </select>
+                                  </td> 
+                                  <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                      <div  style="margin-bottom: 0px;">
+                                          <!-- <input *ngIf="typeOffer.value=='SME'" type="number" 
+                                                  [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                              'color':      y.type === 'lissage' ? 'white' : ''}"                                    
+                                                  disabled class="text-center" style="max-width: 100px;"> -->
+                                          <input type="number" value="{{ energies[y.year] | number : '1.2-3'}}" 
+                                                 [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                      'color':  y.type === 'lissage' ? 'white' : ''}"                                    
+                                          disabled class="text-center" style="max-width: 100px;  border: 1px solid transparent;">
+                                      </div>
+                                  </td>                                                                                 
+                              </tr> 
+          
+                              <tr style="height: 30px;">
+                                  <td class="text-right">&nbsp;Marge sur GO&nbsp;</td>
+                                  <td *ngFor="let y of selectedYearsLisage; let i = index" >
+                                      <input type="number"
+                                              [(ngModel)]="sur_go[y.year]"
+                                              formControlName="sur_goF" 
+                                              placeholder="{{sur_go1[y.year]}}"
+                                              class="text-center" style="max-width: 100px; height: 30px;border: 0; display: block;" 
+                                              [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)'}"
+                                              [ngClass]="{'places': y.type === 'decote'}"
+                                              [readonly]="y.type === 'lissage'">
+                                  </td>   
+                              </tr> 
+          
+                              <tr>
+                                  <td class="text-right">Total éco-énergies</td>
+                                  <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                      <div  style="margin-bottom: 0px;">
+                                          <input type="number" value="{{totalEco[y.year]}}"
+                                                  disabled 
+                                                 class="text-center" style="max-width: 100px;  border: 1px solid transparent;" 
+                                                 [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                             'color':      y.type === 'lissage' ? 'white' : ''}">
+                                      </div>
+                                  </td>                                                                         
+                              </tr>
+          
+          
+                              <tr style="height: 30px;">
+                                  <td class="text-right">&nbsp;Majoration&nbsp;</td>
+                                  <td *ngFor="let y of selectedYearsLisage; let i = index" >
+                                      <input type="number"
+                                              [(ngModel)]="majors[y.year]"
+                                              formControlName="majorsF" 
+                                              placeholder="{{majors1[y.year]}}"
+                                              class="text-center" style="max-width: 100px; height: 30px;border: 0; display: block;" 
+                                              [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)'}"
+                                              [ngClass]="{'places': y.type === 'decote'}"
+                                              [readonly]="y.type === 'lissage'">
+                                  </td>   
+                              </tr> 
+                          </table>
+                      </div>
+                  </div>
+                </form>  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" [disabled]="nomOffer.invalid || loading">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal large -->

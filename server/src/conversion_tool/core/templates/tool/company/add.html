@@ -1,0 +1,8 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+<form action="{% url 'tool:add_company' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+     <button type="submit" class="save btn btn-primary">Save</button>
+</form>
+{% endblock %}

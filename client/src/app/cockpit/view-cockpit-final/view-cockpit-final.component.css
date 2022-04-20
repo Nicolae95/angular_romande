@@ -1,0 +1,624 @@
+
+  /* You can add global styles to this file, and also import other style files */
+  /* @import '~bootstrap/dist/css/bootstrap.min.css'; */
+  /* @import '../../../assets/css/styles/nexus.css'; */
+  
+  button,span,input,textarea,table{
+      font-family:  "open sans";
+  }
+  
+  .ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+  
+  .news-block{
+      margin-top: 20px;
+  }
+  .wrapall{
+      background-color: #f4f7f9;
+      min-height: 100vh;
+      width: 100%;
+      color:#37475a;
+  }
+  .action_bar{
+      float: right;
+      margin-right: 20px;
+      cursor: pointer;
+      position: relative;
+  }
+  .action_bar p{
+      margin:0;
+  }
+  .action_menu{
+      position: absolute;
+      top: 30px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 5px 0;
+      right: 0;
+      background-color: white;
+      z-index: 1;
+  }
+  
+  .reqdel h5{
+      font-size: 23px;
+      color:white;
+  }
+  .reqdel>div:nth-child(1) {
+      background-color: #e74c3c;
+      padding: 40px;
+      display: block;
+      border-radius: 3px;
+      position: relative;
+  }
+  .reqdel p{
+      font-size: 16px;
+      line-height: 22px;
+      color:white;
+  }
+  .reqdel .submit-btn{
+      background-color: #e74c3c !important;
+      border: 1px solid #e74c3c !important;
+      margin:20px 10px 20px 0;
+  }
+  
+  .action_menu span{
+      display: block;
+      white-space: nowrap;
+      line-height: 24px;
+      font-size: 14px;
+      padding: 5px 20px;
+  }
+  .action_menu span:hover{
+      color: #00b0f0;
+      text-decoration: underline;
+  }
+  
+  .action_bar p:hover{
+      text-decoration: underline;
+      color:#00b0f0 !important;
+  }
+  .action_bar i {
+      padding: 0 5px;
+  }
+  .button{
+      padding: 8px 24px;
+      border-radius: 3px;
+      cursor: pointer;
+      float:right;
+      font-size: 15px;
+      font-weight: bold;
+      display: inline-block;
+      border: 1px solid #00b0f0;
+  }
+  .button-blue{
+      color: white;
+      background-color: #00b0f0;
+  }
+  .button-white{
+      color:#00b0f0;
+      background-color: white;
+      margin-right:20px;
+  }
+  .cockpit-name{
+      font-size: 30px;
+      color:#333;
+      font-weight: bold;
+  }
+  .cp-name-div{
+      padding: 15px 0;
+      border-bottom: 2px solid #cbd6e2;
+  }
+  .menu-ul{
+      margin:40px auto;
+      padding: 0;
+  }
+  .menu-li{
+      display: inline-block;
+      padding: 10px 8px;
+      margin:0 8px;
+      font-size: 14px;
+      text-transform: uppercase;
+      cursor: pointer;
+  }
+  .menu-ul i{
+      margin-right: 10px;
+  }
+  
+  .menu-li.active{
+      color:#00b0f0;
+      border-bottom: 2px solid #00b0f0;
+  }
+  
+  /* cp-news-div here  */
+  
+  .cp-news-div{
+      position: relative;
+      border: 1px solid #cbd6e2;
+      border-radius: 3px;
+      padding: 30px 15px;
+      margin-left: 15px;
+      width: 100%;
+      margin-top: 30px;
+  }
+  
+  .subtitle{
+      font-size: 24px;
+      font-weight: bold;
+      padding-bottom: 20px;
+      display: inline-block;
+  }
+  
+  .ddaily .ncategory{
+      color:#23997d;
+  }
+  .ddaily hr{
+      background-color: #23997d;
+  }
+  
+  .dren .ncategory{
+      color:#27ae60;
+  }
+  .dren hr{
+      background-color: #27ae60;
+  }
+  
+  .deco .ncategory{
+      color:#e74c3c;
+  }
+  .deco hr{
+      background-color: #e74c3c;
+  }
+  
+  .doil .ncategory{
+      color:#00d0e4;
+  }
+  .doil hr{
+      background-color: #00d0e4;
+  }
+  
+  .dcoal .ncategory{
+      color:#0091ae;
+  }
+  .dcoal hr{
+      background-color: #0091ae;
+  }
+  
+  .dpower .ncategory{
+      color:#ffcd05;
+  }
+  .dpower hr{
+      background-color: #ffcd05;
+  }
+  
+  .dgas .ncategory{
+      color:#a05695;
+  }
+  .dgas hr{
+      background-color: #a05695;
+  }
+  
+  .ncategory,.ncontent,.ntitle,.nlink,.ndate{
+      display: block;
+  }
+  
+  .nlink{
+      text-align: right;
+      color:#ccc;
+  }
+  .nlink i {
+      font-size: 20px;
+      color:#ccc;
+      padding: 3px;
+      cursor: pointer;
+  }
+  .ndate{
+      margin:5px 0 0 0;
+      color:#88aa00;
+      font-size: 14px;
+  }
+  .news-block>div{
+          padding: 10px;
+          border-radius: 3px;
+          border: 1px solid #cbd6e2;
+          background-color: white;
+  }
+  .ncontent{
+      max-height: 90px;
+      overflow: hidden;
+      line-height: 18px;
+      font-size: 14px;
+      height: 90px;
+  }
+  .ntitle{
+      font-weight: bold;
+      font-size: 16px;
+      overflow: hidden;
+      height: 74px;
+  }
+  .cp-news-div hr{
+      width: 50px;
+      height: 1px;
+      margin:5px 0 10px;
+  }
+  .ncategory{
+      line-height: 40px;
+      text-transform: uppercase;
+      color:#00d0e4;
+  }
+  .ncategory img{
+      width: 32px;
+      position: relative;
+      top: -4px;
+      margin-right: 5px;
+  }
+  
+  .cp-name-div,.cp-news-div{
+      background-color: white;
+  }
+  
+  /* statistics div here*/
+  
+  .cp-statistics-table thead tr{
+      background-color: #37475a;
+  }
+  .cp-statistics-table{
+      width: 100%;
+      border-right: 1px solid #e1e9ec;
+      color:#37475a;
+      background-color: white;
+  }
+  .cp-statistics-table th,.cp-statistics-table td{
+          padding: 10px;
+  }
+  .cp-statistics-table th{
+      vertical-align: middle;
+      text-transform: uppercase;
+      color:#e0cbb8;
+      font-size: 12px;
+      border-right:1px solid white;
+      font-weight: bold;
+  }
+  
+  .cp-statistics-table th:nth-child(1){
+      color:white !important;
+      white-space: nowrap;
+  }
+  .cp-statistics-table th span{
+      color:white !important;
+      font-size: 12px;
+  }
+  .cp-statistics-table tr td:nth-child(1){
+      font-weight: bold;
+  }
+  .cp-statistics-table tr th:nth-child(1){
+      border-left: 1px solid #e1e9ec;
+  }
+  .cp-statistics-table tbody tr td{
+      border-left: 1px solid #e1e9ec;
+      border-bottom: 1px solid #e1e9ec;
+      font-size: 14px;
+      line-height: 14px;
+  }
+  
+  .newenergy{
+      background-color: #00b0f0;
+      color:white;
+      font-size: 16px;
+      text-transform: uppercase;
+  }
+  .bgpink{
+      background-color: #f9d5d5;
+  }
+  .bggoluboi{
+      background-color: #e5f7fa;
+  }
+  /* end statistics div*/
+  
+  /*	start	market & prices*/
+  .sett-table tr td:nth-child(2){
+      text-align: center;
+      width:150px;
+  }
+  .seemore-btn{
+      background-color: #f4f7f9;
+      color: #00b0f0;
+      border-radius: 3px;
+      border: 1px solid #00b0f0;
+      padding: 5px 15px;
+      display: block;
+      margin:20px auto 10px;
+      cursor: pointer;
+  }
+  .chart-div p{
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0;
+  }
+  .chart-div{
+      text-align: center;
+      margin: 25px 0;
+  }
+  .cell{
+      float: left;
+      padding-bottom: 20px;
+      padding-top: 20px;
+  }
+  .title-block{
+      background-color: #37475a;
+      color: white;
+      line-height: 36px;
+      font-size: 15px;
+      text-align: center;
+      text-transform: uppercase;
+  }
+  .text-title-block{
+      background-color: #ffa82c;
+      color: white;
+      font-size: 16px;
+      line-height: initial;
+  }
+  .avg-number{
+      font-size: 40px;
+      font-weight: bold;
+      display: inline-block;
+      padding: 12px 15px 11px 0;
+      float: right;
+  }
+  .text-span{
+      display: inline-block;
+      width: 35%;
+      padding: 20px 0 20px 20px;
+      box-sizing: border-box;
+  }
+  .text-title-block p{
+      margin:0;
+  }
+  .topcons-data-table{
+      width: 100%;
+      color: #3f5e66;
+      background-color: #F3F6F8;
+  }
+  .topcons-data-table td{
+      height: 40px;
+      vertical-align: middle;
+      text-align: center;
+      border: 1px solid #cbd6e2;
+  }
+  .hedge-btn{
+      color:#ffa82c !important;
+      border-color: #ffa82c !important;
+  }
+  
+  .scoring-table{
+      font-size: 14px !important;
+  }
+  .scoring-table img{
+      width:55px;
+      display: inline-block;
+      float: left;
+      margin-left: 15%;
+  }
+  
+  .scoring-table div{
+      display: inline-block;
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 60px;
+      letter-spacing: 2px;
+      color:white;
+  }
+  
+  .topcons-fixed-chart{
+      height: 180px;
+      border: #d0e2f6 1px solid;
+      border-top: 0;
+      border-bottom: 0;
+  }
+  
+  .topcons-fixed-chart div{
+      width: 99%;
+      margin: auto;
+      height: 180px;
+  }
+  
+  .topcons-link{
+      text-align: center;
+      padding: 20px 0;
+      border: 1px solid #d0e2f6;
+      border-top: 0;
+  }
+  .cp-stats-div{
+      padding: 0;
+      margin:0 15px;
+      overflow: auto;
+      max-width: calc(100% - 30px);
+  }
+  
+  #fancybox-overlay {
+      background-color: rgb(102, 102, 102);
+      opacity: 0.3;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 1100;
+  }
+  
+  .chart-menu{
+      padding: 20px;
+      text-align: center;
+  }
+  .chart-menu span{
+      font-weight: bold;
+      margin-right: 10px;
+  }
+  .chart-menu>div{
+      display: inline-block;
+      padding: 0 15px;
+  }
+  .chart-menu>button{
+      border-radius: 3px;
+      border: 1px solid #f08a27;
+      cursor: pointer;
+      color: white;
+      padding: 2px 20px;
+      background-color: #f08a27;
+  }
+  .chart-menu>button:hover{
+      background-color: orange;
+  }
+  .chart-menu>div input{
+      width: 100px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      line-height: 26px;
+  }
+  
+  .chart-menu>input{
+      position: relative;
+      top: 12px;
+      margin-left: 15px;
+  }
+  
+  #fancybox-wrap,.news_edit,.color-scheme,#fancybox-wrap-chart{
+      position: fixed;
+      padding: 20px;
+      z-index: 1101;
+      opacity: 1;
+      width: 73%;
+      height: 410px;
+      top: 20%;
+      display: none;
+      left: calc( (100% - 71.5%)/2);
+      background-color: white;
+      box-shadow: 0px 0px 10px 5px #9e9d9d;
+      border-radius: 4px;
+  }
+  #fancybox-wrap-chart{
+      width: 73% !important;
+      height: 600px !important;
+  }
+  .news_edit,.color-scheme{
+      width: 500px;
+      left: calc( (100% - 400px)/2);
+      padding: 0;
+      height: auto;
+      top: 18%;
+  }
+  .color-palet{
+      padding: 0;
+      width:28px !important;
+      margin-left:5px;
+      height: 28px;
+      cursor: pointer;
+  }
+  .color-form>div{
+      margin-top:15px;
+  }
+  
+  .color-form label{
+      display: inline-block !important;
+      width: 140px;
+  }
+  .color-hex{
+      width: 80px;
+      margin: 0 10px;
+      border-radius: 3px;
+      border: 1px solid #3333;
+      padding: 2px 5px;
+  }
+  .clear-color{
+      padding: 2px 8px !important;
+  }
+  .clear-color i{
+      font-size: 14px;
+      padding: 0 4px;
+  }
+  .news_edit form,.color-scheme form{
+      padding: 20px;
+  }
+  .news_edit form select{
+      width: 60px;
+  }
+  .news_edit hr,.color-scheme hr{
+      width: 400px;
+      position: relative;
+      left: -20px;
+      margin-top: 40px;
+  }
+  
+  .popup-title{
+      line-height: 40px;
+      padding: 10px 20px;
+      background-color: #00b0f0;
+      color:white;
+      position: relative;
+  }
+  .popup-title i,.reqdel>div:nth-child(1) i{
+      color:white;
+      padding: 5px 7px;
+      border:1px solid white;
+      border-radius: 50%;
+      float:right;
+      font-size: 14px;
+      cursor: pointer;
+      position: relative;
+      top: 7px;
+  }
+  .reqdel>div:nth-child(1) i{
+      position: absolute !important;
+      top: 10px !important;
+      right: 20px;
+  }
+  .reset-btn,.submit-btn{
+      padding: 6px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+  .reset-btn{
+      background-color: white;
+      border:1px solid #bcbaba;
+      margin-right: 10px;
+  }
+  .submit-btn{
+      background-color: #00b0f0;
+      color:white;
+      border: 1px solid #00b0f0;
+  }
+  #fancybox-wrap span{
+      display: inline-block;
+      font-style: italic;
+  }
+  #nsource{
+      color:#a9a9a9;
+  }
+  #ncreated{
+      color:#81a631;
+      float:right;
+  }
+  #fancybox-wrap h3{
+      color:#0088AA;
+  }
+  #fancybox-wrap>div{
+      overflow: auto;
+      height: 390px;
+      padding: 20px;
+  }
+  #fancybox-close {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 30px;
+      height: 30px;
+      display: none;
+      background-image: url(https://www.energymarketprice.com/css/fancybox.png);
+      background-position: -40px 0px;
+      cursor: pointer;
+      z-index: 1103;
+  }

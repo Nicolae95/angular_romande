@@ -1,0 +1,92 @@
+      <div class="row">
+          <div class="col-md-6 m-b-5 d-i">
+            <div *ngFor="let y of yearList">
+                <button class="btn m-l-5" [ngClass]="{'btn-secondary': y === year, 'btn-outline-secondary': y !== year}" (click)="getRisq(y,market)">{{y}}</button>
+            </div>
+          </div>
+          <!-- <div class="col-md-6 text-right" style="padding-right: 0px;">
+            <button [ngStyle]="{'background-color': valute === 'CHF' ? 'orange' : '' }" class="btn btn-sm btn-danger">CHF</button>
+          </div> -->
+
+        <div class="col-md-12" *ngIf="chart">
+          <app-risque-chart [data]="chart" [type]="2"></app-risque-chart>
+        </div>
+        <div *ngIf="!chart && loading" class="text-center">
+          <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+        </div>
+        <div class="col-md-12">
+            <h3 class="graph-title text-center m-t-25">Eco-énergies</h3>
+            <div class="table-responsive  m-t-5 m-b-30">
+                <table class="table table-borderless table-data3" *ngIf="chart">
+                    <thead>
+                        <tr>
+                          <th>&nbsp;</th>
+                          <th class="text-center" *ngFor="let data of chart['pfcs']">{{data | date: 'dd/MM/yyyy'}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <!-- ngfor in -->
+                        <tr>
+                            <th class="firtsTh">Mix hydro-solaire suisse </th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Mix hydro-solaire suisse']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                            </td>
+                          </tr>
+          
+                          <tr>
+                            <th class="firtsTh">Hydro Naturemade Star suisse</th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Hydro Naturemade Star suisse']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                            </td>
+                          </tr>
+          
+                          <tr>
+                            <th class="firtsTh">Nucléaire suisse </th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Nucléaire suisse']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                              </td>
+                          </tr>   
+                          
+                          <tr>
+                            <th class="firtsTh">Hydro européens </th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Hydro européens']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                              </td>
+                          </tr> 
+          
+                          <tr>
+                            <th class="firtsTh">Hydro suisse</th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Hydro suisse']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                            </td>
+                          </tr> 
+          
+                          <tr>
+                            <th class="firtsTh">Hydro Naturemade Star romand</th>
+                            <td class="text-center" *ngFor="let data of chart['pfcs']; let i=index">
+                              <span *ngFor="let rec of chart['records']['Hydro Naturemade Star romand']">  
+                                <span *ngIf="data==rec[0]">{{rec[1] | number : '1.3' }}</span>
+                              </span>
+                            </td>
+                          </tr> 
+                
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <div *ngIf="!chart && !loading">Aucune donnée trouvée.</div>
+  </div>

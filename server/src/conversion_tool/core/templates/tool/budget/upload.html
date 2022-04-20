@@ -1,0 +1,22 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+<form action="{% url 'budget:create' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.pfc.errors }}
+        <label for="{{ form.pfc.pfc }}">PFC:</label>
+        {{ form.pfc }}
+    </div>
+    <div class="form-group">
+        {{ form.pfc_market.errors }}
+        <label for="{{ form.pfc_market.pfc_market }}">PFC market:</label>
+        {{ form.pfc_market }}
+    </div>
+    <div class="form-group">
+        {{ form.cc.errors }}
+        <label for="{{ form.cc.cc }}">CC:</label>
+        {{ form.cc }}
+    </div>
+     <button type="submit" class="save btn btn-primary">Save</button>
+</form>
+{% endblock %}

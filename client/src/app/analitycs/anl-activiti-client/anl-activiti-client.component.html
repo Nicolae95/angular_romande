@@ -1,0 +1,117 @@
+<div class="container-fluid">
+
+    <div class="col-md-10"></div>
+    <form [formGroup]="activityGroup" class="from-group needs-validation">
+        <div class="col-md-2 pull-right"  style="float: right; margin-bottom: 10px;  padding-right: 0px;">
+
+                <div  [hidden]="showUserActivity">
+                    <div style="padding-right: 0px; margin-bottom: 5px;"> 
+                        <div class="input-group">
+                            <input  class="form-control input-sm"
+                                    formControlName="search"                    
+                                    [(ngModel)] = "keyword"
+                                    placeholder="Recherche"/>
+                            <span class="btn btn-primary">
+                            <i class="fa fa-search" ></i> 
+                            </span> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+        <br>
+
+        <div *ngIf="!activity" class="text-center">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="padding: 0px;">
+            <!--Table-->
+            <!--Last activity-->
+            <section class="actif_sur" *ngIf='!showUserActivity&&activity'>
+                <div class="mysections border0">
+                    <div class="table-responsive table--no-card m-b-30" style="max-height: calc(100vh - 315px);">
+                        <table class="table table-borderless table-striped table-earning" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th> Nom du client     </th>
+                                    <th> Derniere activite </th>
+                                    <th> Offre             </th>
+                                    <th> Adresse E-Mail    </th>
+                                    <th> DÉFINIR UNE ALERTE</th>
+                                    <th> ANALYTICS         </th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    <tr *ngFor="let active of activity.result">
+                                        <td style="width: 300px;">
+                                            <img class="img_border" src="../../../assets/images/img_avatar.png">
+                                            <ul class="tab_prop">
+                                                <a href='javascript:void(0);' (click)="showUserActivity=true;userActiv = active;">
+                                                    {{active.nom_entrepise}}
+                                                </a>
+                                            <li>{{active.surname}}  {{active.name}}</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="block_display">
+                                                <li>{{active.last_log | date: 'dd/MM/yyyy' }}</li>
+                                                <li>{{active.last_log | date: 'HH:mm' }}</li>
+                                            </ul>
+                                        </td>
+                                        <td>{{active.log_offer}}</td>
+                                        <td><a class="utilis_email" href="javascript:void(0)">{{active.email}}</a></td>
+                                        <td><button class="btn btn-block btn-info"> <i class="fa fa-bell m-r-10"></i>Définir une alerte</button></td>
+                                        <td>
+                                            <button class="btn btn-block btn-danger" (click)="showUserActivity=true;userActiv = active;">Voir</button>
+                                            <!-- <ul class="view_button"><li>
+                                        <a href="javascript:;" (click)="showUserActivity=true;userActiv = active;">Voir</a></li></ul> -->
+                                    </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div *ngIf="activity" class="text-center">
+                            <ul class="pagination" style="display: inline-flex; height: 34px;">
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag>1&&activity.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag>1&&activity.pages>5"><a><i class="material-icons">..</i></a></li>                
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag>2" (click)="pags(activity.pag-2)"><a>{{activity.pag-2}}</a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag>1" (click)="pags(activity.pag-1)"><a>{{activity.pag-1}}</a></li>
+                                <li class="btn btn-primary m-l-5"><a>{{activity.pag}}</a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag<activity.pages" (click)="pags(activity.pag+1)"><a>{{activity.pag+1}}</a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag+1<activity.pages" (click)="pags(activity.pag+2)"><a>{{activity.pag+2}}</a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag<activity.pages&&activity.pages>5"><a><i class="material-icons">..</i></a></li>
+                                <li class="btn btn-outline-primary m-l-5" *ngIf="activity.pag<activity.pages&&activity.pages>1" (click)="pags(activity.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+                                <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                                <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                                <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                                <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                                <option [selected]="nr == 100" [value]="100">100</option>
+                                </select>
+                                <p style="margin: 5px;">Objets par page</p>
+                            </ul>
+                        </div>
+                </section>
+       
+
+
+        </div>
+
+        <div *ngIf='showUserActivity'>
+            <div class='row' style="margin-top: -25px;">
+                <div class="col-md-2">
+                    <span class="pointer" style="color: #2994eb" (click)="showUserActivity =  false;userActiv = null;">
+                        <i class="fa fa-chevron-circle-left pointer"></i> <span class="txtHoverUnderline">Retour</span>
+                    </span>
+                </div>
+            </div>
+            <br />
+
+            <app-user-activity-analytics *ngIf="userActiv" [userActiv]="userActiv" [type]="1"></app-user-activity-analytics>
+        </div>
+</div>

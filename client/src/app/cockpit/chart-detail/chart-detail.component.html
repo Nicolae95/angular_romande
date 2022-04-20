@@ -1,0 +1,22 @@
+<div *ngIf="takeMe">
+		<div id='fancybox-overlay' [ngStyle]="{ 'display' : takeMe ? 'block' : 'none' }"></div>
+		<div id='fancybox-wrap-chart' [ngStyle]="{ 'display' : takeMe ? 'block' : 'none' }">
+				<div style="padding:10px;">	
+					<span id="fancybox-close" (click)="close()" [ngStyle]="{ 'display' : takeMe ? 'block' : 'none' }" (click)="takeMe =''"></span>
+					<h4 style="text-align: center;">{{ title }}</h4>
+					<app-chartdata [takeMe]="takeMe" [dfrom]='dateFrom' [dto]='dateTo'></app-chartdata>
+					<div class="chart-menu">
+						<div>
+							<span>Date from:</span>
+							<input type="text" name="df" #dFrom value="{{dateFrom}}">
+						</div>
+						<div>
+							<span>Date to:</span>
+							<input type="text" name="dt" value="{{dateTo}}" #dTo>
+						</div>
+						<button (click)="drawChart(dFrom.value,dTo.value)">View</button>
+						<input type="image" style="cursor:pointer;" name="submit" src="https://www.energymarketprice.com/assets/download_excel_button.png" width="140" height="36">
+					</div>
+				</div>	
+		</div>
+</div>

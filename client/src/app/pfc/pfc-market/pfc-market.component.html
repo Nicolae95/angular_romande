@@ -1,0 +1,93 @@
+<!-- <p>
+  <select class="form-control" #selectElem (change)="setNewId(selectElem.value)">
+      <option *ngFor="let pfc of pfcs" [ngValue]="pfc.pfc_id">{{pfc.pfc_id}}</option>
+  </select>
+</p>
+<p>
+  <span div *ngFor="let y of yearList">
+    <button (click)="getPfcMarketYear(y)" class="btn bt-warning" [ngStyle]="{'background-color': y === year ? 'orange' : '#ccc' }">{{y}}</button>
+  </span>
+</p>
+
+<div *ngIf="chart">
+  <app-chart [data]="chart"></app-chart>
+</div>
+
+<div *ngIf="!chart">
+  Loading ...
+</div> -->
+<!-- <app-header></app-header> -->
+  <div id="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12" style="padding-left: 0;">
+              <div  class="col-md-10" style="padding-left: 0;">
+                <div class="text-right col-md-25" style="padding-left: 0;padding-right:0;">
+                  <div class="input-group date" id="datetimepicker3">
+                    <input  class="form-control reference"
+                            ngx-mydatepicker 
+                            [(ngModel)]="currentDate" 
+                            [options]="myOptions" 
+                            #dp="ngx-mydatepicker"
+                            (dateChanged)="onDateChanged($event)"
+                            required>
+                    <span class="input-group-addon" class="input-group-addon pointer" (click)="dp.toggleCalendar()"> 
+                      <i class="fa fa-calendar"></i> 
+                    </span> 
+                  </div>
+                </div>
+                <div class="col-md-25 pull-center" >
+                  <router-outlet></router-outlet>
+                </div>
+              </div>
+              <div class="text-right col-md-2">
+                <span class="pull-right" style="margin-right:5px;">
+                    <button (click)="getPfcYear(year,'EUR')"
+                    [ngStyle]="{'background-color': valute === 'EUR' ? 'orange' : '' }"
+                    class="btn btn-sm btn-danger text-uppercase">EUR</button>
+                    <button (click)="getPfcYear(year,'CHF')"
+                    [ngStyle]="{'background-color': valute === 'CHF' ? 'orange' : '' }"
+                     class="btn btn-sm btn-danger text-uppercase">CHF</button>
+                </span></div>
+                </div>
+              <p>
+                <span>
+                    <span *ngFor="let y of yearList">
+                      <button (click)="getPfcMarketYear(y,valute)" class="btn bt-warning" [ngStyle]="{'background-color': y === year ? 'orange' : '#ccc' }">{{y}}</button>
+                  </span>
+                </span>  
+              </p>
+              <div *ngIf="chart">
+                <app-chart [data]="chart"></app-chart>
+              </div>
+              <div *ngIf="!chart && loading" class="text-center">
+                  <div class="spinner">
+                      <div class="bounce1"></div>
+                      <div class="bounce2"></div>
+                      <div class="bounce3"></div>
+                  </div>                    <!-- <div class="preloader-wrapper active">
+                      <div class="spinner-layer spinner-red-only">
+                        <div class="circle-clipper left">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                          <div class="circle"></div>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!chart && !loading">
+          Aucune donnée trouvée.
+    </div>
+</div>

@@ -1,0 +1,14 @@
+
+        <div class="news_edit" *ngIf="active" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+            <div class="reqdel">
+                <div>
+                  <h5>WHOA! Do you really want to delete this section?</h5>
+                  <p>This action can't be undone, so please be sure that's what you really want to do.</p>
+                  <i class="fa fa-times" (click)='cmon=!cmon; offMe()'></i>
+                </div>
+                <div style="text-align: right; margin-top:20px;">
+                    <button class="submit-btn">Yes, delete</button>
+                    <button class="reset-btn">Cancel</button>
+                </div>
+            </div>
+        </div>

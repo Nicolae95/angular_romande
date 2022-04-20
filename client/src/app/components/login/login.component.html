@@ -1,0 +1,143 @@
+﻿
+
+<!-- <div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form"  name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                <span class="login100-form-title" style="margin-bottom: 5rem">
+                    <h1 class="fs-70 m-l-1" style="font-size: 60px;">LOGO</h1>
+                </span>
+                
+
+                <div class="wrap-input100 validate-input" data-validate="Username is required">
+                    <span *ngIf="(trimis && username.invalid) || (error && password.valid)" data-validate="Nom d'utilisateu" class="alert-validate"></span>
+     
+                    <input class="input100" autocomplete="off" type="text" name="username"
+                            [(ngModel)]="model.username" #username="ngModel" required>
+                            <span class="focus-input100" data-placeholder="Nom d'utilisateu"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <span class="btn-show-pass">
+                        <i class="fas fs-eye"></i>
+                    </span>
+                    <span *ngIf="(trimis && username.invalid) || (error && password.valid)" data-validate="Saisir le mot de passe" class="alert-validate"></span>
+                    <input class="input100" type="password" autocomplete="off" type="password"  name="password"
+                    [(ngModel)]="model.password" #password="ngModel" required >
+                    <span  class="focus-input100" data-placeholder="Saisir le mot de passe"></span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button class="login100-form-btn"  [disabled]="loading" type="submit" (click)="trimis = true">
+                            Login
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center" style="padding-top: 2.5rem;">
+                    <span class="txt1">
+                        Don’t have an account?
+                    </span>
+                    <a class="txt2" href="javascript:void(0)">
+                        Sign Up
+                    </a>
+                </div>
+            </form>
+
+            <div *ngIf="try == 2" style="font-size: 13px;text-align: center;color: #2c6bb4;">
+                Il vous reste 2 tentatives.
+            </div> 
+            <div *ngIf="try == 1" style="font-size: 13px;text-align: center;color: #2c6bb4;">
+                Il vous reste 1 tentative.
+            </div> 
+
+            <div *ngIf="try == 0" style="font-size: 13px;text-align: center;color: #2c6bb4;">
+                Votre compte est temporairement bloqué pour des raisons de sécurité.
+            </div>   
+
+
+
+        </div>
+    </div>
+</div>
+<div id="dropDownSelect1"></div> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login </title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <img src="../../../assets/images/bg-01.jpg" alt=""> -->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(../../../assets/images/bg-01.jpg);">
+					<span class="login100-form-title-1">
+						Sign In
+					</span>
+				</div>
+
+				<form class="login100-form validate-form" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                        <span *ngIf="(trimis && username.invalid) || (error && password.valid)" class="pull-right"><i class="fa fa-exclamation-circle" style="color: #ce0028; position: absolute; margin-top: 15px;"></i></span> 
+						<span class="label-input100">Username</span>
+                        <input  class="input100"
+                                placeholder="Enter username"
+                                autocomplete="off"
+                                type="text"
+                                name="username"
+                                [(ngModel)]="model.username"
+                                #username="ngModel" required>
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+                        <span *ngIf="(trimis && password.invalid) || (error && password.valid)" class="pull-right"><i class="fa fa-exclamation-circle" style="color: #ce0028; position: absolute; margin-top: 15px;"></i></span>   
+						<span class="label-input100">Password</span>
+                        <input  class="input100"
+                                autocomplete="off"
+                                type="password"
+                                name="password"
+                                [(ngModel)]="model.password" 
+                                #password="ngModel"
+                                required 
+                                placeholder="Enter password">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="flex-sb-m w-full p-b-30">
+						<div class="contact100-form-checkbox" style="display: inline-flex;">
+                            <!-- <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me"> -->
+                            <i *ngIf="!check" class="far fa-check-square" (click)="check = !check" style="color: #999; zoom: 1.3;"></i>
+                            <i *ngIf="check" class="fas fa-check-square" (click)="check = !check" style="color: #57b846; zoom: 1.3;"></i>
+							<label style="color: #999999; margin-left: 10px;">
+								Remember me
+							</label>
+						</div>
+
+						<div>
+							<a href="javascript:void(0)" class="txt1">
+								Forgot Password?
+							</a>
+						</div>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn"  [disabled]="loading" type="submit" (click)="trimis = true">
+							Login
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

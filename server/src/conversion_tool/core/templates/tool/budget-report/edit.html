@@ -1,0 +1,133 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+
+    <form action="{% url 'tool:edit_reports_budget' id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.errors }}
+            <label for="{{ form.title.id_title }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+        <label for="locations">PFC: </label>
+        <div>
+            <select name="pfc" class="btn-group selectpicker form-control" data-live-search="true" data-size="10" id="pfc" required="required">
+                <option ame="pfc">--</option>
+                {%for meter in meters %}
+                {%if meter.id == unit_selected %}
+                    <option value="{{meter.id}}" selected>{{meter.meter_id}}</option>
+                {% else %}
+                <option ame="meters" value="{{meter.id}}">{{meter.meter_id}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="units">Units: </label>
+        <div >
+            <select name="unit" id="units" class="selectpicker form-control" data-size="10"  data-live-search="true" >
+                <option ame="units" disabled>--</option>
+            </select>
+        </div>
+        </div>
+        <div class="form-group">
+            {{ form.budget.errors }}
+            <label for="{{ form.budget.id_budget }}">CC:</label>
+            {{ form.budget }}
+        </div>
+        <div class="form-group">
+            {{ form.shedules.errors }}
+            <label for="{{ form.shedules.id_shedules }}">Shedules:</label>
+            {{ form.shedules }}
+        </div>
+        <!--{% if form.time_peak.value != None%}
+            <div class="form-group">
+                {{ form.time_peak.errors }}
+                <label>Peak time:</label>
+                    <div class='col-md-6 input-group date' id='time_peak'>
+                        {{ form.time_peak }}
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                    <br>
+                    <div class='col-md-6 input-group date' id='time_peakoff'>
+                        {{ form.time_peakoff }}
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+            </div>
+        {% endif %}-->
+        <div class="form-group">
+            {{ form.datetime_from.errors }}
+            <label for="{{ form.datetime_from.id_datetime_from }}">Datetime from:</label>
+                <div class='input-group date' id='datetime_from'>
+                    {{form.datetime_from}}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            {{ form.datetime_to.errors }}
+            <label for="{{ form.datetime_to.id_datetime_to }}">Datetime to:</label>
+                <div class='input-group date' id='datetime_to'>
+                    {{form.datetime_to}}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+        <script type="text/javascript">
+        var vals = $('#pfc').val();
+        console.log(vals)
+        $.ajax({
+            type: 'GET',
+            url: '/units/'+ vals,
+            success: function (data) {
+                // the next thing you want to do
+                var $units = $('#units');
+                $units.empty();
+                for (var i = 0; i < data.length; i++) {
+                    $units.append('<option value=' + data[i].fields.unit + '>' + data[i].fields.unit + '</option>');
+                    $units.selectpicker('refresh');
+                }
+            }
+            });
+
+
+        $('#pfc').change(function () {
+        var val = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: '/units/'+ val,
+            success: function (data) {
+                // the next thing you want to do
+                var $units = $('#units');
+                $units.empty();
+                for (var i = 0; i < data.length; i++) {
+                    $units.append('<option value=' + data[i].fields.unit + '>' + data[i].fields.unit + '</option>');
+                    $units.selectpicker('refresh');
+                }
+            }
+            });
+        });
+        $(function () {
+            $('#datetime_from').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+                // defaultDate:moment({{form.datetime_from.value}})
+            });
+        });
+        $(function () {
+            $('#datetime_to').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+            });
+        });
+        </script>
+
+      <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,865 @@
+<!-- modal scroll -->
+<div class="modal fade" id="creeOffer" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel" aria-hidden="true" (clickOutside)="hideModal = false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"  *ngIf="!hideModal">Paramétrer une Nouvelle Offre</h4>
+                    <h4 class="modal-title"  *ngIf="hideModal"> Cette offre demande une confirmation.</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" *ngIf="!hideModal">
+    
+                        <form [formGroup]="OfferForm" class="from-group needs-validation" (ngSubmit)="onSubmitOffer(OfferForm.value)"><!-- Body form offer -->
+                            <div class="form-row">
+                                <div class="col-md-3 mb-2 has-success">
+                                    <div class="cat-head">Nom du Client</div>
+                                    <!-- <app-offer-manual></app-offer-manual> -->
+                                    <input class="form-control" formControlName='nomEntreprice' placeholder="Nom du Client" readonly required>
+                                    <div class="valid-feedback" *ngIf="nomEntreprice.errors && (nomEntreprice.dirty || nomEntreprice.touched)">
+                                        <span *ngIf="nomEntreprice.errors.required">Nom du Client est requis</span>
+                                    </div>
+                                </div>                        
+                                <div class="col-md-3 mb-2 has-success">
+                                    <div class="cat-head">Nom du contact</div>
+                                    <input class="form-control" formControlName='clientId' placeholder="Nom du contact" readonly required>
+                                </div>
+                                <div class="col-md-3 mb-2 has-success">
+                                    <div class="cat-head">Conseiller</div>
+                                    <input class="form-control" formControlName='vandeurId' placeholder="Conseiller" readonly required>
+                                </div>
+                                <div class="col-md-3 has-success" (click)="openDropDown();" (clickOutside)="closeDropDown()"
+                                    [ngClass]="{'has-success': vendeur && (conseiller.dirty || conseiller.touched)}">
+                                    <div class="cat-head">Pour le compte de: </div>
+                                    <input class="form-control" formControlName='conseiller' placeholder="{{currentUser.lastName}} {{currentUser.firstName}}"
+                                                (keydown.enter)="saveVadeur(vendeures[0]);"
+                                                [(ngModel)]="vedeurName">
+        
+                                    <div *ngIf="showDropDown" (click)="closeDropDown()" class="search-drop-down" style="width: 85%;">
+                                        <div class="search-result" (click)="saveVadeur(vand)" *ngFor="let vand of vendeures">  
+                                            <span class="lists">{{vand.user.last_name}} {{vand.user.first_name}} </span>       
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-2 mb-2" [ngClass]="{'has-danger': typeOffer.invalid && (typeOffer.dirty || typeOffer.touched),
+                                                                       'has-success': typeOffer.valid && (typeOffer.dirty || typeOffer.touched)}">
+                                    <div class="cat-head">STD/SME</div>
+                                    <select class="form-control" (change)="setTypeOffer(typeOffer.value);
+                                                                           getPfcInitialByday();
+                                                                           getYearsBySite(ccProfilHistorique.value);"
+                                            formControlName='typeOffer' required>
+                                        <option class="form-control" value="Standart">STD</option>
+                                        <option class="form-control" [hidden]="initDisabTypeOffer" value="SME">SME</option>
+                                    </select>
+                                </div> -->
+                                <div class="col-md-6 mb-2" [ngClass]="{'has-danger': prixHpHc.invalid && (prixHpHc.dirty || prixHpHc.touched),
+                                                                       'has-success': prixHpHc.valid && (prixHpHc.dirty || prixHpHc.touched)}">
+                                    <div class="cat-head">Prix HP/HC ou unique</div>
+                                    <select class="form-control" (change)="prix(prixHpHc.value)" formControlName='prixHpHc' required="true">
+                                        <option class="form-control" value="hc/hp">HP/HC</option>
+                                        <option class="form-control" value="unique">Unique</option>
+                                    </select>
+                                </div>
+                                <div *ngIf="showhphc" class="col-md-6 mb-2"  [ngClass]="{'has-danger': hphc.invalid && (hphc.dirty || hphc.touched),
+                                                                                         'has-success': hphc.valid}">
+                                    <div class="cat-head">HP</div>
+                                    <select class="form-control"  formControlName='hphc' 
+                                    [ngStyle]="{'border-color':hphc.value === 'true' || hphc.value === 'false' ? 'green' : '' }"
+                                            required>
+                                        <option class="form-control" value="true">HP 08:00 - 20:00 lundi au vendredi</option>
+        
+                                    </select>
+                                </div>
+                                <!-- 3 new -->
+                                <div class="mb-2" [ngClass]="{'has-danger': type.invalid && (type.dirty || type.touched),
+                                                 'has-success': type.valid && (type.dirty || type.touched),
+                                                 'col-md-4': showhphc === true,
+                                                 'col-md-6': showhphc ===  false}">
+                                    <div class="cat-head">Type d'Offre</div>
+                                    <select class="form-control" formControlName='type' required (change)="typeOf(type.value)">
+                                        <option class="form-control" value="prolongation">Prolongation</option>
+                                        <option class="form-control" value="acquisition" >Acquisition</option>
+                                        <option class="form-control" value="retention" >Rétention</option>
+                                    </select>                                              
+                                      <div class="valid-feedback" *ngIf="type.errors && (type.dirty || type.touched)">
+                                        <span *ngIf="type.errors.required">Type d'Offre est requis</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="currentUser.role==1&&typeOffer.value=='Standart'" class="col-md-4" 
+                                        [ngClass]="{'has-danger': validation_time.valid && (validation_time.dirty || validation_time.touched),
+                                                    'has-success': validation_time.valid && (validation_time.dirty || validation_time.touched),
+                                                    'col-md-4': showhphc === true,
+                                                    'col-md-6': showhphc ===  false}">
+                                    <div class="cat-head">Durée de validité &nbsp; <span style="color: #7f7f7f;">j. ouv. (Max V.)</span></div>
+                                    <div class="d-i" style="width: 100%">                
+                                        <div class="col-md-6" style="padding-left: 0px;padding-right: 1px;">
+                                            <input  id="validites" type="number" min="1" step="1" max="99" maxlength="2" class="form-control" formControlName='validation_time' 
+                                            style="margin-bottom: 0;" >
+                                        </div>
+                                        <div class="col-md-6" style="padding-left: 1px;padding-right: 0px;">
+                                            <input  type="number" min="1" step="1" max="99" maxlength="2" style="border: 1px solid #e0e0e0;margin-bottom: 0;"
+                                                    class="form-control" formControlName='dureeVaneurF' [(ngModel)]="dureeVaneur" > 
+                                                    
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-md-12" style="width: 205px; padding-left: 0;" *ngIf="validation_time.errors && (validation_time.dirty || validation_time.touched)">
+                                            <span *ngIf="validation_time.errors.required" style="font-size: 12px;color: #d9534f;">Durée de validité est requis</span>
+                                            <span *ngIf="validation_time.errors.pattern&&validation_time.value>1" style="font-size: 12px;color: #d9534f;">Durée de validité maximum:99</span>
+                                            <span *ngIf="validation_time.value<1&&validation_time.value!=null" style="font-size: 12px;color: #d9534f;">Durée de validité minimum: 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div  *ngIf="currentUser.role!=1&&typeOffer.value=='Standart'" 
+                                        [ngClass]="{'has-danger': validation_time.valid && (validation_time.dirty || validation_time.touched),
+                                                    'has-success': validation_time.valid && (validation_time.dirty || validation_time.touched),
+                                                    'col-md-4': showhphc === true,
+                                                    'col-md-6': showhphc ===  false
+                                            }">
+                                    <div class="cat-head">Durée de validité &nbsp; <span style="color: #7f7f7f;"> j. ouv.</span></div>
+                                    <span *ngIf="currentUser.role!=1">
+                                        <select *ngIf="listdureeVaneur" class="form-control" formControlName='validation_time' required
+                                                 style="box-shadow: none;"  >
+                                            <option class="form-control" *ngFor="let i of listdureeVaneur" value="{{i}}" >{{i}}</option>
+                                        </select>   
+                                    </span>
+                                </div>
+        
+        
+                                <div *ngIf="typeOffer.value=='SME'" class="col-md-4" 
+                                        [ngClass]="{'has-danger': offer_status.valid && (offer_status.dirty || offer_status.touched),
+                                                    'has-success': offer_status.valid && (offer_status.dirty || offer_status.touched)}">
+                                    <div class="cat-head">Status</div>
+                                        <select *ngIf="listdureeVaneur" class="form-control" formControlName='offer_status' required style="box-shadow: none;">
+                                            <option class="form-control" value="ferme" >Ferme</option>
+                                            <option class="form-control" value="indicative" >Indicative</option>
+                                        </select>   
+                                </div>
+        
+
+
+                            <div [ngClass]="{'has-danger': unit.invalid && (unit.dirty || unit.touched),
+                                             'has-success': unit.valid && (unit.dirty || unit.touched),
+                                             'col-md-4': showhphc === true,'col-md-6': showhphc ===  false}">
+                            <div class="cat-head">Devise</div>
+                                <select class="form-control" formControlName='unit' required>
+                                    <option class="form-control" [selected]="unit.value == 'CHF'" value="CHF">CHF</option>
+                                    <option *ngIf="currentUser.role == 1 && typeOffer.value=='SME'" class="form-control" [selected]="unit.value == 'EUR'" value="EUR">EUR</option>
+                                </select>
+
+                        
+                            </div>
+    
+    
+    
+    
+                                <!--  -->
+                                <div class="col-md-6 mb-2"
+                                        [ngClass]="{'has-danger': nomOffer.invalid && (nomOffer.dirty || nomOffer.touched),
+                                                    'has-success': nomOffer.valid && (nomOffer.dirty || nomOffer.touched)
+                                    }">
+                                    <div class="cat-head">Nom de l'offre</div>
+                                    <input class="form-control" formControlName='nomOffer' placeholder="Nom de l'offre" required>
+                                    <div class="valid-feedback" *ngIf="nomOffer.errors && (nomOffer.dirty || nomOffer.touched)">
+                                        <span *ngIf="nomOffer.errors.required">Nom de l'offre</span>
+                                    </div>
+                                    <input class="form-control" type="hidden" readonly [(ngModel)]="company" formControlName="companyf">
+                                </div>
+                                <!-- Nr de opurtunitate -->
+                                <div class="col-md-6 mb-2"  [ngClass]="{'has-danger': nr_opportunite.invalid && (nr_opportunite.dirty || nr_opportunite.touched),
+                                                                        'has-success': nr_opportunite.valid && (nr_opportunite.dirty || nr_opportunite.touched)}">
+                                    <div class="cat-head">RE Nr. Opportunité</div>
+                                    <input class="form-control" type="number" formControlName='nr_opportunite' placeholder="Nr. Opportunité" required>
+                                </div>
+                                <!-- End Nr de opurtunitate -->  
+                                <!-- Clendares for SME  -->
+                                <div *ngIf="typeOffer.value=='SME'" class="d-i">     
+                                    <div class="col-md-3 mb-2 p-l-5 p-r-0" [ngClass]="{'has-danger': (date_debut.invalid && (date_debut.dirty || date_debut.touched)),
+                                                                           'has-success': (date_debut.valid && (date_debut.dirty || date_debut.touched))}">
+                                        <div class="cat-head">Date début</div>
+                                        <div class="text-right">
+                                            <div class="input-group date" id="datetimepicker4">
+                                                <input class="form-control"
+                                                    ngx-mydatepicker 
+                                                    [(ngModel)]="currentDebut"
+                                                    formControlName="date_debut"
+                                                    [options]="dateOptionsSME" 
+                                                    #debut="ngx-mydatepicker"
+                                                    required>
+                                                <span class="input-group-addon pointer"  (click)="debut.toggleCalendar()"> 
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" [ngClass]="{'has-danger': heures_in.invalid && (heures_in.dirty || heures_in.touched),
+                                                                       'has-success': heures_in.valid && (heures_in.dirty || heures_in.touched)}">
+                                        <div class="cat-head">hh:mm</div>
+                                        <input class="form-control without_ampm" pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9])(:[0-5][0-9])?$"
+                                               formControlName='heures_in' placeholder="10:00" required>
+                                    </div>
+        
+                                    <div class="col-md-3 mb-2 p-l-5 p-r-0" [ngClass]="{'has-danger': (date_fin.invalid && (date_fin.dirty || date_fin.touched)),
+                                                                                       'has-success': (date_fin.valid && (date_fin.dirty || date_fin.touched)) }">
+                                        <div class="cat-head" >Date fin</div>
+                                        <div class="text-right">
+                                            <div class="input-group date" id="datetimepicker3">
+                                                <input class="form-control" 
+                                                    id="dataF"
+                                                    ngx-mydatepicker 
+                                                    [(ngModel)]="currentFin"
+                                                    formControlName="date_fin"
+                                                    [options]="dateOptionsSME" 
+                                                    #fin="ngx-mydatepicker"
+                                                    required>
+                                                <span class="input-group-addon pointer" (click)="fin.toggleCalendar()"> 
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2" [ngClass]="{'has-danger': heures_fin.invalid && (heures_fin.dirty || heures_fin.touched),
+                                                                      'has-success': heures_fin.valid && (heures_fin.dirty || heures_fin.touched)}">
+                                        <div class="cat-head">hh:mm </div>
+                                        <input class="form-control without_ampm" pattern="^([0-1]?[0-9]|2[0-3]):([0-5][0-9])(:[0-5][0-9])?$"
+                                               formControlName='heures_fin' placeholder="10:00" required name="input">
+                                    </div>
+                                    <div class="col-md-2 p-l-0 p-r-5" [ngClass]="{'has-danger': durre.invalid && (durre.dirty || durre.touched),
+                                                                       'has-success': durre.valid && (durre.dirty || durre.touched)
+                                                            }" style="padding-left: 4px;">
+                                        <div *ngIf="currentUser.role!=1" class="cat-head">Durée </div>
+                                        <div *ngIf="currentUser.role==1" class="cat-head">Durée jj hh:mm</div>
+                                        <input class="form-control text-center" [(ngModel)]="durreNmodel"  formControlName='durre' >
+                                    </div>                            
+                                </div>
+                                <!-- <div class="col-md-12">
+                                        <i class="fa fa-exclamation-circle"></i>
+                                        &nbsp;La date de fin devrait être supérieure à la date de début
+                                </div> -->
+
+                                <div *ngIf="inMaxFin || dateDif || heures_fin.value>'16:00'" class="col-md-12" style="margin-top: -10px;">
+
+                                    <span class="error"> 
+                                        <span *ngIf="inMaxFin || dateDif" style="color: red;">
+                                                <i class="fa fa-exclamation-circle"></i>
+                                                &nbsp;La date de fin devrait être supérieure à la date de début
+                                        </span>
+                                        <!-- <span *ngIf="!inMaxFin"> &nbsp;</span> -->
+                                        <p style=" color: red; margin-left: 540px; top: 0;position: absolute;" *ngIf="currentUser.role!=1&&heures_fin.value>'16:00'&&typeOffer.value=='SME'"> max: 16:00</p>
+                                    </span>
+                                </div>
+                                  <!--end Clendares for SME -->  
+        
+                                <div class="col-md-6 d-i"> 
+                                  <div class="row">
+                                    <div class="col-md-8 mb-2" [ngClass]="{'has-danger': ccProfilHistorique.invalid && (ccProfilHistorique.dirty || ccProfilHistorique.touched),
+                                                                            'has-success': ccProfilHistorique.valid && (ccProfilHistorique.dirty || ccProfilHistorique.touched)}">
+                                        <div class="cat-head">CC Profil Historique ou CC type</div>
+                                        <select *ngIf="!siteList" class="form-control"></select>
+                                        <select *ngIf="siteList" (change)="getVolume($event.target.value);getYearsBySite($event.target.value);"
+                                                class="form-control" formControlName='ccProfilHistorique' required>
+                                            <option class="form-control" [hidden]="aneeProposWait" *ngFor="let site of siteList" [value]="site.id">{{site.name}}</option>
+                                        </select>
+                                    </div>
+                                        <label class="col-md-4" for="forces_id" style="padding: 0px;
+                                                                                       width: 400px;
+                                                                                       margin-left: -10px;
+                                                                                       margin-top: 30px;">
+                                            <span>Lissage Manuel</span>                                
+                                            <input type="checkbox" id="forces_id" [checked]="forces == true" (click)="forcces();" style="zoom: 1.5;" 
+                                            [disabled]="existsLissageManual||aneeProposWait||disablisMan"/>
+                                        </label>
+
+                                <!--  -->
+                                </div>
+                            </div> 
+                                <div class="col-md-6 mb-2" style="padding-right: 0;">
+                                    <div [ngClass]="{'col-md-8': currentUser.fonction == 3 ,'col-md-12': currentUser.fonction != 3}" style="padding-left: 0;"
+                                         [ngStyle]="{'padding-right': currentUser.fonction == 3 ? '0px;' : '15px;' }">
+                                     <div class="cat-head">Volume annuel total&nbsp;<span style="color: #7f7f7f;"> kWh</span> </div>
+                                     <input class="form-control" 
+                                            formControlName="volumeAnnuelTotal" 
+                                            [ngModel]="myVolume" 
+                                            placeholder="KWh" required readonly>
+                                     <div class="valid-feedback" *ngIf="volumeAnnuelTotal.errors && (volumeAnnuelTotal.dirty || volumeAnnuelTotal.touched)">
+                                         <span *ngIf="volumeAnnuelTotal.errors.required">Volume est requis</span>
+                                     </div>
+                                     <span class="valid-feedback colorred" style="font-size: 13px; position: absolute; width: 250px;" *ngIf="volCond">Le volume total est supérieur à 3 GWh</span> 
+                                     </div>
+                                     <div *ngIf="currentUser.fonction == 3" class="col-md-4" style="padding-right: 0px;">
+                                            <div class="cat-head">GWh</div>
+                                         <input [(ngModel)]="maxVolumeCc" formControlName="max_volume_cc" class="form-control"  style="width:95px;">
+                                     </div>
+        
+                                 </div>
+        
+        
+                                <div class="col-md-12 mb-2 mt-10" *ngIf="yearList.length>0">
+        
+                                    <div *ngIf="forces" class="d-i">
+                                            <div class="col-lg-25 cat-head p-l-0 p-t-10 p-l-0" style="min-width: 150px;">Années signées:</div> 
+                                            <div class="row">
+                                                <div class="col-md-3 m-r-5" [ngClass]="{'has-danger': anneeInForce.invalid  ,'has-success': anneeInForce.valid}">
+                                                        <select *ngIf="yearList" (change)="observableAnneeInForce(anneeInForce.value)" 
+                                                                class="form-control text-center" [readonly]="ccProfilHistorique.invalid" 
+                                                                formControlName='anneeInForce' required style="min-width:85px">
+                                                            <option class="form-control text-center"  [disabled]="aneeProposWait" *ngFor="let year of yearList" [value]="year">{{year}}</option>
+                                                        </select>
+                                                    </div>                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3 m-r-5" [ngClass]="{'has-danger': anneeFinForce.invalid,'has-success': anneeFinForce.valid}">
+                                                    <select *ngIf="yearList" (change)="observableAnneeFinForce(anneeFinForce.value)" 
+                                                            class="form-control text-center" [readonly]="ccProfilHistorique.invalid" 
+                                                            formControlName='anneeFinForce' required style="min-width:85px">
+                                                            <option class="form-control text-center"  [disabled]="aneeProposWait" *ngFor="let year of yearList" [value]="year">{{year}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+        
+        
+                                            <button id="openModalButton" type="button" class="btn btn-sm  text-uppercase"
+                                                    [ngClass]="{'btn-primary': !aneeProposWait,'btn-success': aneeProposWait}"
+                                                    data-toggle="modal" data-target="#manuals" (click)="go_manual()">
+                                                <i class="fa fa-arrow-circle-right" style="font-size: 23px;"></i>
+                                            </button>
+                                        </div>
+        
+        
+                                    <div *ngIf="!forces||aneeProposWait" class="col-md-6 d-i"
+                                         [ngStyle]="{'padding-left': aneeProposWait == false ? '0px' : '15px', 'padding-right': aneeProposWait == true ? '0px' : ''}">
+                                        <div class="col-md-3 cat-head p-t-10" style="padding-left: 0px;  min-width: 156px;">Années proposées:</div> 
+    
+                                        <div class="m-l-5 m-r-5" [ngClass]="{'has-danger': anneeIn.invalid,'has-success': anneeIn.valid}">
+                                            <select *ngIf="yearList" (change)="observableAnneeIn(anneeIn.value)" 
+                                                    class="form-control text-center" [readonly]="ccProfilHistorique.invalid" 
+                                                    formControlName='anneeIn' required>
+                                                <option class="form-control text-center" *ngFor="let year of yearList" [value]="year">{{year}}</option>
+                                            </select>
+                                        </div>
+        
+                                        <div class="m-l-5 m-r-5" *ngIf="!aneeProposWait" [ngClass]="{'has-danger': anneeFin.invalid,'has-success': anneeFin.valid}">
+                                            <select *ngIf="yearList" (change)="observableAnneeFin(anneeFin.value)" 
+                                                    class="form-control text-center" [readonly]="ccProfilHistorique.invalid" 
+                                                    formControlName='anneeFin' required>
+                                                <option class="form-control text-center" *ngFor="let year of yearList" [value]="year">{{year}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="m-l-5 m-r-5" *ngIf="aneeProposWait" [ngClass]="{'has-danger': anneeFin.invalid,'has-success': anneeFin.valid}">
+                                            <select *ngIf="yearList" (change)="observableAnneeFin(anneeFin.value)" 
+                                                    class="form-control text-center" [readonly]="ccProfilHistorique.invalid" 
+                                                    formControlName='anneeFin' required>
+                                                <option  [hidden]="anneeFinForce.value>=year" class="form-control text-center"  *ngFor="let year of yearList" [value]="year">{{year}}</option>
+                                            </select>
+                                        </div>
+                                        <span class="text-danger" style="position: absolute; font-size: 13px; width: 374px; margin-top: 35px;" *ngIf="yearsMore4">Une "offre standard" ne peut pas envisager plus que 4 ans</span>
+                                    </div>
+
+                                </div>
+        
+                                <div *ngIf="existsLissage && lissage.value != ''" class="col-md-6 mb-2" [ngClass]="{'has-danger': lissage.invalid && (lissage.dirty || lissage.touched),
+                                                                                             'has-success': lissage.valid && (lissage.dirty || lissage.touched)}">
+                                    <div class="cat-head">Lissage: Année signée reprise:</div>
+                                    <input class="form-control" formControlName='lissage' readonly>
+                                    <div class="valid-feedback" *ngIf="lissage.errors && (lissage.dirty || lissage.touched)">
+                                    </div>
+                                </div> 
+                                <div *ngIf="existsLissage && lissage.value != ''" class="col-md-6">
+                                    <div [ngClass]="{'has-danger': decote.invalid && (decote.dirty || decote.touched),
+                                                     'has-success': decote.valid && (decote.dirty || decote.touched)}">
+                                        <div class="col-md-12"> <div class="cat-head ">Année de répartition de la décote:</div></div>
+                                        <div class="d-i">
+                                        <div class="col-md-11"><input class="form-control col-md-12" formControlName='decote' readonly placeholder="Décote" required></div>
+                                        <div class="col-md-2">
+                                            <button type="button" (click)="show = !show" class="btn btn-primary"> 
+                                                <span *ngIf="!show">>>></span>
+                                                <span *ngIf="show"><<<</span>
+                                            </button>
+                                        </div>  
+                                        </div>
+                                    </div>                                
+             
+                                    <div style="display: inline-block;padding-left: 15px;" [ngClass]="{'has-danger': decote.invalid && (decote.dirty || decote.touched),'has-success': decote.valid && (decote.dirty || decote.touched)}" 
+                                            class="text-danger" *ngIf="decote.errors && (decote.dirty || decote.touched)">
+                                        <span *ngIf="decote.errors.required">Décote est requis</span>
+                                    </div>
+                                </div>    
+                                <div *ngIf="show && existsLissage">
+                                    <div class="table-responsive leftmodal animated" [ngClass]="{'fadeOutRight': !show, 'fadeInRight': show }">
+                                        <table class="tableR table-bordered table-decore3" *ngIf="lisages"> 
+                                            <tr>
+                                                <td class="text-right" style="border-bottom: dashed;">Lissage</td>
+                                                <th class="text-center" *ngFor="let y of selectedYears">{{y}}</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Consos annuelles originales (kWh)</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let volumes of lisages.volumes">
+                                                        <span *ngIf="volumes[y]">
+                                                            {{volumes[y]}}
+                                                        </span>
+                                                    </span>                                            
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Prix Moyens Plancher originaux (ct/kWh)</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.prices">
+                                                        <span *ngIf="lisage[y]">
+                                                            {{lisage[y] | number : '1.2-2'}}
+                                                        </span>
+                                                    </span>   
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Prix Moyens Finaux originaux (ct/kWh)</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.prices_final">
+                                                        <span *ngIf="lisage[y]">
+                                                            {{lisage[y] | number : '1.2-2'}}
+                                                        </span>
+                                                     </span>     
+                                                </td>
+                                            </tr>                                                           
+                                            <tr>
+                                                <td class="text-right"  style="border-bottom: dashed;">Contrat original, Annees signees reprises</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.lissage" style=" display:block;color: white; background: rgb(228, 46, 46)">
+                                                        <span *ngIf="lisage[y] || lisage[y]===0">NON</span>
+                                                    </span>
+                                                    <span *ngFor="let lisage of lisages.prices_final" style="display:block;" 
+                                                    style=" display:block;color: white; background: rgb(83, 189, 106)">
+                                                            <span *ngIf="lisage[y]">
+                                                                    OUI 
+                                                            </span>
+                                                         </span>    
+                                                </td>
+                                            </tr>                                                          
+                                            <tr>
+                                                <td class="text-right"> Report (Fr.)</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.decote_reporte">
+                                                        <span *ngIf="lisage[y]">{{lisage[y]}}</span>
+                                                    </span>  
+                                                    <span *ngFor="let lisage of lisages.lissage">
+                                                        <span *ngIf="lisage[y] || lisage[y]===0">0.00</span>
+                                                    </span>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Annees de repartition de la decote</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.lissage" style=" display:block;color: white; background: rgb(228, 46, 46)">
+                                                        <span *ngIf="lisage[y] || lisage[y]===0">OUI</span>
+                                                    </span>
+                                                    <span *ngIf="lisages.lissage_years[i]===y" style="display:block;" 
+                                                             style=" display:block;color: red; background: #ccc" >
+                                                            NON
+                                                    </span> 
+                                                </td>
+                                            </tr>                                                           
+                                            <tr>
+                                                <td class="text-right">report de la decote (ct/kWh)</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i">
+                                                    <span *ngFor="let lisage of lisages.lissage">
+                                                        <span *ngIf="lisage[y]">{{lisage[y]  | number : '1.2-2'}}</span>
+                                                        <span *ngIf="lisage[y]===0">0</span>
+                                                    </span>  
+                                                    <span *ngIf="lisages.lissage_years[i]===y" class="colorred" >
+                                                        0.00
+                                                    </span>
+                                                </td>
+                                            </tr>                                                          
+                                            <tr>
+                                                <td class="text-right">Eco-énergies incluses</td>
+                                                <td class="text-center" *ngFor="let y of selectedYears;index as i" >
+                                                    <span *ngFor="let lisage of lisages.lissage" style=" display:block;color: white; background: rgb(83, 189, 106)">
+                                                        <span *ngIf="lisage[y] || lisage[y]===0">OUI</span>
+                                                     </span> 
+                                                     <span *ngIf="lisages.lissage_years[i]===y" style="display:block;"  style=" display:block;color: red; background: #ccc" >
+                                                        NON
+                                                    </span>
+                                               </td>
+                                            </tr>
+                                            <tr> 
+                                                <td class="text-right" >Taux lissage, 
+                                                    <p style="display:inline-flex">val abs max  </p>
+                                                    <input *ngIf="currentUser.role != 1" type="number" min="0" step="1" style="width: 52px; border: 0px;text-align: center;"
+                                                           [(ngModel)]="lisageMax" formControlName="lisageMaxFormC" [disabled]="true" readonly>
+                                                    <input *ngIf="currentUser.role == 1" type="number" min="0" step="1" style="width: 52px; border: 0px;text-align: center;"
+                                                           [(ngModel)]="lisageMax" formControlName="lisageMaxFormC">
+                                                    <p style="display:inline-flex">%</p>
+                                                </td>
+                                                <td colspan="8" style="border: 0px;" *ngIf="ccProfilHistorique.valid&&anneesProposees.valid">
+                                                <input type="number" min="0" step="1"
+                                                        [(ngModel)]="percent" 
+                                                        formControlName="taux" 
+                                                        class="text-center"
+                                                        style="width: 98%;"></td>
+                                            </tr>
+                                        </table>
+                                        <div *ngIf="percent>lisageMax||lisageMax < - percent"><p class="colorred text-center" style="height: 5px;text-align: center; font-size: 12px;">
+                                            Vous avez dépassé le taux maximal de lissage toléré</p></div>
+                                    </div>
+                                </div>
+                                <!--end left bar  -->
+                                <div class="col-md-12 d-i m-b-15" style="padding-left: 0px;">
+                                    <div class="col-md-6 d-i" style="padding: 0px 0px;" *ngIf="selectedYears.length !== 0">
+                                        <div class="col-md-6" style="padding-left: 0px;"
+                                        [ngClass]="{'has-danger': (pfcRecordFirstF.invalid && (pfcRecordFirstF.dirty || pfcRecordFirstF.touched)),
+                                                    'has-success': (pfcRecordFirstF.valid && (pfcRecordFirstF.dirty || pfcRecordFirstF.touched))}">
+                                       <div class="cat-head">Date début</div>
+                                       <div class="text-right">
+                                           <div class="input-group date" id="datetimepickerFirst">
+                                               <input  class="form-control"
+                                                       ngx-mydatepicker 
+                                                       [(ngModel)]="pfcRecordFirst"
+                                                       formControlName="pfcRecordFirstF"
+                                                       [options]="datePfcsOptions" 
+                                                       #first="ngx-mydatepicker"
+                                                       required>
+                                               <span class="input-group-addon pointer"  (click)="first.toggleCalendar()"> 
+                                                   <i class="fa fa-calendar"></i>
+                                               </span>
+                                           </div>
+                                       </div>
+                                   </div>
+           
+                                   <div style="padding-right: 5px;"
+                                            class="col-md-6 " [ngClass]="{'has-danger': (pfcRecordLastF.invalid && (pfcRecordLastF.dirty || pfcRecordLastF.touched)),
+                                                                              'has-success': (pfcRecordLastF.valid && (pfcRecordLastF.dirty || pfcRecordLastF.touched)) }">
+                                       <div class="cat-head">Date fin</div>
+                                       <div class="text-right">
+                                           <div class="input-group date" id="datetimepicker3">
+                                               <input  class="form-control" 
+                                                       id="datetimepickerLast"
+                                                       ngx-mydatepicker 
+                                                       [(ngModel)]="pfcRecordLast"
+                                                       formControlName="pfcRecordLastF"
+                                                       [options]="datePfcsOptions" 
+                                                       #last="ngx-mydatepicker"
+                                                       required>
+                                               <span class="input-group-addon pointer" (click)="last.toggleCalendar()"> 
+                                                   <i class="fa fa-calendar"></i>
+                                               </span>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <p *ngIf="invalidPeriod" class="valid-feedback colorred" style="font-size: 13px; margin-top: -5px; margin-bottom: 0px; height: 0px; padding-left: 15px;">
+                                       Veuillez choisir une période valide
+                                   </p> 
+                                </div>
+        
+                                    <div [hidden]="typeOffer.value==='SME'" class="col-md-6"
+                                         [ngClass]="{'has-danger': existsPfc === false && (datePFC.invalid && (datePFC.dirty || datePFC.touched)),
+                                                     'has-success': existsPfc === true && (datePFC.valid && (datePFC.dirty || datePFC.touched))}"
+                                         [ngStyle]="{'padding-left': currentPfc && selectedYears.length !== 0 ? '5px' : '0px;',
+                                                     'padding-left': !currentPfc && selectedYears.length === 0 ? '5px' : '0px;'}">
+                                        <div>
+                                            <div class="cat-head">Profil PFC du jour ou choisir une date: 
+                                                 <div *ngIf="loadPFC" class="spinner" style="position: absolute; margin-top: -20px; margin-left: 281px;">
+                                                        <div style="height:10px; width:10px" class="bounce1"></div>
+                                                        <div style="height:10px; width:10px" class="bounce2"></div>
+                                                        <div style="height:10px; width:10px" class="bounce3"></div>
+                                                    </div>
+                                            </div>
+                                            <div class="input-group date" id="datetimepicker3">
+                                                <input class="form-control"
+                                                       id="dataF"
+                                                       ngx-mydatepicker 
+                                                       formControlName="datePFC"
+                                                       [(ngModel)]="currentDate" 
+                                                       [options]="myOptions" 
+                                                       #dp="ngx-mydatepicker"
+                                                       (dateChanged)="onDateChanged($event)">
+                                                <span class="input-group-addon pointer"  (click)="dp.toggleCalendar()"> 
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input class="form-control" type="hidden" readonly [(ngModel)]="currentPfc" formControlName="pfc">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div *ngIf="selectedYearsLisage.length!=0" class="table-responsive pd-top-20 col-md-12" style="padding-bottom: 0px">
+                                    <table class="tableR table-bordered table-decore2">
+                                        <tr>
+                                            <td class="text-right">ct/kWh </td>
+                                            <td class="text-center" *ngFor="let y of selectedYearsLisage"[ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }">
+                                                {{y.year}}
+                                            </td>
+                                        </tr>
+                                        <tr class="colorback">
+                                            <td class="text-right">Inclure au Prix Plancher</td>
+                                            <td *ngFor="let y of selectedYearsLisage;"></td>                                    
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">Effort commercial</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                <input type="number" [ngModel]="0" 
+                                                        [(ngModel)]="efforts[y.year]"  
+                                                        [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }"
+                                                        formControlName="effortsF" 
+                                                        class="text-center" style="max-width: 100px;"
+                                                        [readonly]="y.type === 'lissage'">
+                                            </td>                                    
+                                        </tr>
+                                        <tr class="colorback">
+                                            <td class="text-right">Inclure au Prix Finaux</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                <select class="form-control white" formControlName="energy_type"
+                                                        style="background: #2e3336;border: 0px;color: #fff;"
+                                                        (change)="getEcoEnergy(energy_type.value)">
+                                                    <option class="form-control" value="energy1">Hydro suisse Naturemade Star   </option>
+                                                    <option class="form-control" value="energy2">Hydro suisse                   </option>
+                                                    <option class="form-control" value="energy3">Nucléaire suisse               </option>
+                                                    <option class="form-control" value="energy4">Mix hydro-solaire suisse       </option>
+                                                    <option class="form-control" value="energy5">Hydro romand Naturemade Star   </option>
+                                                    <option class="form-control" value="energy6">Hydro européens                </option>
+                                                    <option [hidden]="typeOffer.value != 'SME'" class="form-control" value="energy7">Hydro suisse Naturemade Basic  </option>
+                                                    <option [hidden]="typeOffer.value != 'SME'" class="form-control" value="energy8">Solaire suisse Naturemade Star </option>
+                                                    <option [hidden]="typeOffer.value != 'SME'" class="form-control" value="energy9">Custom                         </option>
+                                                </select>
+                                            </td> 
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                <div  style="margin-bottom: 0px;">
+                                                    <input *ngIf="typeOffer.value=='SME'" type="number" 
+                                                            [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                                        'color':      y.type === 'lissage' ? 'white' : ''}"                                    
+                                                            disabled class="text-center" style="max-width: 100px;">
+                                                    <input  *ngIf="typeOffer.value=='Standart'" type="number" value="{{ energies[y.year] | number : '1.2-3'}}" 
+                                                    [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                                'color':      y.type === 'lissage' ? 'white' : ''}"                                    
+                                                    disabled class="text-center" style="max-width: 100px;">
+                                                </div>
+                                            </td>                                                                                 
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">Marge sur GO</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                    <input type="number" [ngModel]="0" 
+                                                            [(ngModel)]="sur_go[y.year]" formControlName="sur_goF" 
+                                                            class="text-center" style="max-width: 100px;"
+                                                            [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }"
+                                                            [readonly]="y.type === 'lissage'">
+                                            </td>                                                                        
+                                        </tr>
+                                        <tr *ngIf="typeOffer.value=='Standart'">
+                                            <td class="text-right">Total éco-énergies</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                <div  style="margin-bottom: 0px;">
+                                                    <input type="number" value="{{ totalEco[y.year] | number : '1.2-3'}}"
+                                                            disabled 
+                                                           class="text-center" style="max-width: 100px;" 
+                                                           [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)',
+                                                                       'color':      y.type === 'lissage' ? 'white' : ''}">
+                                                </div>
+                                            </td>                                                                         
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">P&S1</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                 <input type="number" [ngModel]="0" [(ngModel)]="ps1[y.year]" 
+                                                        formControlName="ps1F"
+                                                        class="text-center" style="max-width: 100px;" 
+                                                        [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }"
+                                                        [readonly]="y.type === 'lissage'">
+                                            </td>                                                                        
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">P&S2</td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                 <input type="number" [ngModel]="0" [(ngModel)]="ps2[y.year]" 
+                                                        formControlName="ps2F"
+                                                        class="text-center" style="max-width: 100px;" 
+                                                        [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }"
+                                                        [readonly]="y.type === 'lissage'">
+                                            </td>                                                                        
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">Majoration<i *ngIf="currentUser.role != 1">&nbsp;max:&nbsp;{{margesMax}}</i></td>
+                                            <td *ngFor="let y of selectedYearsLisage; let i = index">
+                                                <input type="number" [ngModel]="0" [(ngModel)]="majors[y.year]" 
+                                                        formControlName="majorsF" 
+                                                        class="text-center" style="max-width: 100px;" 
+                                                        [ngStyle]="{'background': y.type === 'lissage' ? 'white' : 'rgba(0,255,0,0.1)' }"
+                                                        [readonly]="y.type === 'lissage'">
+                                            </td>   
+                                        </tr>                                
+                                    </table>
+                                    <div *ngIf="mesajErros"><p class="colorred">Les valeurs limites sont dépassées</p></div>
+                                    <div *ngIf="currentUser.role == 1">
+                                        <div class="col-md-12 d-i m-t-10 m-b-5"> <!-- min max -->
+                                            <div class="col-md-4 mb-2"  style="white-space:nowrap;padding-left:0px;"><span>Définir les marges, ct/kWh</span></div>
+                                            <div class="col-md-2 mb-2" style="white-space:nowrap">
+                                                <span class="cat-head" style="display: inline;">Min&nbsp;</span>
+                                                <input class="marges text-center" type="number" min="0" step="1" [(ngModel)]="margesMin" formControlName="minim" required>
+                                            </div>
+                                            <div class="col-md-2 mb-2" style="white-space:nowrap"> 
+                                                <span class="cat-head" style="display: inline; margin-left: 20px;">Max&nbsp;</span>
+                                                <input class="marges text-center" type="number" min="0" step="1" [(ngModel)]="margesMax" formControlName="maxim" required>
+                                            </div>
+                                        </div><!-- min max -->
+                                    </div>
+                                </div><br>   
+                                <div class="col-md-12 mb-2" *ngIf="type.value != 'prolongation'" >
+                                    <label for="yy" style="display: inline-flex;" *ngIf="type.value != 'retention'">
+                                        <a style="margin-top:3px; margin-left:10px;color: #262626;cursor: context-menu; margin-left: 0;" >Client déjà sur le marché.</a>                                
+                                        <input type="checkbox" id="yy" formControlName="marche" style="zoom: 1.5; margin-left: 5px; margin-top: 5px;" />
+                                      </label>
+                                    <label for="xy" style="display: inline-flex;" *ngIf="type.value == 'retention'">
+                                        <a style="margin-top:3px;;color: #262626;cursor: context-menu;" >Déjà télé relevé.</a>                                
+                                        <input type="checkbox" id="xy" formControlName="releve"  style="zoom: 1.5; margin-left: 5px; margin-top: 5px;"/>
+                                    </label>
+                                </div>
+                                    <div class="col-md-12 mb-2" [hidden]="type.value == 'prolongation'"
+                                        [ngClass]="{'has-danger': grd.invalid && (grd.dirty || grd.touched),
+                                                    'has-success': grd.valid && (grd.dirty || grd.touched)}">
+                                        <div class="cat-head">Choix du GRD</div>
+                                        <select class="form-control" formControlName='grd' *ngIf="grds" >
+                                            <option class="form-control" *ngFor="let grd of grds" [value]="grd.id">{{grd.name}}</option>
+                                        </select>
+                                    </div>
+                                    
+        
+                                <div class="col-md-12 mb-2" [ngClass]="{'has-success': comment.valid && (comment.dirty || comment.touched)}">
+                                    <div class="cat-head">Commentaire affiché sur l'offre</div>
+                                    <input class="form-control" formControlName='comment' />
+                                    <div class="valid-feedback" *ngIf="comment.errors && (comment.dirty || comment.touched)"></div>
+                                </div>
+                            </div><br>
+                            <!-- OfferForm.invalid: {{OfferForm.invalid}} <br> 
+                            existsPfc: {{existsPfc}}<br> 
+                            volCond: {{volCond}}<br>
+                            yearsMore4: {{yearsMore4}}<br>
+                            mesajErros: {{mesajErros}}<br>
+                            inMaxFin: {{inMaxFin}}<br><br>
+                            clientId: {{clientId.valid}}<br>
+                            vandeurId: {{vandeurId.valid}}<br>
+                            typeOffer: {{typeOffer.valid}}<br>
+                            prixHpHc: {{prixHpHc.valid}}<br>
+                            nomOffer: {{nomOffer.valid}}<br>
+                            nr_opportunite: {{nr_opportunite.valid}}<br>
+                            comment: {{comment.valid}}<br>
+                            marche: {{marche.valid}}<br>
+                            releve: {{releve.valid}}<br>
+                            grd: {{grd.valid}}<br>
+                            companyf: {{companyf.valid}}<br>
+                            hphc: {{hphc.valid}}<br>
+                            ccProfilHistorique: {{ccProfilHistorique.valid}}<br>
+                            volumeAnnuelTotal: {{volumeAnnuelTotal.valid}}<br>
+                            anneesProposees: {{anneesProposees.valid}}<br>
+                            datePFC: {{datePFC.valid}}<br>
+                            pfc: {{pfc.valid}}<br>
+                            type: {{type.valid}}<br>
+                            validation_time: {{validation_time.valid}}<br>
+                            unit: {{unit.valid}}<br>
+                            lissage: {{lissage.valid}}<br>
+                            decote: {{decote.valid}}<br>
+                            taux: {{taux.valid}}<br>
+                            minim: {{minim.valid}}<br>
+                            maxim: {{maxim.valid}}<br>
+                            decotesF: {{decotesF.valid}}<br>
+                            effortsF: {{effortsF.valid}}<br>
+                            energiesF: {{energiesF.valid}}<br>
+                            majorsF: {{majorsF.valid}}<br>
+                            ps1F: {{ps1F.valid}}<br>
+                            ps2F: {{ps2F.valid}}<br>
+                            sur_goF: {{sur_goF.valid}}<br>
+                            totalEcoF: {{totalEcoF.valid}}<br>
+                            mesajErrosF: {{mesajErrosF.valid}}<br>
+                            lisageMaxFormC: {{lisageMaxFormC.valid}}<br>
+                            energy_type: {{energy_type.valid}}<br>
+                            date_debut: {{date_debut.valid}}<br>
+                            heures_in:: {{heures_in.valid}}<br>
+                            date_fin: {{date_fin.valid}}<br>
+                            heures_fin: {{heures_fin.valid}}<br>
+                            durre: {{durre.valid}}<br>
+                            dureeVaneurF: {{dureeVaneurF.valid}}<br>
+                            offer_status: {{offer_status.valid}}<br>
+                            conseiller: {{conseiller.valid}}<br>
+                            anneeFin: {{anneeFin.valid}}<br>
+                            anneeIn: {{anneeIn.valid}}<br>
+                            invalidPeriod: {{invalidPeriod}} -->
+                        </form>
+                    </div>
+        
+     
+                        <div id='fancybox-overlay' [ngStyle]="{ 'display' : majorationsVerify ? 'block' : 'none' }"></div>
+                        <div id='fancybox-wrap'    [ngStyle]="{ 'display' : majorationsVerify ? 'block' : 'none' }" style="padding-top: 0px;">
+                            <div class="modal-header" style="height: 50px;overflow: hidden;">
+                                    <h5 class="modal-title" id="largeModalLabel">Avertissement Marge</h5>
+                                    <button type="button" class="close" (click)="majorationsVerify = false;one_veryfi_popup = false" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            <div> 
+                            <span style="font-style: normal;">Veuillez confirmer la marge dans la création de la nouvelle offre.</span>
+                            <button type="button" class="btn btn-outline-success pull-right" (click)="majorationsVerify = false;one_veryfi_popup = false">OK</button>
+                            </div> 
+                        </div>
+        
+        
+                    <div class="modal-body"  *ngIf="hideModal&&result">
+                        <div>
+                            <h4 style="display: inline-flex;">Cette offre demande la confirmation du&nbsp;
+                                <div *ngIf="result.fonction == 1">Account Manager</div>
+                                <div *ngIf="result.fonction == 2">Key Account Manager</div>
+                                <div *ngIf="result.fonction == 3">Responsable du service Tarification et Pricing</div>
+                                <div *ngIf="result.fonction == 4">Responsable Marchés</div>
+                                <div *ngIf="result.fonction == 5">Directeur REC SA</div>
+                                <div *ngIf="result.fonction == 6">Responsable du Groupe Account Manager</div>
+                                <div *ngIf="result.fonction == 7">Responsable Qualité Ressource Energie</div>
+                                <div *ngIf="result.fonction == 8">Responsable du Marché Entreprises et Collectivités Analyste Pricing</div>
+                                <div *ngIf="result.fonction == 9">CEO</div>
+                            </h4>
+                        <h4 style="margin-bottom: 20px;">Volumétrie, GWh: {{result.volumetrie | number : '1.2-2'}}</h4>
+                        <h4 style="margin-bottom: 20px;">Marge, %: {{result.marge - 100 | number : '1.2-2' }}</h4>
+                        
+                        <h4>Souhaitez-vous créer l'offre et demander sa confirmation?</h4><br>
+                        
+                        <div *ngIf="!loading">
+                            <button class="pull-right btn btn-danger" (click)="hideModal = false;close();" data-dismiss="modal"> Annuler </button>
+                            <button class="pull-right btn btn-primary" style="margin-right: 10px;" (click)="mailfunction()">Oui</button><br><br><br>
+                        </div>
+                        <div *ngIf="loading">
+                            <button class="pull-right btn btn-danger" [disabled]="true"> Annuler </button>
+                            <button class="pull-right btn btn-primary" style="margin-right: 10px;"  [disabled]="true">Oui 
+                                <div class="lds-ring "><div></div><div></div><div></div><div></div></div>
+                            </button><br><br><br>
+                        </div>
+                        </div>
+                    </div>
+                <div class="modal-footer" *ngIf="!hideModal">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button *ngIf="!loading" type="button" class="btn btn-primary" (click)="verificamMarje(OfferForm.value);"
+                            [disabled]="OfferForm.invalid 
+                                        || existsPfc === false 
+                                        || volCond === true 
+                                        || yearsMore4 === true 
+                                        || mesajErros === true
+                                        || invalidPeriod === true
+                                        || inMaxFin === true">
+                        Sauvegarder
+                    </button>
+                    <button *ngIf="loading" type="button" class="btn btn-primary">
+                        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>SAUVEGARDER
+                    </button>    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal scroll -->    
+<app-offer-manual></app-offer-manual>
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,50 @@
+
+	<!-- modal medium -->
+  <div class="modal fade" id="createNewCockpitB" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="mediumModalLabel">Create energy cockpit</h4>
+          <button type="button" class="close" id="cancelcreateNewCockpitB" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="padding: 0px 40px 15px 40px;">
+            <p style="color: #4f4f4f;">In order to create an ENERGY COCKPIT, you should insert a name and attach ADMIN and CLIENT users that will get this page.
+               Once the ENERGY COCKPIT is created, you could attach other users.</p>
+          </div>
+          <form [formGroup]="cockpitB" (ngSubmit)="onSubmit(cockpitB.value)">  
+            <input class="form-control" type="text" formControlName="cockpitName" required style="height: 37px;">
+            <br>
+            <div class="col-md-12" style="position: relative; margin-left: -15px; padding-right: 7px; margin-top: 20px; margin-bottom: 20px; display: contents">
+              <select *ngIf="clientList" class="form-control myselect ng-pristine ng-invalid ng-touched" (change)="getOfferListBy($event.target.value)"
+                       formcontrolname="cockpitClients"  [(ngModel)]="ngClients" [ngModelOptions]="{standalone: true}">
+                  <option *ngFor="let item of clientList" [value]="item.id">{{item.nom_entrepise}}</option>
+              </select>
+            </div>
+  
+            <!-- <div *ngIf="offersList.length != 0" class="col-md-12" style="margin-top: 20px; margin-bottom: 20px;padding-left: 0px;padding-right: 20px;">
+              <angular2-multiselect [data]="offersList"
+                                    [(ngModel)]="selectedoffers" 
+                                    [settings]="offersSettings" 
+                                    (change)="gata()"
+                                    formControlName='ofersList'>
+              </angular2-multiselect>
+            </div> -->
+            <!-- <div class="modal-footer" style="border-top: 0px; padding-right: 0px;">
+                <button *ngIf="!loading" type="submit" class="btn btn-sm btn-danger pull-right" [disabled]="cockpitName.invalid || cockpitClients.invalid">SAUVEGARDER</button>
+                <button *ngIf="loading"   type="submit" class="btn btn-sm btn-danger pull-right" [disabled]="true">SAUVEGARDER
+                  <img class="pull-right" class="redload" src="../../../assets/images/assets/load.gif">
+                </button>
+            </div> -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="onSubmit(cockpitB.value)" [disabled]="cockpitName.invalid || cockpitClients.invalid || loading">SAUVEGARDER</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal medium -->

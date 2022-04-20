@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Zeno</title>
+  </head>
+  <body class="animsition" style="animation-duration: 900ms; opacity: 1;">
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        <header class="header-mobile d-block d-lg-none">
+            <div class="header-mobile__bar">
+                <div class="container-fluid">
+                    <div class="header-mobile-inner">
+                        <a class="logo" href="javascript:void(0)">
+                            <!-- <h1 style="font-size: 50px;">LOGO</h1> -->
+                            <img src="../../../assets/images/logoEMPLOGOBlue.png" style="width: 300px; padding: 15px;" alt="">
+                        </a>
+                        <div class="hamburger-box nav-btn" (click)="hamburger_mobile = !hamburger_mobile">
+                            <!-- <span *ngIf="!hamburger_mobile"></span>
+                            <span *ngIf="!hamburger_mobile"></span>
+                            <span *ngIf="!hamburger_mobile"></span> -->
+                            <i *ngIf="!hamburger_mobile" class="fas fa-bars  fs-21 animated" [ngClass]="{'bounceIn': !hamburger_mobile, 'bounceOut': hamburger_mobile}"></i>
+                            <i *ngIf="hamburger_mobile"  class="fas fa-times fs-23 animated" [ngClass]="{'bounceIn': hamburger_mobile, 'bounceOut': !hamburger_mobile}"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="navbar-mobile d-none" [ngClass]="{'d-block': hamburger_mobile}">
+                <div class="container-fluid">
+                    <ul class="navbar-mobile__list list-unstyled">
+                        <li class="has-sub" [ngClass]="{'active': accountUrl}">
+                                <a class="js-arrow" href="javascript:void(0)"  (click)="accountsRout = !accountsRout" [ngClass]="{'open': accountsRout === true}">
+                                    <i class="fa fa-user"></i>Account</a>
+                                <ul class="list-unstyled navbar__sub-list js-sub-list" [ngStyle]="{'display': accountsRout === true ? 'block' : 'none'}">
+                                    <li [routerLinkActive]="['active']"><a [routerLink]="['/clients']">Clients</a></li>
+                                    <li [routerLinkActive]="['active']"><a [routerLink]="['/admins']">Admins</a></li>
+                                </ul>
+                            </li>
+                            <li [routerLinkActive]="['active']"><a [routerLink]="['/cockpit']"> <i class="fas fa-tachometer-alt"></i>Cokpit</a></li>        
+                            <li [routerLinkActive]="['active']"><a [routerLink]="['/offers']"><i class="fas fa-copy"></i>Offres</a></li>   
+                        <li class="has-sub">
+                            <a class="js-arrow" href="javascript:void(0)" (click)="data = !data" [ngClass]="{'open': data === true}">
+                                <i class="fas fa-chart-line"></i>Data</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" [ngStyle]="{'display': data === true ? 'block' : 'none'}">
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/pfc']">PFC</a></li>
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/risque']">Primes de risque</a></li>  
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/ecoenergies']">Eco-énergies</a></li>
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/datahub']">Data hub</a></li>
+                            </ul>
+                        </li>
+                        <li [routerLinkActive]="['active']"><a [routerLink]="['/analytics']"><i class="fas fa-chart-bar"></i>Analytics</a></li>
+    
+                        <li class="has-sub">
+                            <a class="js-arrow" href="javascript:void(0)"  (click)="courbes = !courbes" [ngClass]="{'open': courbes === true}"><i class="fa fa-signal"></i>Courbes de Charges</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list" [ngStyle]="{'display': courbes === true ? 'block' : 'none'}">
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/pondere']">Profils CC Types</a></li>
+                            </ul>
+                        </li>
+                        <div class="header-button m-t-0">
+                                <div class="account-wrap m-l-10"  *ngIf="currentUser">
+                                        <div class="account-item clearfix js-item-menu"  (click)="notifications = false;accounts = !accounts" [ngClass]="{'show-dropdown': accounts === true}">
+                                            <div class="image noti__item js-item-menu" style="width: 100%;font-weight: 700; height: auto;">
+                                              
+                                              <span><i class="fa fa-user"></i> 
+                                                    {{ currentUser.firstName }} {{ currentUser.lastName }}
+                                              </span>
+                                            </div>
+                                           
+                                            <div class="content">
+                                            </div>
+                                            <div class="account-dropdown js-dropdown" style="top: 37px;left: 0;">
+                                                <div class="info clearfix">
+                                                    <div class="image">
+                                                        <a href="javascript:void(0)">
+                                                            <img src="../../../assets/images/img_avatar.png" alt=" {{ currentUser.firstName }} {{ currentUser.lastName }}">
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <h5 class="name">
+                                                            <a href="javascript:void(0)"> {{ currentUser.firstName }} {{ currentUser.lastName }}</a>
+                                                        </h5>
+                                                        <span class="email">{{ currentUser.email }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="account-dropdown__body">
+                                                    <div class="account-dropdown__item">
+                                                        <a href="javascript:void(0)" *ngIf="curentClient"  data-toggle="modal" data-target="#editCurentUser">
+                                                            <i class="fas fa-user"></i>Account</a>
+                                                    </div>
+                                                    <div class="account-dropdown__item">
+                                                        <a href="javascript:void(0)">
+                                                                <i class="fas fa-cog"></i>Setting</a>
+                                                    </div>
+                                                    <div class="account-dropdown__item">
+                                                        <a href="javascript:void(0)">
+                                                            <i class="fas fa-hand-holding-usd"></i>Billing</a>
+                                                    </div>
+                                                </div>
+                                                <div class="account-dropdown__footer">
+                                                    <a href="javascript:void(0)" routerLink='/login'>
+                                                        <i class="fas fa-power-off"></i>Logout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="noti-wrap">
+                                    <div *ngIf="topUser" class="noti__item js-item-menu" style="margin-right: 15px;" (click)="accounts = false;notifications = !notifications" [ngClass]="{'show-dropdown': notifications === true}">
+                                        <i class="fa fa-bell"></i>
+                                        <span class="quantity">{{topUser.nr}}</span>
+                                        <div class="mess-dropdown js-dropdown" style="top: 37px; left: -305px;">
+                                            <div class="notifi__title">
+                                                <p>Vous avez {{topUser.nr}} Notifications</p>
+                                            </div>
+
+                                            <div class="notifi__item" *ngFor="let item of topUser.logs; let i=index">
+                                                <div>
+                                                    <div *ngIf="item.log_type === 'signee'"   class="m-r-5 icons i_signee">  <span class="fas fa-file-signature"></span></div>
+                                                    <div *ngIf="item.log_type === 'signer'"   class="m-r-5 icons i_signer">  <span class="fas fa-file-alt">     </span></div>
+                                                    <div *ngIf="item.log_type === 'click'"    class="m-r-5 icons i_click">   <span class="fa fa-mouse-pointer"> </span></div>
+                                                    <div *ngIf="item.log_type === 'send'"     class="m-r-5 icons i_send">    <span class="fa fa-envelope">      </span></div>
+                                                    <div *ngIf="item.log_type === 'open'"     class="m-r-5 icons i_open">    <span class="fa fa-envelope-open"> </span></div>
+                                                    <div *ngIf="item.log_type === 'created'"  class="m-r-5 icons i_created"> <span class="fa fa-check">         </span></div>
+                                                    <div *ngIf="item.log_type === 'confirmer'
+                                                             ||item.log_type=== 'aconfirmer'" class="m-r-5 icons i_aconfirmer"><span class="fa fa-hourglass-half"></span></div>
+                                                    <div *ngIf="item.log_type === 'refuse'"   class="m-r-5 icons i_refused"> <span class="fas fa-file-prescription"></span></div>
+                                                </div>
+                                                <div class="content">
+                                                            <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                                                            <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté l'offre.</span>
+                                                            <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                                                            <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                                                            <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                                                            <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                                                            <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                                                            <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span></span>
+                                                            <span *ngIf="item.log_type === 'refuse'" > <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                                                            <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                                                </div>
+                                            </div>
+                                            <div class="notifi__footer">
+                                                <a href="javascript:void(0)" (click)="voirAll();" routerLink="/analytics/tableau">Voir Tous</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- END HEADER MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        <!-- <div class="menu-sidebar d-none d-lg-block">
+                <div class="logo">
+                        <a href="javascript:void(0)"><img src="../../assets/images/logozeno.png" alt="Zeno Admin"style="width: 200px;margin-left: 10px;"></a>
+                    </div>
+        </div> -->
+        <style>
+                .fadeInLeft {
+                    -webkit-animation-name: fadeInLeft;
+                    animation-name: fadeInLeft;
+                }
+                .aa1 {
+                    -webkit-transition-timing-function: ease;
+                     transition-timing-function: ease;
+                }
+                .sa1 {
+                    -webkit-transition: padding-left 0.3s ease 0s;
+                     transition: padding-left 0.3s ease 0s;
+                }
+                .animated {
+                    -webkit-animation-duration: 4s;
+                    animation-duration: 2s;
+                    -webkit-animation-fill-mode: both;
+                    animation-fill-mode: both;
+                }
+                                        
+                .has-sub .show_sublist {
+                    max-height: 0;
+                    transition: max-height 0.30s ease-out;
+                    overflow: hidden;
+                    background: #d5d5d5;
+                }
+                .has-sub:hover .show_sublist {
+                    max-height: 800px;
+                    transition: max-height 0.55s ease-in;
+                }
+            </style>
+        <aside class="menu-sidebar d-none" [ngClass]="{'fadeInLeft': accordion_hide == true,'d-lg-block': accordion_hide == true}">
+            <div class="logo">
+                <a href="javascript:void(0)"><img alt="EMP Admin" src="../../../assets/images/logoEMPLOGOBlue.png" style="width: 300px;"></a>
+            </div>
+          
+            <style>
+            </style>
+            <div class="menu-sidebar__content js-scrollbar1 ps">
+                <nav class="navbar-sidebar">
+                    <ul class="list-unstyled navbar__list" id="menu">
+                            <li class="has-sub" [ngClass]="{'active': accountUrl}">
+                                <a class="js-arrow" href="javascript:void(0)" (click)="accountsRout = !accountsRout" [ngClass]="{'open': accountsRout !== true}">
+                                    <i class="fa fa-user"></i>Account</a>
+                                <ul class="list-unstyled navbar__sub-list js-sub-list show_sublist"  style="display: block;">
+                                    <li [routerLinkActive]="['active']"><a [routerLink]="['/clients']">Clients</a></li>
+                                    <li [routerLinkActive]="['active']"><a [routerLink]="['/admins']">Admins</a></li>
+                                </ul>
+                            </li>
+
+                            <li [routerLinkActive]="['active']"><a [routerLink]="['/cockpit']"><i class="fas fa-tachometer-alt"></i>Cokpit</a></li>        
+                            <li [routerLinkActive]="['active']"><a [routerLink]="['/offers']"><i class="fas fa-copy"></i>Offres</a></li>   
+                        <li class="has-sub" [ngClass]="{'active': dataUrl}">
+                            <a class="js-arrow" href="javascript:void(0)" (click)="data = !data" [ngClass]="{'open': data === true}">
+                                <i class="fas fa-chart-line"></i>Data</a>
+                                <!-- [ngStyle]="{'display': data === true ? 'block' : 'none'}" -->
+                            <ul class="list-unstyled navbar__sub-list js-sub-list show_sublist" style="display: block;">
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/pfc']">PFC</a></li>
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/risque']">Primes de risque</a></li>  
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/ecoenergies']">Eco-énergies</a></li>
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/datahub']">Data hub</a></li>
+                            </ul>
+                        </li>
+                        <li [routerLinkActive]="['active']"><a [routerLink]="['/analytics']"><i class="fas fa-chart-bar"></i>Analytics</a></li>
+    
+                        <li class="has-sub" [ngClass]="{'active': courbesUrl}">
+                            <a class="js-arrow" href="javascript:void(0)"  (click)="courbes = !courbes" [ngClass]="{'open': courbes === true}"><i class="fa fa-signal"></i>Courbes de Charges</a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list show_sublist" style="display: block;">
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/pondere']">&nbsp;&nbsp;Profils CC Types</a></li>
+                                <li [routerLinkActive]="['active']"><a [routerLink]="['/calculator']">&nbsp;&nbsp;Conversion Tool</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+        </aside>
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container" [ngStyle]="{'padding-left': accordion_hide == true ? '300px' : '0px'}" >
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop" [ngStyle]="{'left': accordion_hide == true ? '300px' : '0px'}">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="header-wrap">
+                            <div class="nav-btn pull-left" (click)="accordion_hide = !accordion_hide">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="header-button">
+                                <div class="noti-wrap">
+                                    <div *ngIf="topUser" class="noti__item js-item-menu" (click)="accounts = false;notifications = !notifications" [ngClass]="{'show-dropdown': notifications === true}">
+                                        <i class="fa fa-bell"></i>
+                                        <span class="quantity">{{topUser.nr}}</span>
+                                        <div class="notifi-dropdown js-dropdown">
+                                            <div class="notifi__title">
+                                                <p>Vous avez {{topUser.nr}} Notifications</p>
+                                            </div>
+
+                                            <div class="notifi__item" *ngFor="let item of topUser.logs; let i=index">
+                                                <div>
+                                                    <div *ngIf="item.log_type === 'signee'"   class="m-r-5 icons i_signee">  <span class="fas fa-file-signature"></span></div>
+                                                    <div *ngIf="item.log_type === 'signer'"   class="m-r-5 icons i_signer">  <span class="fas fa-file-alt">     </span></div>
+                                                    <div *ngIf="item.log_type === 'click'"    class="m-r-5 icons i_click">   <span class="fa fa-mouse-pointer"> </span></div>
+                                                    <div *ngIf="item.log_type === 'send'"     class="m-r-5 icons i_send">    <span class="fa fa-envelope">      </span></div>
+                                                    <div *ngIf="item.log_type === 'open'"     class="m-r-5 icons i_open">    <span class="fa fa-envelope-open"> </span></div>
+                                                    <div *ngIf="item.log_type === 'created'"  class="m-r-5 icons i_created"> <span class="fa fa-check">         </span></div>
+                                                    <div *ngIf="item.log_type === 'confirmer'
+                                                             ||item.log_type=== 'aconfirmer'" class="m-r-5 icons i_aconfirmer"><span class="fa fa-hourglass-half"></span></div>
+                                                    <div *ngIf="item.log_type === 'refuse'"   class="m-r-5 icons i_refused"> <span class="fas fa-file-prescription"></span></div>
+                                                </div>
+                                                <div class="content">
+                                                            <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                                                            <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté l'offre.</span>
+                                                            <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                                                            <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                                                            <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                                                            <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                                                            <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                                                            <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span></span>
+                                                            <span *ngIf="item.log_type === 'refuse'" > <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                                                            <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                                                </div>
+                                            </div>
+                                            <div class="notifi__footer">
+                                                <a href="javascript:void(0)" (click)="voirAll();" routerLink="/analytics/tableau">Voir Tous</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="account-wrap"  *ngIf="currentUser">
+                                    <div class="account-item clearfix js-item-menu"  (click)="notifications = false;accounts = !accounts" [ngClass]="{'show-dropdown': accounts === true}">
+                                        <div class="image noti__item js-item-menu" style="width: 100%;font-weight: 700; height: auto;">
+                                          
+                                          <span><i class="fa fa-user"></i> 
+                                                {{ currentUser.firstName }} {{ currentUser.lastName }}
+                                          </span>
+                                        </div>
+                                       
+                                        <div class="content">
+                                        </div>
+                                        <div class="account-dropdown js-dropdown" style="margin-top: -5px;">
+                                            <div class="info clearfix">
+                                                <div class="image">
+                                                    <a href="javascript:void(0)">
+                                                        <img src="../../../assets/images/img_avatar.png" alt=" {{ currentUser.firstName }} {{ currentUser.lastName }}">
+                                                    </a>
+                                                </div>
+                                                <div class="content">
+                                                    <h5 class="name">
+                                                        <a href="javascript:void(0)"> {{ currentUser.firstName }} {{ currentUser.lastName }}</a>
+                                                    </h5>
+                                                    <span class="email">{{ currentUser.email }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__body">
+                                                <div class="account-dropdown__item">
+                                                    <a href="javascript:void(0)" *ngIf="curentClient"  data-toggle="modal" data-target="#editCurentUser">
+                                                        <i class="fas fa-user"></i>Account</a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="javascript:void(0)">
+                                                            <i class="fas fa-cog"></i>Setting</a>
+                                                </div>
+                                                <div class="account-dropdown__item">
+                                                    <a href="javascript:void(0)">
+                                                        <i class="fas fa-hand-holding-usd"></i>Billing</a>
+                                                </div>
+                                            </div>
+                                            <div class="account-dropdown__footer">
+                                                <a href="javascript:void(0)" routerLink='/login'>
+                                                    <i class="fas fa-power-off"></i>Logout</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- HEADER DESKTOP-->
+
+            <!-- MAIN CONTENT-->
+             <div class="main-content">
+                <div class="section__content--p30"> <!-- section__content  -->
+                    <div class="container-fluid">
+                            <!-- container-fluid -->
+                            <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT-->
+
+            <!-- END PAGE CONTAINER-->
+        </div>
+    </div>
+
+
+<!-- end document-->
+</body>
+
+</html>
+
+
+<div *ngIf="curentClient">
+    <app-edit-curent-user [curentU]="curentClient"></app-edit-curent-user>  
+</div>

@@ -1,0 +1,41 @@
+{% extends 'tool/base.html' %}
+
+{% block tool_content %}
+<script type="text/javascript">
+    function submit_form(){
+        var node = document.getElementById('load')
+        var visibility = node.style.visibility;
+        node.style.visibility = visibility == "visible" ? 'hidden' : "visible"
+    }
+</script>
+      <form action="{% url 'pfc:market_upload' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {# {{ form.as_p }} #}
+          <div class="form-group">
+              <div class="form-group">
+                    <div>
+                        <label for="data_file">Files to upload:</label>
+                        <div class="file-area">
+                            {{ form.data_file.errors }}
+                            <input type="file" name="data_file" id="data_file" multiple="multiple" required="required"/>
+                            <div class="file-dummy">
+                                <span class="success">Great, your files are selected.</span>
+                                <span class="default">Please select some files.</span>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <p>Uploaded files: </p>
+              <div id="messages">
+              </div>
+        </div>
+        <div id="submitbutton">
+            <button type="submit" onclick="submit_form()" class="save btn btn-primary">Upload</button>
+            <span id="load" style="visibility: hidden; top: 0px; left: 0px; opacity: 1;">
+                Loading ...
+            </span>
+        </div>
+
+      </form>
+
+{% endblock %}

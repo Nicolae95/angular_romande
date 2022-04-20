@@ -1,0 +1,105 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+<form action="{% url 'tool:edit_shedule' id %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.title.errors }}
+        <label for="{{ form.title.id_title }}">Title:</label>
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        {{ form.hours.errors }}
+        <label for="{{ form.hours.id_hours }}">Hours:</label>
+        {{ form.hours }}
+    </div>
+    <div class="form-group">
+        {{ form.months.errors }}
+        <label for="{{ form.months.id_months }}">Months:</label>
+        {{ form.months }}
+    </div>
+    <div class="form-group">
+        {{ form.weekdays.errors }}
+        <label for="{{ form.weekdays.id_weekdays }}">Weekdays:</label>
+        {{ form.weekdays }}
+    </div>
+    <div class="form-group">
+        {{ form.country.errors }}
+        <label for="{{ form.country.id_country }}">Country:</label>
+        {{ form.country }}
+    </div>
+
+    <!--<div id="holiday" class="col-md-12 form-group">
+        <div style="float: left;width: 50%;position: relative; min-height: 1px;">
+            {{ form.holiday.errors }}
+            <label for="id_holiday">Holidays as Normal Weekdays (hours selected above) !!!:</label>
+            {{ form.holiday }}
+        </div>
+        <div class="col-md-6">
+            {{ form.off_holiday.errors }}
+            <label for="id_off_holiday">Holidays as Normal Weekdays (hours that are not selected above) !!!:</label>
+            {{ form.off_holiday }}
+        </div>
+    </div>-->
+
+    <div id="holiday" class="col-md-12 form-group">
+        {{ form.holiday.errors }}
+        <label for="id_holiday">Holidays as Normal Weekdays (hours selected above):</label>
+        {{ form.holiday }}
+    </div>
+
+    <div id="all_holidays" class="col-md-12 form-group">
+        {{ form.all_holidays.errors }}
+        <label for="id_all_holidays">Holidays as OffPeak Days (24h automatically offpeak):</label>
+        {{ form.all_holidays }}
+    </div>
+
+    <div class="col-md-12 form-group">
+        {{ form.weekend.errors }}
+        <label for="id_weekend">Select data from Weekend (24h automatically):</label>
+        {{ form.weekend }}
+    </div>
+
+    {% if form.weekend.value == True %}
+        <div id="weekend_days" class="col-md-12 form-group">
+            {{ form.weekend_days.errors }}
+            <label for="{{ form.weekend_days.id_weekend_days }}">Weekend days:</label>
+            {{ form.weekend_days }}
+        </div>
+    {% else %}
+        <div id="weekend_days" style="display: none;" class="col-md-12 form-group">
+            {{ form.weekend_days.errors }}
+            <label for="{{ form.weekend_days.id_weekend_days }}">Weekend days:</label>
+            {{ form.weekend_days }}
+        </div>
+    {% endif %}
+
+     <script type="text/javascript">
+     $(function() {
+         $('#id_holiday').change(function(){
+             if($(this).prop("checked")) {
+                 $('#all_holidays').hide('slow');
+             } else {
+                 $('#all_holidays').show('slow');
+             }
+         });
+         $('#id_all_holidays').change(function(){
+             if($(this).prop("checked")) {
+                 $('#holiday').hide('slow');
+             } else {
+                 $('#holiday').show('slow');
+             }
+         });
+         $('#id_weekend').change(function(){
+             if($(this).prop("checked")) {
+                 $('#weekend_days').show('slow');
+             } else {
+                 $('#weekend_days').hide('slow');
+             }
+         });
+     });
+     </script>
+     <div class="col-md-12">
+         <button type="submit" class="save btn btn-primary">Edit</button>
+    </div>
+</form>
+{% endblock %}

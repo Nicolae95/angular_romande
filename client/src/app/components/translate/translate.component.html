@@ -1,0 +1,43 @@
+
+<div class="row">
+  	<div class="col-md-12">
+		  <div class="row">
+			<div class="table-data__tool col-lg-12">
+					<div class="table-data__tool-left">
+						<button (click)="getCCyear(lastYear,company); data=true"  class="btn"
+								[ngClass]="{'btn-secondary': data, 'btn-outline-secondary': !data}">SY {{lastYear}}</button>
+			
+						<span *ngFor="let y of yearList">
+							<button class="btn m-l-5" [ngClass]="{'btn-secondary': y === year, 'btn-outline-secondary': y !== year}" (click)="getTranslateYear(y, company); data = false">{{y}}</button>
+						</span>
+					</div>
+					<div class="table-data__tool-right">
+						<button [ngClass]="{'btn-warning': typeRecques === false, 'btn-outline-warning': typeRecques === true}"
+								(click)="typeRecques=false;getType(year);" class="btn">
+							Profil hebdomadaire
+				  		</button>            
+					<button [ngClass]="{'btn-warning': typeRecques === true, 'btn-outline-warning': typeRecques === false}"
+							(click)="typeRecques=true;getType(year);" class="btn" style="margin-right:0px;">
+						Profil annuel
+					</button>
+				</div>
+			</div>
+		</div>
+          <div *ngIf="!chart && !loading">
+                No data found 
+          </div>
+          <div *ngIf="chart&&typeRecques">
+            <app-chart [data]="chart" [valute]="'kWh'"></app-chart>
+          </div>
+          <div *ngIf="chart&&!typeRecques">
+              <app-chart-cc-weekly [data]="chart"></app-chart-cc-weekly>
+            </div>
+          <div *ngIf="!chart && loading" class="text-center">      
+            <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+            </div>
+          </div>
+        </div>

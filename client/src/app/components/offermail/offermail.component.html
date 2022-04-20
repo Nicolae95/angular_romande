@@ -1,0 +1,10 @@
+
+<div class="text-center">
+	<!-- <div class="logo m-b-20 m-t-20"><h1 class="fs-70 p-l-30">LOGO</h1></div> -->
+	<!-- :{{idOffer | json }} -->
+	<app-inf-offer-mail *ngIf="idOffer" class="m-t-20 m-b-20" [idOffer]="idOffer" [token]="token"></app-inf-offer-mail>	
+	<div class="content-container m-t-20" *ngIf="!idOffer"> 
+		<h3>Offre expirée</h3> 
+		<h4>La durée de validité de cette offre vient d'expirer.</h4> 
+	</div>
+</div>

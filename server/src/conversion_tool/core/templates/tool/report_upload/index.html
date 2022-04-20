@@ -1,0 +1,58 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+    <!--<form action="{% url 'tool:edit_report' id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+      <button type="submit" class="save btn btn-primary">Save</button>
+    </form>-->
+    <form action="{% url 'tool:edit_report' id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.errors }}
+            <label for="{{ form.title.id_title }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            {{ form.meter.errors }}
+            <label for="{{ form.meter.id_meter }}">Site:</label>
+            {{ form.meter }}
+        </div>
+        <div class="form-group">
+            {{ form.datetime_from.errors }}
+            <label for="{{ form.datetime_from.id_datetime_from }}">Datetime from:</label>
+                <div class='input-group date' id='datetime_from'>
+                    <input type='text' name="datetime_from" id="datetime_from" class="form-control" required="required"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            {{ form.datetime_to.errors }}
+            <label for="{{ form.datetime_to.id_datetime_to }}">Datetime from:</label>
+                <div class='input-group date' id='datetime_to'>
+                    <input type='text' name="datetime_to" id="datetime_to" class="form-control" required="required"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+
+        <script type="text/javascript">
+        $(function () {
+            $('#datetime_from').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+            });
+        });
+        $(function () {
+            $('#datetime_to').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+            });
+        });
+        </script>
+
+      <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,182 @@
+<div class="row" *ngIf="userActiv">
+    <div class="col-md-4">
+        <div class="persinfo_box">
+            <img class="img_of_user" src="../../../assets/images/img_avatar.png">
+            <!-- <i class="fas fa-pencil-alt pencil_user"></i> -->
+            <div class="user_name">{{userActiv.surname}} {{userActiv.name}}</div>
+            <div style="margin-left: 86px;">{{userActiv.email}}</div><br/>
+            <div style="margin:5px auto;width: 50%; margin-top: -18px;margin-left: 81px;" >                
+                    <div class="select-wrap form-group">
+                        <!-- <span class="select-arrow"><i class="fa fa-angle-down"></i></span> -->
+                        <select class="form-control input-sm" *ngIf="offerList" (change)="offerById($event.target.value);">
+                            <option [selected]="offre.name == lastOffer.name" [value]="offre.id"
+                                    *ngFor="let offre of offerList">{{offre.name}}</option>
+                        </select>
+                        <select class="form-control input-sm" *ngIf="!offerList"></select>
+                    </div>                
+            </div>
+        </div>
+        <div class="persinfo_box" *ngIf="lastOffer">
+            <ul class="box_text_arange">
+                <li class="title_list"><i class="fas fa-clipboard-list"></i>  Offre {{lastOffer.name}}</li>
+                <li *ngIf="lastOffer.offer_type == 'Standart'"> Durée de validité: {{lastOffer.expiration_date  | date: 'dd/MM/yyyy'}} 23:59</li>
+                <li *ngIf="lastOffer.offer_type == 'SME'"> Durée de validité: {{lastOffer.date_fin | slice:8:10}}/{{lastOffer.date_fin | slice:5:7}}/{{lastOffer.date_fin | slice:0:4}} {{lastOffer.date_fin | slice:11:16}}</li>
+                <li>PODs inclus: <span *ngFor="let pod of lastOffer.meters">{{pod.meter_id}} - {{pod.address}}, </span></li>
+                <li>Année: {{lastOffer.years}}</li>
+                <li>Statut: 
+                    <span class="text-primary" *ngIf="lastOffer.offer_status == 'supprimer'" >A supprimer</span>
+                    <span class="grey_text"    *ngIf="lastOffer.offer_status == 'indicative'">Indicative</span>
+                    <span class="yellow_text"  *ngIf="lastOffer.offer_status == 'signer'   " >A Signer</span>
+                    <span class="green_text"   *ngIf="lastOffer.offer_status == 'signee'   " >Signee</span>
+                    <span class="grey_text"    *ngIf="lastOffer.offer_status == 'confirmer'||
+                                                      lastOffer.offer_status == 'aconfirmer'" >A confirmer</span>
+
+                    
+                 </li><br/>
+                <!-- <ul class="new_offer_button"><li><a href='javascript:;'>Nouvelle offre</a></li></ul> -->
+            </ul>
+        </div>
+        <div class="persinfo_box">
+            <ul class="box_text_arange">
+                <li class="title_list"><i class="fa fa-globe  title_icons"></i>Activité sur la page de l'offre</li>
+
+                        <li> <div class="col-xs-5  col-sm-3 col-md-4 nr_of_visits" *ngIf="offerActivity">{{offerActivity.per_page}}</div></li>
+                        <li> <div class="col-xs-5  col-sm-3 col-md-4 nr_of_visits" *ngIf="!offerActivity">0</div></li>
+                        <li> <div class="col-xs-6  col-sm-6 col-md-7 nr_of_visits" *ngIf="offerActivity" style="margin-top: -40px; left: 30%;">
+                                <span *ngIf="timpu_mediu._data.days != 0">{{timpu_mediu._data.days}}d   </span>
+                                <span *ngIf="timpu_mediu._data.hours != 0||timpu_mediu._data.days != 0">{{timpu_mediu._data.hours}}h  </span> 
+                                <span *ngIf="timpu_mediu">{{timpu_mediu._data.minutes}}m</span>
+                                <span *ngIf="timpu_mediu">{{timpu_mediu._data.seconds}}s</span>
+                            </div>
+                        </li>
+
+                <li> <div class="col-xs-6 col-sm-6 col-md-5 text_of_visits">VISITES DE PAGES</div></li>
+                <li> <div class="col-xs-6  col-sm-6 col-md-7 text_of_visits">TEMPS MOYEN SUR LA PAGE</div></li> <br/>
+                <span *ngIf="offerActivity">
+                    <span *ngFor="let item of offerActivity.logs">
+                        <li>Dernière visite</li>
+                        <li>{{item.created | date: 'dd/MM/yyyy HH:mm'}}</li><br/>
+                    </span>
+                </span>
+                <!-- <li>Dernière visite</li>
+                <li>Ven, Mai 18, 2018 2:37 AM GMT+2 </li> -->
+            </ul>
+        </div>
+        <div class="persinfo_box">
+            <ul class="box_text_arange">
+                <li class="title_list"><i class="fa fa-file-text title_icons"></i>Documents</li><br/>
+
+                <li *ngIf="offerActivity">
+                    <a href='javascript:;' (click)="openFile(offerActivity.offer.signed_file);" 
+                       title="{{offerActivity.offer.signed_file.split('/')[3]}}"   
+                       *ngIf="offerActivity.offer.signed_file" class="file pdf">
+                       {{offerActivity.offer.signed_file.split('/')[3]}}
+                    </a>
+                </li> 
+
+                <li *ngIf="offerActivity">
+                    <a href='javascript:;' (click)="openFile(offerActivity.offer.unsigned_file);" 
+                       title="{{offerActivity.offer.unsigned_file.split('/')[3]}}" 
+                       *ngIf="offerActivity.offer.unsigned_file" class="file pdf">
+                       {{offerActivity.offer.unsigned_file.split('/')[3]}}
+                    </a>
+                </li>
+
+                <li *ngIf="offerActivity">
+                    <a href='javascript:;' (click)="openFile(offerActivity.offer.eligibilite);" 
+                       title="{{offerActivity.offer.eligibilite.split('/')[3]}}"   
+                       *ngIf="offerActivity.offer.eligibilite" class="file pdf">
+                       {{offerActivity.offer.eligibilite.split('/')[3]}}
+                    </a>
+                </li>
+                
+            </ul>
+
+            <!-- <span class="btn btn-style btn-file">
+                <i class="fa fa-upload"></i>Télécharger
+                <input  multiple 
+                        type="file"
+                        placeholder=" Télécharger"
+                        (change)="fileEvent($event.target.files)" 
+                        required 
+                        accept=".pdf,.xlsx"
+                        id="data_file"
+                        name="file">  
+             </span> -->
+        </div>
+    </div>
+    <!--Vertical line-->
+    <div  *ngIf="!actualite" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div *ngIf="actualite">
+        <div class="col-md-1 hidden-xs">
+            <ul class="time_left_align" *ngFor="let item of actualite"><li>{{item.created | date: 'dd/MM/yyyy'}}</li><li>{{item.created | date: 'HH:mm'}}</li></ul>
+        </div>
+    </div>
+    <div class="col-md-1  hidden-xs" *ngIf="actualite">
+        <div class="vl"></div>
+        <div *ngFor="let item of actualite">
+         <div *ngIf="item.log_type === 'signee'"  class="icon_circle"> <i class="fa fa-edit">         </i></div>
+         <div *ngIf="item.log_type === 'signer'"  class="icon_circle"> <i class="fa fa-file-text">    </i></div>
+         <div *ngIf="item.log_type === 'click'"   class="icon_circle"> <i class="fa fa-mouse-pointer" style="margin-left: 3px;"></i></div>
+         <div *ngIf="item.log_type === 'send'"    class="icon_circle"> <i class="fa fa-envelope">     </i></div>
+         <div *ngIf="item.log_type === 'open'"    class="icon_circle"> <i class="fa fa-envelope-open"></i></div>
+         <div *ngIf="item.log_type === 'created'" class="icon_circle"> <i class="fa fa-check">        </i></div>
+         <div *ngIf="item.log_type === 'confirmer'||item.log_type === 'aconfirmer'" class="icon_circle"><i class="fa fa-hourglass-half"></i></div>
+         <div *ngIf="item.log_type === 'refuse'" class="icon_circle"> <img src="../../../assets/images/offre refusee white.png"></div>
+    </div>
+    </div>
+    <!--Right panel-->
+    <div class="col-md-6" *ngIf="actualite">
+        <!-- <div class="date_and_calendar"> </div> -->
+            <div class="col-md-8 d-i calender-wrap">
+                    <div class="input-group date" id="datetimepicker3" style="margin-right: 7px;">
+                        <input  class="form-control reference"
+                            ngx-mydatepicker 
+                            [(ngModel)]="dateFrom" 
+                            [options]="myOptions" 
+                            #dp1="ngx-mydatepicker"
+                            (dateChanged)="dateFromC($event)">
+                        <span class="input-group-addon pointer" style="background-color:#008080; border: 0px;" (click)="dp1.toggleCalendar()"> 
+                            <i class="fa fa-calendar" style="color: white;"></i> 
+                        </span> 
+                    </div>
+        
+                    <div class="input-group date" id="datetimepicker3" style="margin-left: 7px;">
+                        <input  class="form-control reference"
+                            ngx-mydatepicker 
+                            [(ngModel)]="dateTo" 
+                            [options]="myOptions" 
+                            #dp="ngx-mydatepicker"
+                            (dateChanged)="dateToC($event)">
+                        <span class="input-group-addon pointer" style="background-color:#008080; border: 0px;" (click)="dp.toggleCalendar()"> 
+                            <i class="fa fa-calendar" style="color: white;"></i> 
+                        </span> 
+                    </div>
+            </div>
+
+        <div  *ngFor="let item of actualite">
+            <div class="news_box_client">
+                <div class="title_of_news">
+                    
+                <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté l'offre.</span>
+                <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                        <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                        <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                </span>
+                <span *ngIf="item.log_type === 'refuse'"> <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                </div>
+                &nbsp;<br>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+</div>

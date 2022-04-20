@@ -1,0 +1,85 @@
+<div class="table-data__tool">
+    <div class="table-data__tool-left">
+        <div class="rs-select2--light rs-select2--md">
+            <div class="input-group" *ngIf="currentDate">
+              <div class="input-group-btn" (click)="dp.toggleCalendar()"><button class="btn btn-primary"><i class="fa fa-calendar"></i></button></div>
+              <input type="text" id="input1-group1" name="input1-group1" placeholder="12.12.2021" class="form-control"
+                      ngx-mydatepicker 
+                      [(ngModel)]="currentDate" 
+                      [options]="myOptions" 
+                      #dp="ngx-mydatepicker"
+                      (dateChanged)="onDateChanged($event)"
+                      required>
+            </div>
+        </div>
+        <div class="rs-select2--light rs-select2--sm d-i">
+          <div *ngFor="let y of yearList">
+            <button class="btn m-l-5" [ngClass]="{'btn-secondary': y === year, 'btn-outline-secondary': y !== year}" (click)="getPfcYear(y, valute, pfc_day)">{{y}}</button>
+          </div>
+        </div>
+    </div>
+    <div class="table-data__tool-right">
+      <div (click)="getPfcYear(year, 'EUR', pfc_day)" class="btn" [ngClass]="{'btn-info': valute === 'EUR', 'btn-outline-info': valute !== 'EUR'}">EUR</div>
+      <div (click)="getPfcYear(year, 'CHF', pfc_day)" class="btn" [ngClass]="{'btn-info': valute === 'CHF', 'btn-outline-info': valute !== 'CHF'}">CHF</div>
+      <div class="rs-select2--dark">
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#UploadPfc">Uploader la PFC</button>
+        <app-pfc-upload></app-pfc-upload>
+      </div>
+    </div>
+</div>
+
+<div *ngIf="!chart && loading" class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+</div>
+
+ <div class="col-md-12 p-l-0" [ngClass]="{'d-i': pfcPeakData.result.length != 0}">
+        <div *ngIf="chart" [ngClass]="{'col-lg-95': pfcPeakData.result.length != 0}">
+          <app-chart *ngIf="valute=='CHF'" [data]="chart" [valute]="'CHF/MWh'"></app-chart>
+          <app-chart *ngIf="valute=='EUR'" [data]="chart" [valute]="'EUR/MWh'"></app-chart>
+        </div>
+        
+        <div class="col-lg-25" *ngIf="pfcPeakData && chart" >
+            <div class="graph-wrap" *ngIf="pfcPeakData.result.length != 0" >
+              <style>
+                .titlesdate {
+                  right: 0;
+                  background: #2c6bb4;
+                  color: white;
+                  padding: 1px 10px 0px 10px;
+                  position: absolute;
+                  margin-right: 17px;
+                  margin-top: -22px;
+                }
+              </style>
+                <span class="graph-title titlesdate">{{pfcPeakData.pfc}}</span>
+                <div class="table-responsive">
+                  <table class="table table-borderless table-striped table-earning" *ngIf="chart">
+
+                  <tr>
+                    <th>&nbsp;</th>
+                    <th class="text-center">Base</th>
+                    <th class="text-center">Peak</th>
+                  </tr>
+                 
+                  <tr *ngFor="let year of pfcPeakData.years">
+                      <th class="text-center">{{year}}</th>
+                        <td class="text-center">
+                          <span *ngFor="let item of pfcPeakData.result">
+                            <span *ngIf="item.peak == 'base' && item.year == year">{{item.value | number: '.2-2'}}</span>
+                          </span>
+                        </td>
+                        <td class="text-center">
+                          <span *ngFor="let item of pfcPeakData.result">
+                            <span *ngIf="item.peak == 'peak' && item.year == year">{{item.value | number: '.2-2'}}</span>
+                          </span>
+                        </td>
+                  </tr>                 
+                </table>
+              </div>
+            </div>
+          </div> 
+
+    <div *ngIf="!chart && !loading" class="text-info">Aucune donnée trouvée.</div>
+</div>

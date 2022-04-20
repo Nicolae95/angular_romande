@@ -1,0 +1,82 @@
+
+<div class="row" *ngIf="cockpit">
+	<h1 style="font-weight: 400;margin-left: 15px;margin-bottom: 20px;">Edit Cockpit</h1>
+	<button class="btn btn-primary50" [routerLink]="['/cockpits']" title="Retour" style="right: 105px;position: absolute; height: 50px;width: 50px;max-width: 50px;">
+		<i class="fa fa-chevron-circle-left" style="font-size: 20px;"></i>
+	</button>
+	<button class="btn btn-danger50" (click)="deleteCockpit()" title="Delete" style="right: 45px;position: absolute;">
+		<i class="fas fa-trash pointer" style="font-size: 20px;"></i>
+	</button>
+	<div class="col-lg-12">
+		<!-- <ul class="nav nav-pills m-b-20" role="tablist" style="border-bottom: 1px solid #0c82f9;">     
+			<li class="nav-item"><a class="nav-link" [ngClass]="{'active': nameMenu == 'general'}"  href="javascript:void()" (click)="nameMenu = 'general'">General settings							</a></li>
+			<li class="nav-item"><a class="nav-link" [ngClass]="{'active': nameMenu == 'markets'}"  href="javascript:void()" (click)="nameMenu = 'markets'">Manage markets								</a></li>
+			<li class="nav-item"><a class="nav-link" [ngClass]="{'active': nameMenu == 'hedge__'}"  href="javascript:void()" (click)="nameMenu = 'hedge__'">Manage hedge reporting linked				</a></li>
+			<li class="nav-item"><a class="nav-link" [ngClass]="{'active': nameMenu == 'mcontent'}" href="javascript:void()" (click)="nameMenu = 'mcontent'">Manage content								</a></li>
+		</ul> -->
+		
+		
+		<div class="card" *ngIf="nameMenu == 'general'">
+				<div class="card-header">General settings</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<label for="cc-exp" class="control-label mb-1">Energy cockpit name</label>
+								<input id="cc-exp" [(ngModel)]="name" [value]="cockpit.name" type="text" class="form-control cc-exp">
+								<span class="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="emp" class="control-label mb-1">Include EMP News?</label>
+								<br>
+								<label id="emp" class="switch switch-default switch-success mr-2 m-t-5">
+										<input type="checkbox" class="switch-input" [(ngModel)]="emp_news" [checked]="emp_news == true">
+										<span class="switch-label"></span>
+										<span class="switch-handle"></span>
+									</label>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<label for="x_card_code" class="control-label mb-1">Created on</label>
+							<div class="input-group">
+								<div class="form-control cc-cvc">{{cockpit.created}}</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="automatic" class="control-label mb-1">Send Automatically?</label>
+								<br>
+								<label id="automatic" class="switch switch-default switch-success mr-2 m-t-5">
+										<input type="checkbox" class="switch-input" [(ngModel)]="automatic" [checked]="automatic == true" >
+										<span class="switch-label"></span>
+										<span class="switch-handle"></span>
+									</label>
+							</div>
+						</div>
+						<div class="col-6">
+							<label for="costemal" class="control-label mb-1">Custom email subject line</label>
+							<div class="input-group">
+								<input id="costemal" [(ngModel)]="email_name" [ngModelOptions]="{standalone: true}"class="form-control cc-cvc">
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label for="frequency" class="control-label mb-1">Frequency</label>
+								<div id="frequency" style="display: flex;">
+									<angular2-multiselect [data]="days"
+														  [(ngModel)]="weekdays" 
+														  [ngModelOptions]="{standalone: true}"
+														  [settings]="frequencySetings">
+									</angular2-multiselect>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="m-l-15 btn btn-primary" (click)="onSubmit()"><i class="far fa-save p-r-10"></i>Save settings</button>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+

@@ -1,0 +1,52 @@
+    <!-- modal medium -->
+    <div class="modal fade" id="addMail" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Nouvelle adresse email</h4>
+              <button type="button" class="close" id="cancelAddMail" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addMailGroup" (ngSubmit)="onSubmit(addMailGroup.value)">  
+                    <div *ngIf="add" formArrayName="mailRows">
+                      <div class="form-group" *ngFor="let podsrow of addMailGroup.controls.mailRows.controls; let i=index"  [formGroupName]="i" [ngClass]="{
+                              'has-danger': addMailGroup.controls.mailRows.controls[i].invalid && (addMailGroup.controls.mailRows.controls[i].dirty || addMailGroup.controls.mailRows.controls[i].touched),
+                              'has-success': addMailGroup.controls.mailRows.controls[i].valid && (addMailGroup.controls.mailRows.controls[i].dirty || addMailGroup.controls.mailRows.controls[i].touched)
+                              }">
+                        <div class="pd-top-10">Adresse email #{{ i + 1 }}</div>                                
+                        <div class="input-group" >
+                          <input *ngIf="i+1===addMailGroup.controls.mailRows.length" class="form-control input-sm" formControlName="mailname" required [pattern]="mePattern"/>
+                          <input *ngIf="i+1!==addMailGroup.controls.mailRows.length" class="form-control input-sm" readonly="true" [disabled]="true" formControlName="mailname"
+                            style="color:#7f7f7f; outline:none;box-shadow:none;"  [pattern]="mePattern"/>
+                          <div class="input-group-addon" style="background-color: transparent">
+                            <b *ngIf="i+1===addMailGroup.controls.mailRows.length && plusMail  && !mailExist" (click)="addNewRow()"  title="Add pods" class="fa fa-plus" style="cursor:pointer; color:black;" [disabled]="true" ></b> 
+                            <b *ngIf="1!==addMailGroup.controls.mailRows.length" (click)="deleteRow(i)" title="Delete pods" class="fa fa-trash" style="cursor:pointer; color:red; margin-left:5px;" [disabled]="true" ></b>                                             
+                          </div> 
+                        </div>
+                        <span style="color: #d9534f" *ngIf="mailExist && !addMailGroup.controls.mailRows.controls[i].invalid && i+1===addMailGroup.controls.mailRows.length">
+                            Cet email existe.
+                        </span>                                                                                     
+                          <div *ngIf="addMailGroup.controls.mailRows.controls[i].invalid && 
+                                (addMailGroup.controls.mailRows.controls[i].dirty || addMailGroup.controls.mailRows.controls[i].touched)">
+                            <span class="colorred">Le courrier électronique est invalide</span>
+                          </div> 
+                        </div>
+                    </div>
+          
+          
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="cancel" data-dismiss="modal">Cancel</button>
+              <button *ngIf="!loading" [disabled]="addMailGroup.invalid" type="button" class="btn btn-primary" (click)="onSubmit(addMailGroup.value)">SAUVEGARDER</button>
+              <button *ngIf="loading" type="button" class="btn btn-primary">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>SAUVEGARDER
+              </button>      
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end modal medium -->
+  

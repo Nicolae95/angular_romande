@@ -1,0 +1,6 @@
+.activetab {
+    background: white !important;
+    border-radius: 0;
+    border-top: 4px solid #ba0029 !important;
+    color: #ba0029 !important;
+}

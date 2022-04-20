@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8' /></head>
+<body>
+<table width='100%'>
+  <tr>
+    <td align='center'>
+      <table cellpadding='0' cellspacing='0' width='600' style='border:8px solid white; color:#333; font-size:16px;'>
+          <tr>
+            <td>
+                <table cellpadding='0' cellspacing='0' width='100%'>
+                {% if destination == 'admin' %}
+                    <tr><td><b>Réf: {{ obj.company.nom_entrepise }} </b></td></tr>
+                    <tr><td><b>{{ surname }} {{ customer }}</b></td></tr>
+                    <tr><td><b>{{ offer }}</b></td></tr>
+                    <tr><td style='height:30px'></td></tr>
+                    <tr><td><p>Une demande d’offre ferme a été enregistrée. Veuillez vérifier les détails et accepter ou refuser l’offre.</p></td></tr>
+                    <tr><td style='height:30px'></td></tr>
+                {% endif %}
+                {% if destination == 'fonction' %}
+                    <tr>
+                        <td>
+                            <b>Réf: {{ obj.company.nom_entrepise }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>{{ surname }} {{ customer }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>{{ offer }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='height:10px'></td>
+                    </tr>
+                     {% if sign_profile %}
+                        {% if sign_profile.sex == 'F' %}
+                            <tr>
+                                <td>
+                                    <p>Madame {{ sign.first_name }} {{ sign.last_name }}, </p>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td>
+                                    <p>Monsieur {{ sign.first_name }} {{ sign.last_name }}, </p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                     {% endif %}
+                    <tr>
+                        <td style='height:5px'></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Une demande d’offre {{ obj.otype }} a été enregistrée.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Volumétrie, GWh cumulés: {{volumetrie}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Marge %: {{omarge}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Veuillez vérifier les détails et accepter ou refuser l’offre.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='height:30px'></td>
+                    </tr>
+                {% endif %}
+                {% if destination == 'confirmer' %}
+                    <tr>
+                        <td>
+                            <b>Réf: {{ obj.company.nom_entrepise }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>{{ surname }} {{ customer }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>{{ offer }}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='height:10px'></td>
+                    </tr>
+                    {% if profile.sex == 'F' %}
+                    <tr>
+                        <td>
+                            <p>Madame {{ obj.user.first_name }} {{ obj.user.last_name }}, </p>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>
+                            <p>Monsieur {{ obj.user.first_name }} {{ obj.user.last_name }}, </p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style='height:5px'></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Une demande d’offre {{ obj.otype }} a été confirmée.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>Veuillez vérifier les détails et envoyer l'offre au client.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='height:30px'></td>
+                    </tr>
+                    <tr>
+                        <td height='40'>
+                            <p style='margin:0'>Demo SA </p>
+                        </td>
+                    </tr>
+                {% endif %}
+              </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <table cellpadding='0' cellspacing='0' width='100%'>
+                <tr>
+                    <!-- <td width='160'><img src='{{ url }}/assets/images/logos/romande-energie.png' width='140'></td> -->
+                  <td>
+                      <p style='color:#007bff; margin:0; font-weight:bold; margin-top:32px'>OFFRE EN LIGNE</p>
+                      <p style='color:#ccc; margin:0;'>EVOLUTION DU MARCHE</p>
+                  </td>
+                </tr>
+              </table>
+          </td>
+        </tr>
+
+
+        {% if destination == 'client' %}
+             {% if obj.company.sex == 'F' %}
+                <tr>
+                    <td height='50'>
+                        <p style='font-size: 15px; margin:0'>Madame {{ surname }} {{ customer }}, </p>
+                    </td>
+                </tr>
+             {% else %}
+                <tr>
+                    <td height='50'>
+                        <p style='font-size: 15px; margin:0'>Monsieur {{ surname }} {{ customer }}, </p>
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+              <!-- <td><p style='font-size: 15px; margin:0'>Vous avez d&#233;sormais la possibilit&#233; de demander une offre.</p></td> -->
+              <td><p style='font-size: 15px; margin:0'>Vous avez la possibilit&#233; de demander une offre, avec les prix ci-dessous, valide jusqu'au {{ expiration_date }}.</p></td>
+            </tr>
+            <tr><td height='30'></td></tr>
+            <tr>
+              <td><p style='font-size: 15px; margin:0'>Si cette offre vous convient, vous pouvez cliquer sur le bouton &#171; Demander une offre ferme &#187;.</p></td>
+            </tr>
+            <tr><td height='30'></td></tr>
+            <tr>
+                <td height='40' align='center' style='background-color: #007bff;'><a href='{{ url }}/mail/{{token}}' style='color:white; font-size: 16px;'>DEMANDER UNE OFFRE FERME ></a></td>
+            </tr>
+            <tr>
+              <td height='50'><p style='font-size: 15px; margin:0'>Avec nos meilleures salutations.</p></td>
+            </tr>
+        {% endif %}
+        {% if destination == 'admin' or destination == 'fonction' or destination == 'confirmer' %}
+            <tr><td height='30'></td></tr>
+               <tr>
+                   <td align="center">
+                     <table cellpadding="0" cellspacing="0" width="220">
+                       <tr>
+                           <td height='40' align='center' style='background-color: #333;'><a href='{{ url }}/offers' style='color:white; font-size: 16px;'>VOIR </a></td>
+                       </tr>
+                     </table>
+                   </td>
+              </tr>
+        {% endif %}
+        
+        <tr>
+          <td>
+              <table cellpadding='0' cellpadding='0' width='100%'>
+                <tr>
+                  <td width='50'>&nbsp;</td>
+                  <td>
+                      <table cellspacing='0' cellpadding='0' width='500' >
+                        {% if titles > 1  %}
+                            <tr>
+                            <td height='50'><p style='margin:0; font-size: 18px'>Prix finaux (en ct.CHF/kWh)</p></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <table cellspacing='0' cellpadding='0' width='100%' align='center' style='text-align: center; font-size:15px; font-weight:bold;'>
+                                    <tr style='background-color: #333'>
+                                    <td style='border-right:1px solid white; height: 25px; min-height:25px; border-bottom: 1px solid white'></td>
+                                    <td colspan='2' style='color:white;border-right:1px solid white; border-bottom: 1px solid white'>&#201;T&#201;</td>
+                                    <td colspan='2' style='color:white;border-right:1px solid white; border-bottom: 1px solid white'>HIVER</td>
+                                    </tr>
+                                    <tr>
+                                    <td style='background-color: #333;border-right:1px solid white; border-bottom: 1px solid white; height: 25px; min-height:25px;'></td>
+                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'>HP</td>
+                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'>HC</td>
+                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'>HP</td>
+                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'>HC</td>
+                                </tr>
+                                    {% for year in years %}
+                                    <tr>
+                                        <td style='background-color: #333; color:white;border-right:1px solid white; border-bottom: 1px solid white; height: 25px; min-height:25px;'>{{ year }}</td>
+                                        {% for budget in budget_season %}
+                                            {% if budget.season == 'Summer' and budget.hp_hc == 'Peak' and budget.year == year  %}
+                                                 {% if budget.value == 0 %}
+                                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'> --- </td>
+                                                 {% else %}
+                                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'>{{ budget.value|floatformat:2 }}</td>
+                                                 {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for budget in budget_season %}
+                                            {% if budget.season == 'Summer' and budget.hp_hc == 'OffPeak' and budget.year == year  %}
+                                                 {% if budget.value == 0 %}
+                                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'> --- </td>
+                                                {% else %}
+                                                    <td style='background-color: #ffffcb;border-right:1px solid white; border-bottom: 1px solid white'>{{ budget.value|floatformat:2 }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for budget in budget_season %}
+                                            {% if budget.season == 'Winter' and budget.hp_hc == 'Peak' and budget.year == year  %}
+                                                 {% if budget.value == 0 %}
+                                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'> --- </td>
+                                                {% else %}
+                                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'>{{ budget.value|floatformat:2 }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for budget in budget_season %}
+                                            {% if budget.season == 'Winter' and budget.hp_hc == 'OffPeak' and budget.year == year  %}
+                                                {% if budget.value == 0 %}
+                                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'> --- </td>
+                                                {% else %}
+                                                    <td style='background-color: #f1f1f1;border-right:1px solid white; border-bottom: 1px solid white'>{{ budget.value|floatformat:2 }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        <tr><td height='20'></td></tr>
+                        <tr>
+                          <td>
+                            <table cellpadding='0' cellspacing='0' width='100%' style='border:1px solid #ccc;text-align: center; font-weight:bold; font-size:15px;'>
+                                <tr>
+                                  <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 25px; min-height:25px;'>ct/kWh</td>
+                                  {% for year in years %}
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; color:white; background-color: #007bff;'>{{ year }}</td>
+                                  {% endfor %}
+                                </tr>
+                                <tr>
+                                     {% if titles > 1 %}
+                                        <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; width:30%'><p style='margin:0;color:#007bff'>Prix moyen<br>indicatif</p></td>
+                                     {% endif %}
+                                     {% if titles == 1 %}
+                                        <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; width:30%'>
+                                            <p style='margin:0;color:#007bff'>Prix unique</p>
+                                        </td>
+                                    {% endif %}
+                                    {% for year in years %}
+                                        {% for price in prices %}
+                                            {% if price.year == year  %}
+                                                {% if price.value == 0 %}
+                                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc'> --- </td>
+                                                 {% else %}
+                                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc'>{{ price.value|floatformat:2 }}</td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr><td height='20'></td></tr>
+                        <tr>
+                          <td>
+                            <table cellpadding='0' cellspacing='0' width='100%' style='border:1px solid #ccc;text-align: center; font-weight:bold; font-size:15px;'>
+                                <tr>
+                                  <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 25px; min-height:25px;'>kWh</td>
+                                  {% for year in years %}
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; color:white; background-color: #007bff;'>{{ year }}</td>
+                                  {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; width:30%'><p style='margin:0;color:#007bff'>Volumes <br> projetés </p></td>
+                                    {% for year in years %}
+                                        {% for key, value in year_sum.iteritems %}
+                                            {% if key|stringformat:"i" == year|stringformat:"i"  %}
+                                                <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc'>{{ value }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                          </td>
+                        </tr>
+                            <!-- Go -->
+                            <tr>
+                                <td height='20'></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table cellpadding='0' cellspacing='0' width='100%' style='border:1px solid #ccc;text-align: center; font-weight:bold; font-size:15px;'>
+                                        <tr>
+                                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 25px; min-height:25px;'>ct. CHF/kWh</td>
+                                            {% for year in years %}
+                                                <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; color:white; background-color: #007bff;'>{{ year }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; width:30%'>
+                                                <p style='margin:0;color:#007bff'> {{ obj.energyd }} </p>
+                                            </td>
+                                            {% for year in years_lis %} 
+                                                {% for energy in energys %} 
+                                                    {% if energy.year|stringformat:"i" == year|stringformat:"i" %}
+                                                        <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc'>{{ energy.value|floatformat:2 }}</td>
+                                                    {% endif %} 
+                                                {% endfor %} 
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                      </table>
+                    </td>
+                    <td width='50'>&nbsp;</td>
+                  </tr>
+              </table>
+          </td>
+        </tr>
+        
+        {% if destination == 'client' %}
+            <!-- Hiden data -->
+            <p class=MsoNormal align=center style='text-align:center'><span
+                style='mso-fareast-font-family:"Times New Roman";display:none;mso-hide:all'><o:p>&nbsp;</o:p></span></p>
+            <div align=center>
+            <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+            width=600 style='width:450.0pt;border-collapse:collapse;display:none;
+            mso-yfti-tbllook:1184;mso-padding-alt:0cm 0cm 0cm 0cm;border-spacing: 0'>
+            <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes;
+                display:none;max-height:0px;float:left;overflow:hidden'>
+                <td style='padding:0cm 0cm 0cm 0cm'>
+                <p class=MsoNormal><span style='mso-fareast-font-family:"Times New Roman";
+                display:none;mso-hide:all'><img border=0 id="_x0000_i1036"
+                src="{{ mail_address }}"
+                style='max-height:0;display:none;font-size:0in;mso-hide:all;overflow:
+                hidden'><o:p></o:p></span></p>
+                </td>
+            </tr>
+            </table>
+            </div>
+        {% endif %}
+        
+         
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

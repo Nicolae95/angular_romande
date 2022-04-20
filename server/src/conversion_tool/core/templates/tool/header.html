@@ -1,0 +1,67 @@
+<nav class="navbar navbar-inverse">
+{% if user.is_authenticated %}
+  <div class="container">
+      <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'tool:index' %}">Conversion Tool</a>
+    </div>
+    <div class="collapse navbar-collapse" id="main-menu">
+      <ul class="nav navbar-nav navbar-right">
+          <li><a style="color: white;" href="#">Hello, {{user}}</a></li>
+          <!--<li{% if '/' in request.path %} class="active"{% endif %}>
+            <a href="{% url 'tool:index' %}">Reports</a>
+            </li>-->
+          <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#"> Reports
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                    <li><a href="{% url 'tool:index' %}">Reports</a></li>
+                    <li><a href="{% url 'tool:budgets' %}">Budget Reports</a></li>
+                    <li><a href="{% url 'tool:meters_sum' %}">Sum/Diff Reports</a></li>
+              </ul>
+          </li>
+        <li{% if '/upload/' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'tool:upload' %}">Upload files</a>
+        </li>
+
+        <!--<li{% if '/upload/' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'tool:upload_report' %}">Upload Report</a>
+      </li>-->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"> Upload Reports
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                  <li><a href="{% url 'tool:upload_report' %}">Simple Report</a></li>
+                  <li><a href="{% url 'tool:upload_reports_budget' %}">Budget report</a></li>
+                  <li><a href="{% url 'tool:upload_meters_sum' %}">Sum report</a></li>
+            </ul>
+        </li>
+        <li{% if '/schedules/' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'tool:shedules' %}">Schedules</a>
+        </li>
+        <li{% if '/companies/' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'tool:companies' %}">Companies</a>
+        </li>
+        <li{% if '/translations/' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'tool:translations' %}">Translations</a>
+        </li>
+        <li>
+          <a style="color: white;" href="{% url 'tool:logout' %}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="container">
+      <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'tool:login' %}">Conversion Tool</a>
+    </div>
+    <div class="collapse navbar-collapse" id="main-menu">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="{% url 'tool:login' %}">Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+</nav>

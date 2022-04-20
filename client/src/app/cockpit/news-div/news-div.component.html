@@ -1,0 +1,143 @@
+        <div class='col-sm-12 cp-news-div' id="newssection" [ngStyle]="{ 'backgroundColor' : colors[0] }">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="subtitle" [ngStyle]="{ 'color' : colors[1] }">{{ editn.name }}</span>
+                    <div class="action_bar" (click)='action = !action'>
+                        <p [ngStyle]="{ 'color' : colors[1] }">Action
+                            <i class="fa" [ngClass]="{'fa-caret-up': action, 'fa-caret-down': !action }"></i>
+                        </p>
+                        <div *ngIf="action" class='action_menu'>
+                            <span (click)="active = !active">Edit section</span>
+                            <span (click)="acolor = !acolor; offMe()">Edit color scheme</span>
+                            <span (click)='sdelete = !sdelete; offMee()'>Delete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div *ngFor="let news of results" class='col-sm-3 news-block {{ SwitchMe(news.query) }}' >
+                    <div class="col-sm-12">
+                        <span class='ncategory'><img src='{{ img }}'>{{ title }}</span>
+                        <span class="ntitle">{{ news.title | slice:0:80 }}...</span>
+                        <hr>
+                        <span class="ncontent">{{ news.validated_text | slice:0:140 }}</span>
+                        <span class='ndate'>{{ news.created | slice:0:10 }}</span>
+                        <span class="nlink"><i (click)="ShowMe(news)" class="far fa-arrow-alt-circle-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <button class='closeallbtn' style="display: none;" (click)='closeall();'></button>
+
+        <app-news-details [nid]="stiri"></app-news-details>
+        <app-color-scheme [active]="acolor" [colorBG]="colorbg" [co]="co" [colorFont]="colorf"></app-color-scheme>
+        <app-deletesection [active]="sdelete"></app-deletesection>
+
+        <div id='fancybox-overlay' [ngStyle]="{ 'display' : active || acolor || sdelete ? 'block' : 'none' }"></div>
+
+        <div *ngIf="active" class="news_edit" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+            
+        <div class="popup-title"><b>Edit news section</b><i class="fa fa-times closeme" (click)="active = !active"></i></div>
+            <!-- {{ diagnostic }} -->
+            <form (ngSubmit)="onSubmit()" #editForm="ngForm" >
+                <div class="form-group">
+                    <label for="name"><b>Edit name:</b></label>
+                    <input type="text" class="form-control" id="name" (change)="verify()" required minlength="4" [(ngModel)]="editn.name" name="name" #name = "ngModel">
+                    
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                        <div *ngIf="name.errors.required">
+                          Field is required.
+                        </div>
+                        <div *ngIf="name.errors.minlength">
+                          Field must be at least 4 characters long.
+                        </div>
+                    </div>
+
+                </div> 
+
+                <input type="hidden" id="ckid" required [(ngModel)]="editn.ckid" name="ckid" value="23">
+
+                <div class="form-group">
+                    <label for="numberof"><b>Select the number of news to display:</b></label>
+                    <select class="form-control" id="numberof" (change)="setNews()" [(ngModel)]="editn.numberof" name="numberof">
+                          <option *ngFor="let aux of [4,5,6,7,8]" value="{{aux}}">{{ aux }}</option>
+                    </select>
+                </div>    
+
+                <div class="form-group">
+                    <label for="categories"><b>Select the news categories to display:</b></label>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat0" [(ngModel)]="editn.categories[0]" name="cat0"  value="{{ editn.categories[0] }}">{{ clist[0] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat1" [(ngModel)]="editn.categories[1]" name="cat1"  value="{{ editn.categories[1] }}">{{ clist[1] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat2" [(ngModel)]="editn.categories[2]" name="cat2"  value="{{ editn.categories[2] }}">{{ clist[2] }}
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat3" [(ngModel)]="editn.categories[3]" name="cat3"  value="{{ editn.categories[3] }}">{{ clist[3] }}
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat4" [(ngModel)]="editn.categories[4]" name="cat4"  value="{{ editn.categories[4] }}">{{ clist[4] }}
+                      </label>
+                    </div>
+                    
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat5" [(ngModel)]="editn.categories[5]" name="cat5"  value="{{ editn.categories[5] }}">{{ clist[5] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat6" [(ngModel)]="editn.categories[6]" name="cat6"  value="{{ editn.categories[6] }}">{{ clist[6] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat7" [(ngModel)]="editn.categories[7]" name="cat7"  value="{{ editn.categories[7] }}">{{ clist[7] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat8" [(ngModel)]="editn.categories[8]" name="cat8"  value="{{ editn.categories[8] }}">{{ clist[8] }}
+                      </label>
+                    </div>
+
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input type="checkbox" (change)="filterMe()" class="form-check-input categories" id="cat9" [(ngModel)]="editn.categories[9]" name="cat9"  value="{{ editn.categories[9] }}">{{ clist[9] }}
+                      </label>
+                    </div>
+
+                </div>  
+
+                <hr>
+
+                <div class="form-group" style="text-align: right">
+                    <button type="reset" class='reset-btn' (click)="filterNews()">Cancel</button>
+                    <button type="submit" class="submit-btn"  [disabled]="!editForm.form.valid">Save Settings</button>
+                </div>
+
+            </form>
+        </div>

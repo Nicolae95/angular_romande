@@ -1,0 +1,151 @@
+<div class="container-fluid"  *ngIf='!allOrUne'>
+    <form [formGroup]="ofGroup" class="from-group needs-validation col-md-12" style="padding-right: 0px;">
+        <div class="col-md-2 pull-right"  style="float: right; margin-bottom: 10px;  padding-right: 0px;">
+                <div class="pull-right"> 
+                    <div class="input-group">
+                    <input  class="form-control input-sm"
+                            formControlName="search"                    
+                            [(ngModel)] = "keyword"
+                            placeholder="Recherche"/>
+                    <span class="btn btn-primary">
+                    <i class="fa fa-search" ></i> 
+                    </span> 
+                </div>
+             
+            </div>
+        </div>
+    </form><br>
+
+
+    <div *ngIf="!offerPagination" class="text-center">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+
+    <section *ngIf='!allOrUne&&offerPagination'>
+        <div >
+            <div class="table-responsive table--no-card m-b-30" style="max-height: calc(100vh - 300px);">
+                <table class="table table-borderless table-striped table-earning" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th> Nom du client     </th>
+                            <th> Nom du contact    </th>
+                            <th> NOM DE L’OFFRE    </th>
+                            <th> Pour le compte de </th>
+                            <th class="text-center"> PODS INCLUS       </th>
+                            <th class="text-center"> ANNÉE             </th>
+                            <th class="text-center"> STATUT            </th>
+                            <th class="text-center"> Valide jusqu'au   </th>
+                            <th class="text-center"> ANALYTICS         </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  *ngFor="let offer of offerPagination.result;let y=index">
+                            <td class=" t-d-style">{{offer.entreprise}}</td>
+                            <td class=" t-d-style">{{offer.contact}} {{offer.surname}}</td>
+                            <td class="t-d-style" style="width: 300px;">
+                                    <ul class="block_display">
+                                        <li><b>{{offer.name}} [{{offer.entreprise}}]</b></li>
+                                        <li>Créé le  {{offer.created  | date: 'dd/MM/yyyy' }}</li>
+                                    </ul> 
+                            </td>
+                            <td  class=" t-d-style">{{offer.admin_data.first_name}} {{offer.admin_data.last_name}}</td>
+                            <td  class="t-d-style " style="width: 108px;">
+                                <div *ngIf="offer.meters"> 
+                                    <div *ngIf="offer.meters.length == 1">
+                                        <div *ngFor="let y of offer.meters"><p>{{y.meter_id}} - <br *ngIf="y.meter_id.length > 10||y.address.length > 10"/> {{y.address}}</p></div>
+                                    </div>
+                                </div>
+                                <span *ngIf="offer.meters.length>1" class="pointer" (click)="show[y] = !show[y]">
+                                    <div style="padding: 0px 0px; padding-bottom: 10px;">
+                                        <span class="voirTous" *ngIf="!show[y]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #8799AC"></i></span>
+                                        <span class="fermerTous" *ngIf="show[y]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #8799AC"></i></span>
+                                    </div>
+                                </span>
+                                <span *ngIf="offer.meters.length>1&&show[y]"><p *ngFor="let y of offer.meters;">{{y.meter_id}} -<br *ngIf="y.meter_id.length > 10||y.address.length > 10"/>{{y.address}}</p></span>
+                            </td>
+                            <td class="t-d-style">
+                                <p style="min-width: 90px;" *ngIf="offer.pfc_first_date || offer.pfc_last_date">{{offer.pfc_first_date | slice:0:10}} - {{offer.pfc_last_date | slice:0:10}}</p>
+                              </td>
+                            <!-- <td  class="t-d-style " style="width: 108px;">
+                                <div *ngIf="offer.yearsSplits"> 
+                                    <div *ngIf="offer.yearsSplits.length == 1">
+                                    <div *ngFor="let y of offer.yearsSplits">{{y}}</div>
+                                    </div>
+                                    <span *ngIf="offer.yearsSplits.length>1" class="pointer" (click)="voirYear[y] = !voirYear[y]">
+                                    <div style="padding: 0px 0px; padding-bottom: 10px;">
+                                        <span class="voirTous" *ngIf="!voirYear[y]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #8799AC"></i></span>
+                                        <span class="fermerTous" *ngIf="voirYear[y]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #8799AC"></i></span>
+                                    </div>
+                                    </span>
+                                    <span *ngIf="offer.yearsSplits.length>1&&voirYear[y]">
+                                    <p *ngFor="let y of offer.yearsSplits;">{{y}}</p>
+                                    </span>
+                                </div>
+                            </td> -->
+                            <td>
+                                <div *ngIf="offer.offer_status == 'supprimer' ">A supprimer</div>
+                                <div *ngIf="offer.offer_status == 'indicative'">PRIX Proposés</div>
+                                <div *ngIf="offer.offer_status == 'signer'    ">A signer</div>
+                                <div *ngIf="offer.offer_status == 'signee'    ">Signee</div>
+                                <div *ngIf="offer.offer_status == 'confirmer' ">A confirmer</div>  
+                            </td>
+                            <td  class="t-d-style ">
+                                <ul class="block_display">
+                                    <li *ngIf="offer.offer_type == 'Standart'">{{offer.expiration_date | slice:0:10}} {{offer.expiration_date | slice:11:16}}</li>
+                                    <li *ngIf="offer.offer_type == 'SME'">{{offer.date_fin | slice:0:10}} {{offer.date_fin | slice:11:16}}</li>
+                                </ul>
+                            </td>
+                            <td  class="t-d-style ">
+                                    <ul class="view_button">
+                                        <li><a (click)="voir(offer)">Voir</a></li>
+                                    </ul>
+                            </td>
+                        </tr>
+                      </tbody>                   
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="offerPagination && !tabOrInf" class="text-center">
+                <ul class="pagination" style="display: inline-flex; height: 34px;">
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1&&offerPagination.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1&&offerPagination.pages>5"><a><i class="material-icons">..</i></a></li>                
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>2" (click)="pags(offerPagination.pag-2)"><a>{{offerPagination.pag-2}}</a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1" (click)="pags(offerPagination.pag-1)"><a>{{offerPagination.pag-1}}</a></li>
+                    <li class="btn btn-primary m-l-5"><a>{{offerPagination.pag}}</a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages" (click)="pags(offerPagination.pag+1)"><a>{{offerPagination.pag+1}}</a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag+1<offerPagination.pages" (click)="pags(offerPagination.pag+2)"><a>{{offerPagination.pag+2}}</a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages&&offerPagination.pages>5"><a><i class="material-icons">..</i></a></li>
+                    <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages&&offerPagination.pages>1" (click)="pags(offerPagination.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+                    <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                    <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                    <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                    <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                    <option [selected]="nr == 100" [value]="100">100</option>
+                    </select>
+                    <p style="margin: 5px;">Objets par page</p>
+                </ul>
+            </div>
+           
+        </section>
+    </div>
+<!-- <div> -->
+
+
+<div *ngIf='allOrUne'>
+    <div class='row'>
+        <div class="col-md-2">
+            <span class="pointer" style="color: #2994eb" (click)="allOrUne =  false;userActiv = null;">
+                <i class="fa fa-chevron-circle-left pointer"></i> <span class="txtHoverUnderline">Retour</span>
+            </span>
+        </div>
+    </div>
+    <br/>
+
+    <app-user-activity-analytics *ngIf="userActiv" [userActiv]="userActiv" [type]="1"></app-user-activity-analytics>
+</div>
+      

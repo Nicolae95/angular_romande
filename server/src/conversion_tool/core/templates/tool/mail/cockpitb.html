@@ -1,0 +1,163 @@
+<!DOCTYPE HTML><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8' /></head>
+<body>
+<table width='1000px' style='margin: auto;'>
+  <table width='100%' style='text-align: center;'>
+    <tr>
+      <td align='center'>
+        <tr>
+          <td>
+            <table cellpadding='0' cellspacing='0' width='100%'>
+              <tr>
+                <td width='180' style='text-align: left;'><img src='{{url}}/assets/images/logoEMPLOGOBlue.png'></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height='30'></td>
+        </tr>
+        {% if endata %}
+          <tr>
+            <td height='30'><p style='text-align: left;font-size: 18px;color:#333;font-weight: bold;'>STATISTICS</p></td>
+          </tr>
+          <tr>
+            <td>
+              <table cellpadding='0' cellspacing='0' width='1000px' style='border:8px solid white; color:#333; font-size: 12px;margin:auto;'>
+                <tr>
+                  <td style='background-color: #333; color:white;border-right:1px solid white; border-bottom: 1px solid white; height: 35px; min-height:35px;padding-left: 5px;'>FROM THE BEGINNING OF THIS YEAR</td>
+                  {% for key, day in day_groups.iteritems %}
+                      {% for datekey, date in date_groups.iteritems %}
+                          {% if key == datekey %}
+                            <td style='background-color: #333; color:#e0cbb8;border-right:1px solid white; border-bottom: 1px solid white; height: 35px; min-height:35px;text-transform: uppercase;'>{{ day }}<br><span style='color:#ccc;'>{{ date }} &nbsp;</span></td>
+                          {% endif %}
+                      {% endfor %}
+                  {% endfor %}
+                  <td style='background-color: #333; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'>VAR D-1</td>
+                  <td style='background-color: #333; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'>VAR W-1</td>
+                  <td style='background-color: #333; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'>AVG.</td>
+                  <td style='background-color: #333; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'>MAX</td>
+                  <td style='background-color: #333; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'>MIN</td>
+                </tr>
+                
+                {% for uid in uids %}
+                  {% for key, energ in enrglist.iteritems %}
+                    {% if uid == key %}
+                      <tr> 
+                        <td style='text-align: left;background-color: #00b0f0; color:white;font-size: 14px; padding-left:10px;text-transform: uppercase;' colspan="12">{{ energ }}</td>
+                      </tr>
+                      {% for data in endata %}
+                        {% if data.uid == uid %}
+                          <tr>
+                            <td style='text-align: left;padding-left: 10px;background-color: #ccc; border-left: 1px solid #ccc; border-right:1px solid #ccc; border-bottom: 1px solid #ccc; color: #333; font-weight: bold; height: 35px; min-height:35px;padding-left: 10px;'> {{ data.name }} {{ data.unit }}/{{ data.curr }}</td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.v1 }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.v2 }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.v3 }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.v4 }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.byv }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.yv }} </td>
+                            
+                            {% if data.yp > 0 %}
+                              <td style='background-color: #f9d5d5;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.yp }} </td>
+                            {% else %}
+                              <td style='background-color: #e5f7fa;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.yp }} </td>
+                            {% endif %}
+                            
+                            {% if data.wp > 0 %}
+                              <td style='background-color: #f9d5d5;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.wp }} </td>
+                            {% else %}
+                              <td style='background-color: #e5f7fa;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.wp }} </td>
+                            {% endif %}
+                            
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.mavg }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.ymax }} </td>
+                            <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;'> {{ data.ymin }} </td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td height='30'></td>
+          </tr>
+        {% endif %}
+        
+        <tr>
+          <td height='30'><p style='text-align: left;margin:0; font-size: 18px;color:#333;font-weight: bold;'>MARKET PRICES & TRENDS </p></td>
+        </tr>
+        <tr>
+          <td>
+          {% if len_cockpit == 1 %}
+              <table cellpadding='0' cellspacing='0' width='500px' style='border:8px solid white; color:#333; font-size: 14px;text-align: left;'>
+                {% for chart in charts %}
+                        <tr>
+                          <tr>
+                            <td style='text-align: left;padding-left: 10px;background-color: #00b0f0; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="12">SETTLEMENTS</td>
+                          </tr>
+                          {% for last in uid_groups %}
+                            {% if last.cid|stringformat:"i" == chart.id|stringformat:"i" %}
+                                <tr>
+                                  <td style='text-align: left;padding-left: 10px;border-left:1px solid #ccc;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="7"> {{ last.name }} </td>
+                                  <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="5"> {{ last.value }} </td>
+                                </tr>
+                            {% endif %}
+                          {% endfor %}
+                            <tr>
+                              <td width='876'><img src='{{ url }}/api/chart/{{chart.id}}/' width='876'></td>
+                            </tr>
+                            <table cellpadding='0' cellspacing='0' width='150px' style='border:8px solid white; font-size: 14px;margin:auto;'>
+                              <tr>
+                                  <td style='background-color: #007bff;height: 35px;'><a style='color:white; font-size: 16px;' href="{{ url }}/cockpits/view/{{ cockpit.id }}"> See more >> </a></td>
+                              </tr>
+                            </table>
+                          </tr>
+                  {% endfor %}
+              </table>
+          {% endif %}
+
+          {% if len_cockpit > 1 %}
+            <table cellpadding='0' cellspacing='0' width='1000px' style='border:8px solid white; color:#333; font-size: 14px;text-align: left;'>
+              {% for chart in charts_even %}
+                    <table cellpadding='0' cellspacing='0' width='500px' style='border:8px solid white; color:#333; font-size: 14px;text-align: left;'>
+                        <td>
+                          <tr>
+                            <tr>
+                              <td style='text-align: left;padding-left: 10px;background-color: #00b0f0; color:white;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="12">SETTLEMENTS</td>
+                            </tr>
+                            {% for last in uid_groups %}
+                              {% if last.cid|stringformat:"i" == chart.id|stringformat:"i" %}
+                                  <tr>
+                                    <td style='text-align: left;padding-left: 10px;border-left:1px solid #ccc;border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="7"> {{ last.name }} </td>
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 35px; min-height:35px;' colspan="5"> {{ last.value }} </td>
+                                  </tr>
+                              {% endif %}
+                            {% endfor %}
+                              <tr>
+                                <td width='876'><img src='{{ url }}/api/chart/{{chart.id}}/' width='876'></td>
+                              </tr>
+                              <table cellpadding='0' cellspacing='0' width='150px' style='border:8px solid white; font-size: 14px;margin:auto;'>
+                                <tr>
+                                    <td style='background-color: #007bff;height: 35px;'><a style='color:white; font-size: 16px;' href="{{ url }}/cockpits/view/{{ cockpit.id }}"> See more >> </a></td>
+                                </tr>
+                              </table>
+                            </tr>
+                          </td>
+                      </table>
+              {% endfor %}
+            </table>
+          {% endif %}
+
+          <tr>
+            <td height='40'><p>Romande Energie Commerce SA </p></td>
+          </tr>
+          </td>
+        </tr>
+      </td>
+    </tr>
+  </table>
+</table>
+</body>
+</html>

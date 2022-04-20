@@ -1,0 +1,53 @@
+{% extends 'tool/base.html' %}
+{% block tool_content %}
+
+    <form action="{% url 'tool:edit_translation' id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.errors }}
+            <label for="{{ form.title.id_title }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            {{ form.translation_meter.errors }}
+            <label for="{{ form.translation_meter.translation_meter }}">CC:</label>
+            {{ form.translation_meter }}
+        </div>
+        <!--<div class="form-group">
+            {{ form.year.errors }}
+            <label for="{{ form.year.id_year }}">Year:</label>
+                <div class='input-group date' id='year'>
+                    {{form.year}}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            {{ form.translated_year.errors }}
+            <label for="{{ form.translated_year.id_translated_year }}">CCT:</label>
+                <div class='input-group date' id='translated_year'>
+                    {{form.translated_year}}
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+        </div>-->
+        <script type="text/javascript">
+        $(function () {
+            $('#year').datetimepicker({
+                format: 'YYYY',
+                // defaultDate:moment({{form.datetime_from.value}})
+            });
+        });
+        $(function () {
+            $('#translated_year').datetimepicker({
+                format: 'YYYY',
+            });
+        });
+        </script>
+
+      <button type="submit" class="save btn btn-primary">Edit</button>
+    </form>
+
+{% endblock %}

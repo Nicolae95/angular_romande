@@ -1,0 +1,163 @@
+
+  <!-- modal large -->  
+			<div class="modal fade" id="manuals" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" style="min-width: 1500px;" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="manuals">Paramétrer une Nouvelle Offre</h4>
+                <button type="button" class="close" data-dismiss="modal" (click)="close()" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form [formGroup]="offerManual" class="from-group needs-validation" (ngSubmit)="onSubmitOffer(offerManual.value)">
+                      <div class="col-md-12 mb-3 d-i" [ngClass]="{'mb-10': prixHpHc === 'unique'}" >
+                          <div class="col-md-3" [ngClass]="{'has-danger': ccHisto.invalid && (ccHisto.dirty || ccHisto.touched),
+                                                                 'has-success': ccHisto.valid && (ccHisto.dirty || ccHisto.touched)}">
+                              <h5 class="cat-head">CC Profil Historique ou CC type</h5>
+                              <input type="text" class="form-control" formControlName='ccHisto' required readonly>
+                          </div>
+                      
+                              <div class="col-md-3  mb-4" [ngClass]="{'has-danger': anneeFinForce.invalid && (anneeFinForce.dirty || anneeFinForce.touched),
+                                                                      'has-success': anneeFinForce.valid && (anneeFinForce.dirty || anneeFinForce.touched)}">
+                              <h5 class="cat-head">Années proposées:</h5>
+                              <div style="display: inline-flex;">
+                                <div style="width: 100px; margin-right: 10px"><input type="text" class="form-control" step="width: 100px; margin-right: 10px" formControlName='anneeInForce'  required readonly></div>
+                                <div style="width: 100px; margin-right: 10px"><input type="text" class="form-control" step="width: 100px; margin-right: 10px" formControlName='anneeFinForce' required readonly></div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <div id="main-wrapper"> 
+                            <div role="tabpanel" class="tab-pane">
+                              <div class="row">
+                                <div class="col-sm-6">
+                                  <div class="graph-wrap">
+                                    <h3 class="graph-title text-center" *ngIf="prixHpHc === 'hc/hp'">Prix plancher (en ct. CHF/kWh)</h3>
+                                    <div class="text-center">
+                                      <div class="table-responsive m-b-30" *ngIf="prixHpHc === 'hc/hp'">
+                                        <table class="table table-borderless table-data3">
+                                          <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th class="text-center" colspan="2">ÉTÉ</th>
+                                                <th class="text-center" colspan="2">HIVER</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>HP</th>
+                                                <th>HC</th>
+                                                <th>HP</th>
+                                                <th>HC</th>
+                                            </tr>
+                                            <tr *ngFor="let y of selectedYears; let i = index">
+                                                <th>{{y}}</th>
+                                                <td style="background: #fff7e8;"><input [ngModel]="0" [(ngModel)]="oe_hp[y]" formControlName="e_hp" type="number" class="text-center" style="background: #fff7e8; max-width: 100px; height: 36px; border: 0px" ></td> 
+                                                <td style="background: #fff7e8;"><input [ngModel]="0" [(ngModel)]="oe_hc[y]" formControlName="e_hc" type="number" class="text-center" style="background: #fff7e8; max-width: 100px; height: 36px; border: 0px" ></td> 
+                                                <td style="background: #f2f2f2;"><input [ngModel]="0" [(ngModel)]="oh_hp[y]" formControlName="h_hp" type="number" class="text-center" style="background: #f2f2f2; max-width: 100px; height: 36px; border: 0px" ></td> 
+                                                <td style="background: #f2f2f2;"><input [ngModel]="0" [(ngModel)]="oh_hc[y]" formControlName="h_hc" type="number" class="text-center" style="background: #f2f2f2; max-width: 100px; height: 36px; border: 0px" ></td> 
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="table-responsive m-t-30">
+                                        <table class="table table-borderless table-data3">
+                                            <thead>
+                                              <tr>
+                                                <th>ct/kWh</th>
+                                                <th class="text-center redbg" *ngFor="let y of selectedYears">{{y}}</th>                    
+                                              </tr> 
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <th>
+                                                    <span *ngIf="prixHpHc === 'unique'">Prix unique</span>
+                                                    <span *ngIf="prixHpHc === 'hc/hp'">Prix moyen indicatif</span>
+                                                  </th>
+                                                  <td class="text-center" *ngFor="let y of selectedYears">
+                                                      <input [ngModel]="0" [(ngModel)]="omoney_i[y]" formControlName="money_i" type="number" class="text-center" style="max-width: 100px; height: 36px; border: 0px">
+                                                  </td>
+                                                </tr>
+                                          </tbody>
+
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                      
+                                <div class="col-sm-6">
+                                    <div class="graph-wrap">
+                                      <h3 class="graph-title text-center" *ngIf="prixHpHc === 'hc/hp'">Prix finaux (en ct. CHF/kWh)</h3>
+                                      <div class="text-right">
+                                        <div class="table-responsive m-b-30" *ngIf="prixHpHc === 'hc/hp'">
+                                          <table class="table table-borderless table-data3">
+                                            <thead>
+                                              <tr>
+                                                  <th>&nbsp;</th>
+                                                  <th class="text-center" colspan="2">ÉTÉ</th>
+                                                  <th class="text-center" colspan="2">HIVER</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                  <th>&nbsp;</th>
+                                                  <td>HP</td>
+                                                  <td>HC</td>
+                                                  <td>HP</td>
+                                                  <td>HC</td>
+                                              </tr>
+                                              <tr *ngFor="let y of selectedYears; let i = index">
+                                                  <th class="text-center">{{y}}</th>
+                                                  <td style="background: #fff7e8"> <input [ngModel]="0" [(ngModel)]="o_fin_e_hp[y]" formControlName="fin_e_hp" type="number" class="text-center" style="max-width: 100px; height: 36px; background: #fff7e8; border: 0px" ></td> 
+                                                  <td style="background: #fff7e8"> <input [ngModel]="0" [(ngModel)]="o_fin_e_hc[y]" formControlName="fin_e_hc" type="number" class="text-center" style="max-width: 100px; height: 36px; background: #fff7e8; border: 0px" ></td> 
+                                                  <td style="background: #f2f2f2"><input [ngModel]="0" [(ngModel)]="o_fin_h_hp[y]" formControlName="fin_h_hp" type="number" class="text-center" style="max-width: 100px; height: 36px; background: #f2f2f2; border: 0px" ></td> 
+                                                  <td style="background: #f2f2f2"><input [ngModel]="0" [(ngModel)]="o_fin_h_hc[y]" formControlName="fin_h_hc" type="number" class="text-center" style="max-width: 100px; height: 36px; background: #f2f2f2; border: 0px" ></td> 
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="table-responsive m-t-20">
+                                          <table class="table table-borderless table-data3">
+                                            <thead>
+                                                <tr>
+                                                    <th>ct/kWh</th>
+                                                    <th class="text-center redbg" *ngFor="let y of selectedYears">{{y}}</th>                    
+                                                  </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="colorred">
+                                                        <span *ngIf="prixHpHc === 'unique'">Prix unique</span>
+                                                        <span *ngIf="prixHpHc === 'hc/hp'">Prix moyen indicatif</span>
+                                                    </td>
+                                                    <td class="text-center" *ngFor="let y of selectedYears">
+                                                        <input [ngModel]="0" [(ngModel)]="o_fin_money_i[y]" formControlName="fin_money_i" type="number" class="text-center" style="max-width: 100px; height: 36px; border: 0px">
+                                                    </td>
+                                                  </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            
+                              </div>
+                          </div>
+                      </div>
+                      </form>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button *ngIf="!loading" type="button" class="btn btn-primary" (click)="onSubmitOffer(offerManual.value);aneeProposWait();">Sauvegarder</button>
+                <button *ngIf="loading" type="button" class="btn btn-primary">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>SAUVEGARDER
+                </button>  
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end modal large -->

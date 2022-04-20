@@ -1,0 +1,129 @@
+.tabback {
+    background: #f2f5f8;
+    border-radius: 0 !important;
+    padding: 10px 15px !important;
+    margin-right: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    border-bottom: none !important;
+  }
+  
+  
+  .nav {
+    padding: 10px 15px !important;
+  }
+  
+    .display {
+      color: #f3f6fb;
+        font-size: 14px;
+      }
+  
+      
+      #calcmultisite button, #calcmultisite2 button {
+       
+           
+            color: #333;
+        margin-right: 1.5rem; 
+            border: 1px;
+           
+            border-style: solid;
+            border-color: #0c82f9;
+            min-width: 9rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    
+      .time-btns2 > button:hover, .time-btns2 >button.active, .time-btns2 button:hover .display, .time-btns2 > button.active + .display {
+        color: #f3f6fb !important;
+            background-color: #0c82f9;
+            border: none;
+            display: inline-block;
+            
+            }
+  
+  
+            .activebtncalc, .activebtn {
+                color: #fff !important;
+                background-color: #0c82f9 !important;
+                border: none !important;
+                display: inline-block !important;
+                
+            }
+  
+            .btn {
+                border: 1px solid red;
+            }
+  
+            .activee {
+                display: block !important;
+            }
+  
+  
+  
+  
+            @media (min-width: 992px) {
+  
+           .btn-md {
+                 width: 13.333333%;
+            }
+            }
+  
+  
+           #tabldevariat th, #tabldevariat tr td:first-child { background: #e1a021; color: white;border: 1px solid white;}
+           #tabldevariat tr td:first-child {background: #e1a021; color: white;border: 1px solid white;}
+          
+           #tabldevariat  tr td:not(:first-child) {
+                background: #fdf5ea !important;border: 1px solid white;
+           }
+  
+  
+           .activecalccc {
+  
+  
+  
+            display: inline-block !important;
+           }
+  
+  
+  
+           .nav-tabs > li {
+            list-style-type: none;
+          background: white;
+            display: inline-block;
+          }
+          .nav-tabs > li > a {
+           
+            display: block;
+            height: 100%;
+            text-align: center;
+            line-height: 40px;
+            border: 1px solid #141414;
+            box-sizing: border-box;
+            color: orange;
+          }
+       
+   
+     
+          .nav-tabs > li > a:hover,
+          .nav-tabs > li > a:focus,
+          .nav-tabs > li.active > a:hover,
+          .nav-tabs > li.active > a:focus {
+            border-bottom: 1px solid #ce0028;
+    cursor: default;
+  color: #ce0028 !important;
+  border-top: 3px solid #ce0028 ;
+  background-color: white !important;
+          }
+  
+          .shower {
+            display: unset !important;
+          }
+  
+  
+          .activetab {
+            opacity: 1 !important;
+            border-top: 3px solid #ce0028 !important;
+            color: #ce0028 !important;
+            background-color: #ffffff !important;
+          }
+  
+          

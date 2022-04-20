@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8' /></head>
+<body>
+<table width='100%'>
+  <tr>
+    <td align='center'>
+      <table cellpadding='0' cellspacing='0' width='600' style='border:8px solid white; color:#333; font-size:16px;'>
+        <tr>
+            <td>
+                <table cellpadding='0' cellspacing='0' width='100%'>
+                    <tr><td><b>Numéro d'opportunité: </b> {{ offer.nr_opportunite }}</td></tr>
+                    <tr><td><b>Numéro de l'offre ID: </b>{{  offer.emp_id }}</td></tr>
+                    <tr><td><b>MW Base: </b>{{ base|floatformat:6 }}</td></tr>
+                    <tr><td><b>MW Peak: </b>{{ peak|floatformat:6 }}</td></tr>
+                    <tr><td><b>Garanties d'origine: </b>{{ offer.energyd }}</td></tr>
+                    
+                    {% if exists_ps1 %}
+                      <tr><td><b>Produits et Services 1: </b>inclus</td></tr>
+                    {% else %}
+                      <tr><td><b>Produits et Services 1: </b>0</td></tr>
+                    {% endif %}
+                    
+                    {% if exists_ps2 %}
+                      <tr><td><b>Produits et Services 2: </b>inclus</td></tr>
+                    {% else %}
+                      <tr><td><b>Produits et Services 2: </b>0</td></tr>
+                    {% endif %}
+                    
+                    <tr><td><b>Années: </b>{{ offer.years }}</td></tr>
+                    <tr><td><b>Validité: </b>{{ offer.date_debut|date:'d.m.Y H:i' }} - {{ offer.date_fin|date:'d.m.Y H:i' }}</td></tr>
+                    <tr><td><b>Status: </b>{{ offer.sme_status }}</td></tr>
+                    <tr><td><b>Devise: </b>{{ unit }}</td></tr>
+                    <tr><td><b>Volume annuel total: </b></td></tr>
+              </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+              <table cellpadding='0' cellpadding='0' width='100%'>
+                <tr>
+                  <td width='50'>&nbsp;</td>
+                  <td>
+                      <table cellspacing='0' cellpadding='0' width='500' >
+                        <tr><td height='20'></td></tr>
+                        <tr>
+                          <td>
+                            <table cellpadding='0' cellspacing='0' width='100%' style='border:1px solid #ccc;text-align: center; font-weight:bold; font-size:15px;'>
+                                <tr>
+                                  <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; height: 25px; min-height:25px;'>kWh</td>
+                                  {% for year in years %}
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; color:white; background-color: #d60029;'>{{ year }}</td>
+                                  {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc; width:30%'><p style='margin:0;color:#d60029'>Volumes <br> projetés </p></td>
+                                    {% for year in years %}
+                                        {% for key, value in year_sum.iteritems %}
+                                            {% if key|stringformat:"i" == year|stringformat:"i"  %}
+                                                <td style='border-right:1px solid #ccc; border-bottom: 1px solid #ccc'>{{ value }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td width='50'>&nbsp;</td>
+                  </tr>
+              </table>
+          </td>
+        </tr>
+        <!-- <tr>
+            <td height='40'>
+                <p style='margin:0'>Romande Energie Commerce SA </p>
+            </td>
+        </tr>  -->
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

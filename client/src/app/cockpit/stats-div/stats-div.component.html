@@ -1,0 +1,79 @@
+        <div class='col-sm-12 cp-news-div' id="statssection" [ngStyle]="{ 'backgroundColor' : colors[0] }">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="subtitle" [ngStyle]="{ 'color' : colors[1] }">{{ stats }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="news-block col-sm-12 cp-stats-div">
+                  <table class="cp-statistics-table">
+                      <thead>
+                        <tr>
+                            <th>FROM THE BEGINNING OF THIS YEAR</th>
+                            <th *ngFor = "let days of wday; let i = index;">{{ days }}<br><span>{{ wdate[i] }} &nbsp;</span></th>
+                            <th>VAR D-1</th>
+                            <th>VAR W-1</th>
+                            <th>AVG.</th>
+                            <th>MAX</th>
+                            <th>MIN</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngFor="let order of auxstring">
+
+                        <tr> 
+                          <td class="newenergy" colspan="12">{{ enrglist[order-1] }}</td>
+                        </tr>
+
+                        <tr *ngFor='let data of filterOf(order)'>
+                          <td> {{ data.name }} {{ data.unit }}/{{ data.curr }}</td>
+                          <td> {{ data.v1 }} </td>
+                          <td> {{ data.v2 }} </td>
+                          <td> {{ data.v3 }} </td>
+                          <td> {{ data.v4 }} </td>
+                          <td> {{ data.byv }} </td>
+                          <td> {{ data.yv }} </td>
+                          <td [ngClass]="GiveClass(data.yp)"> {{ data.yp ? data.yp : '-' }} </td>
+                          <td [ngClass]="GiveClass(data.wp)"> {{ data.wp ? data.wp : '-' }} </td>
+                          <td> {{ data.mavg }} </td>
+                          <td> {{ data.ymax }} </td>
+                          <td> {{ data.ymin }} </td>
+                        </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+        </div>
+
+        <button style="display: none;"  class='closeallbtn' (click)='active=false'></button>
+        <div id='fancybox-overlay' [ngStyle]="{ 'display' : active || acolor || sdelete ? 'block' : 'none' }"></div>
+
+        <div *ngIf="active" class="news_edit" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+            
+        <div class="popup-title"><b>Edit statistics section</b><i class="fa fa-times closeme" (click)="active = !active"></i></div>
+            <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+                <div class="form-group">
+                    <label for="name"><b>Edit name:</b></label>
+                    <input type="text" class="form-control" required minlength="4" (change)='verify()' [(ngModel)]="stats" name='stats-name' #statsName='ngModel'>
+
+                    <div *ngIf="statsName.invalid && (statsName.dirty || statsName.touched)" class="alert alert-danger">
+                        <div *ngIf="statsName.errors.required">
+                          Field is required.
+                        </div>
+                        <div *ngIf="statsName.errors.minlength">
+                          Field must be at least 4 characters long.
+                        </div>
+                    </div>
+
+                </div> 
+
+                <input type="hidden" required name="ckid" value="23"> 
+
+                <hr>
+
+                <div class="form-group" style="text-align: right">
+                    <button type="reset" class='reset-btn'>Cancel</button>
+                    <button type="submit" class="submit-btn"  [disabled]="!editForm.form.valid">Save Settings</button>
+                </div>
+            </form>
+
+        </div>

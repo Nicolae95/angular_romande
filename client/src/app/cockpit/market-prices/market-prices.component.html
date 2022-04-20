@@ -1,0 +1,82 @@
+        <div *ngIf="chartByMarkets" class='col-sm-12 cp-news-div' id="marketsection" [ngStyle]="{ 'backgroundColor' : colors[0] }">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="subtitle" [ngStyle]="{ 'color' : colors[1] }">{{ mpt }}</span>
+                    <!-- <div class="action_bar" (click)='action = !action'>
+                        <p [ngStyle]="{ 'color' : colors[1] }">Action
+                            <i class="fa" [ngClass]="{'fa-caret-up': action, 'fa-caret-down': !action }"></i>
+                        </p>
+                        <div *ngIf="action" class='action_menu'>
+                            <span (click)="active = !active">Edit section</span>
+                            <span (click)="acolor = !acolor; offMe()">Edit color scheme</span>
+                            <span (click)='sdelete = !sdelete; offMee()'>Delete</span>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="row" *ngIf="chartData">
+
+                <div *ngFor="let chart of chartByMarkets; let i = index;" class="col-sm-6 news-block">  
+                  <table class="cp-statistics-table sett-table">
+                  <tr>
+                    <td class="newenergy" colspan="2"> SETTLEMENTS </td>
+                  </tr>
+                  <tr *ngFor='let datas of chart.dataTab'>
+                      <td>{{ datas.name }} {{datas.curr}}/{{datas.unit}}</td>
+                      <td>{{ datas.yv }}</td>
+                  </tr>
+                  </table>
+
+            
+                  <div class="chart-div">
+                    <p>{{ chart.name }}</p>
+                    
+                    <div style="width:100%; height: 400px;"><app-chartdata [takeMe]="chart.ids"></app-chartdata></div>
+                    <button (click)='ajax = chart.ids; auxname = chart.name' class="seemore-btn">See more »</button>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <app-chart-detail  *ngIf="ajax" [takeMe]="ajax" [title]="auxname"></app-chart-detail>
+        
+        <button style="display: none;" class='closeallbtn' (click)='active=false'></button>
+        <div id='fancybox-overlay'  [ngStyle]="{ 'display' : active ? 'block' : 'none'}"></div>
+
+        <div *ngIf="active" class="news_edit" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+            
+        <div class="popup-title"><b>Edit chart section</b><i class="fa fa-times closeme" (click)="active = !active"></i></div>
+            <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+                <div class="form-group">
+                    <label for="name"><b>Edit name:</b></label>
+                    <input type="text" class="form-control" required minlength="4" (change)='verify()' [(ngModel)]="mpt" name='mpt-name' #mptName='ngModel'>
+
+                    <div *ngIf="mptName.invalid && (mptName.dirty || mptName.touched)" class="alert alert-danger">
+                        <div *ngIf="mptName.errors.required">
+                          Field is required.
+                        </div>
+                        <div *ngIf="mptName.errors.minlength">
+                          Field must be at least 4 characters long.
+                        </div>
+                    </div>
+
+                </div> 
+
+                <input type="hidden" required name="ckid" value="23"> 
+
+                <hr>
+
+                <div class="form-group" style="text-align: right">
+                    <button type="reset" class='reset-btn'>Cancel</button>
+                    <button type="submit" class="submit-btn"  [disabled]="!editForm.form.valid">Save Settings</button>
+                </div>
+            </form>
+
+        </div>
+
+        <div *ngIf="active" class="news_edit" [ngStyle]="{ 'display' : active ? 'block' : 'none', 'top' : '1500px'}">
+          <div class="popup-title"><b>Here will be chart</b><i class="fa fa-times closeme" (click)="active = !active"></i></div>
+          <div style="width:200px; height: 200px;">{{ ajax }}</div>
+        </div>
+

@@ -1,0 +1,48 @@
+
+<div id='fancybox-overlay' [ngStyle]="{ 'display' : ckid ? 'block' : 'none' }"></div>
+
+<div *ngIf="active" class="news_edit">
+    <form>
+        <div class="form-group">
+            <label for="email"><b>Edit name:</b></label>
+            <input type="text" class="form-control" id="email">
+        </div> 
+
+        <div class="form-group">
+            <label for="email"><b>Select the number of news to display:</b></label>
+            <select class="form-control" id="sel1">
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+            </select>
+        </div>    
+
+        <div class="form-group">
+            <label for="email"><b>Select the news categories to display:</b></label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" value="">All categories
+              </label>
+            </div>
+
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" value="">Natural Gas
+              </label>
+            </div>
+
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" value="">Renewable
+              </label>
+            </div>
+
+        </div>    
+
+        <div class="form-group">
+            <label for="email"><b>Email address:</b></label>
+            <input type="email" class="form-control" id="email">
+        </div>    
+    </form>
+</div>

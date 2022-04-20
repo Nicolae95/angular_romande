@@ -1,0 +1,105 @@
+
+  <div *ngIf="!cockpitNews" class="text-center">
+      <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+      </div>
+  </div>
+
+  <div class="mysections" *ngIf="cockpitNews">
+    <div class="tabcontainer border0">
+      <table class="table-striped" style="width: 100%;">
+        <thead>
+            <tr class="header">
+                <th>COCKPIT NAME    <div>COCKPIT NAME    </div> </th>
+                <th>ATTACHED USERS  <div>ATTACHED USERS  </div> </th>
+                <th>ATTACHED SCORING<div>ATTACHED SCORING</div> </th>
+                <th>ADD OWN CONTENT <div>ADD OWN CONTENT </div> </th>
+                <th>Add charts      <div style="padding-left: 34px;">Add charts</div> </th>  
+                <th>Edit            <div style="padding-left: 37px;">Edit      </div> </th>  
+                <th>SEND VIA EMAIL  <div>SEND VIA EMAIL  </div> </th>   
+              </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cockpit of cockpitNews;let y=index">
+              <td>{{cockpit.name}}</td>
+              <td>
+                <div style="display: inline-flex">
+                  <button class="boxx atachcockpit" style="margin-right: 15px;" (click)="attachedUser(cockpit)" data-toggle="modal" data-target="#createNewCockpitB"><i class="fa fa-paperclip"></i>Attach</button>
+                  <div *ngIf="cockpit.clients"> 
+                      <div *ngIf="cockpit.clients.length == 1">
+                        <div *ngFor="let y of cockpit.clients" style="padding: 10px 5px;">{{y.nom_entrepise}}</div>
+                      </div>
+                      <p style="height: 0px; margin-bottom: 5px;">&nbsp;</p>
+                      <span *ngIf="cockpit.clients.length>1" class="pointer" (click)="voirClients[y] = !voirClients[y]">
+                        <div style="padding: 0px 0px;">
+                          <span style="height: 37px;" class="voirTous"   *ngIf="!voirClients[y]">Voir Tous &nbsp;<i class="pull-right fa fa-angle-down" style="margin: 4px 0px 0px 0px;color: #8799AC"></i></span>
+                          <span style="height: 37px;" class="fermerTous" *ngIf="voirClients[y]">Fermer     &nbsp;<i class="pull-right fa fa-angle-up"   style="margin: 4px 0px 0px 0px;color: #8799AC"></i></span>
+                        </div>
+                      </span>
+
+
+                      <!-- <div class="usel" style="display: table;" *ngIf="cockpit.clients.length>1&&voirClients[y]">
+                        <span class="sel_desel_all"><input type="checkbox" class="regular-checkbox" style="margin-bottom:0px;"></span>
+                        <span>{{count[y]}} selected</span>
+                        <span class="withpopup" popup="reqdel">
+                        <a>REMOVE</a></span>
+                      </div> -->
+
+                      <ul class="hedgelist mcockpitlist" style="display:block;" *ngIf="cockpit.clients.length>1&&voirClients[y]">
+                        <li *ngFor="let client of cockpit.clients;">
+                          <!-- <input type="checkbox" [(ngModel)]="clients[client.id]" (click)="clientSelected(y)" class="regular-checkbox usercheckbox"> -->
+                          <span class="withcheck"><a >{{client.nom_entrepise}}</a></span>
+                          <a class="withpopup pointer" (click)="delCock = cockpit; delCli = client;"><i class="fa fa-trash-o trashfa" data-toggle="modal" data-target="#deleteClients"></i></a>
+                        </li>
+                      </ul>
+              
+
+                    </div>
+                </div>
+              </td>
+              <td><button class="boxx atachcockpit"><i class="fa fa-paperclip"></i>Attach</button></td>
+              <td><button class="boxx addcontent">  <i class="fa fa-plus"></i>Add content</button></td>
+              <td><button class="boxx atachcockpit optmenu"><div style="margin-right:10px;" class="fa fa-line-chart"></div>Attach</button></td>
+              <td><button class="boxx atachcockpit optmenu" [routerLink]="['/cockpit/edit/', cockpit.id]"><div  style="margin-right:10px;" class="fa fa-edit"></div> Edit</button></td>
+              <td><button class="viewbtn">          <i class="fa fa-envelope" style="margin-right:10px;"></i>Send now</button></td>   
+          </tr>  
+        </tbody>    
+      </table>
+    </div>
+  </div>
+
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="modal fade owerflow-y" id="deleteClients" role="dialog">
+            <div class="modal-dialog modal-sm-6 mt-140">
+              <div class="modal-content">
+                <div class="mymodal-header">
+                  <i class="close_popup fa pull-right" id="canceldeleteClients" data-dismiss="modal" >&#xf00d;</i>       
+                  <h4 class="modal-title white">Supprimer un utilisateur</h4>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <h4 *ngIf="delCli">Souhaitez-vous supprimer l'utilisateur {{delCli.nom_entrepise}}?</h4><br>
+                    <button class="pull-right btn btn-primary" data-dismiss="modal"> NON </button>
+                    <button *ngIf="!loadingSm" class="pull-right btn btn-primary" style="margin-right: 10px;" (click)="delClient()">OUI</button>
+                    <button *ngIf="loadingSm" class="pull-right btn btn-primary" style="margin-right: 10px;" disabled>OUI
+                      <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    </button>
+                   
+
+                    <br><br><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

@@ -1,0 +1,172 @@
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Edit a company</button>
+<!-- Modal -->
+<div class="modal fade owerflow-y" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="mymodal-header">
+        <i class="close_popup fa pull-right" data-dismiss="modal" >&#xf00d;</i>
+        <h4 class="modal-title white">Edit Company</h4>
+      </div>
+      <div class="modal-body">     
+        <!-- Body -->
+        <div *ngIf="company"> 
+            <div id="page-wrapper">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="pull-center">
+            <form [formGroup]="form" (ngSubmit)="updateCompany(form.value)">  
+                <!-- Company Name -->
+                <div [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched),
+                                 'has-success': name.valid && (name.dirty || name.touched)}">
+                   <div>Company Name</div>
+                    <input class="form-control" type="text" formControlName="name" required>
+                    <div  [ngClass]="{
+                              'has-danger': name.invalid && (name.dirty || name.touched),
+                              'has-success': name.valid && (name.dirty || name.touched)
+                            }" 
+                            *ngIf="name.errors && (name.dirty || name.touched)">
+                      <span *ngIf="name.errors.required">Company Name is required</span>
+                    </div>
+                </div>  
+             <!-- End Company Name -->
+             <!-- Address     -->
+               <div class="form-group" 
+                 [ngClass]="{
+                        'has-danger': address.invalid && (name.dirty || address.touched),
+                        'has-success': address.valid && (name.dirty || address.touched)
+                    }">
+                  <div class="pd-top-10">Address</div>
+                  <input class="form-control" type="text" formControlName="address">
+                  <div  [ngClass]="{
+                      'has-danger': address.invalid && (address.dirty || address.touched),
+                      'has-success': address.valid && (address.dirty || address.touched)
+                    }" 
+                        *ngIf="address.errors && (address.dirty || address.touched)">
+                  <span *ngIf="address.errors.required">Address is required </span>
+                </div>
+               </div>
+             <!-- End Address-->
+              <!-- Zip_code -->
+               <div class="form-group" 
+                 [ngClass]="{
+                        'has-danger': zip_code.invalid && (zip_code.dirty || zip_code.touched),
+                        'has-success': zip_code.valid && (zip_code.dirty || zip_code.touched)
+                      }" >
+                  <div class="pd-top-10">Zip_code</div>
+                  <input class="form-control" type="text" formControlName="zip_code">
+                  <div  [ngClass]="{
+                    'has-danger': zip_code.invalid && (zip_code.dirty || zip_code.touched),
+                    'has-success': zip_code.valid && (zip_code.dirty || zip_code.touched)
+                  }" 
+                          *ngIf="zip_code.errors && (zip_code.dirty || zip_code.touched)">
+                    <span *ngIf="zip_code.errors.required">Zip Code is required </span>
+                  </div>
+              </div>
+            <!-- End Zip_code -->
+              <!-- Nick -->
+               <div class="form-group" 
+                 [ngClass]="{
+                  'has-danger': nick.invalid && (nick.dirty || nick.touched),
+                  'has-success': nick.valid && (nick.dirty || nick.touched)
+                   }" >
+                  <div class="pd-top-10">Nick</div>
+                  <input class="form-control" type="text" formControlName="nick">
+                  <div  [ngClass]="{
+                    'has-danger': nick.invalid && (nick.dirty || nick.touched),
+                    'has-success': nick.valid && (nick.dirty || nick.touched)
+                    }" 
+                         *ngIf="nick.errors && (nick.dirty || nick.touched)">
+                   <span *ngIf="nick.errors.required">Nick is required </span>
+                 </div>
+               </div>
+              <!-- End Nick-->
+               <!-- Surname -->
+               <div class="form-group" [ngClass]="{
+                  'has-danger': surname.invalid && (surname.dirty || surname.touched),
+                  'has-success': surname.valid && (surname.dirty || surname.touched)
+                   }" >
+                   <div class="pd-top-10">Surname</div>
+                  <input class="form-control" type="text" formControlName="surname">
+                  <div  [ngClass]="{
+                    'has-danger': surname.invalid && (surname.dirty || surname.touched),
+                    'has-success': surname.valid && (surname.dirty || surname.touched)
+                  }" 
+                        *ngIf="surname.errors && (surname.dirty || surname.touched)">
+                  <span *ngIf="surname.errors.required">Surname is required </span>
+                 </div>
+               </div>
+              <!-- End Surname -->
+               <!-- Function -->
+               <div class="form-group" 
+                  [ngClass]="{
+                    'has-danger': func.invalid && (func.dirty || func.touched),
+                    'has-success': func.valid && (func.dirty || func.touched)
+                  }" >
+                  <div class="pd-top-10">Function</div>
+                  <input class="form-control" type="text" formControlName="func">
+                  <div  [ngClass]="{
+                    'has-danger': func.invalid && (func.dirty || func.touched),
+                    'has-success': func.valid && (func.dirty || func.touched)
+                  }" 
+                        *ngIf="func.errors && (func.dirty || func.touched)">
+                  <span *ngIf="func.errors.required">Function is required </span>
+                </div>
+               </div>  
+             <!-- End Function -->
+              <!--Email  -->
+               <div class="form-group"
+                 [ngClass]="{
+                    'has-danger': email.invalid && (email.dirty || email.touched),
+                    'has-success': email.valid && (email.dirty || email.touched)
+                 }">
+                  <span>Email</span>
+                  <input type="email"
+                         class="form-control"
+                         formControlName="email"
+                         required>
+               </div>
+               <div
+                 *ngIf="email.errors && (email.dirty || email.touched)">
+                 <span  *ngIf="email.errors.required">Email is required</span>
+                 <span *ngIf="password.errors.pattern">The email address must contain at least the @ character</span>
+              </div>
+             <!-- End Email-->
+              <!-- Phone -->
+              <div class="form-group" 
+                [ngClass]="{
+                   'has-danger': phone.invalid && (phone.dirty || phone.touched),
+                   'has-success': phone.valid && (phone.dirty || phone.touched)
+                 }">
+                     <div class="pd-top-10">Phone</div>
+                     <input class="form-control" type="number" formControlName="phone">
+                     <div  [ngClass]="{
+                        'has-danger': phone.invalid && (phone.dirty || phone.touched),
+                        'has-success': phone.valid && (phone.dirty || phone.touched)
+                      }" 
+                          *ngIf="phone.errors && (phone.dirty || phone.touched)">
+                     <span *ngIf="phone.errors.required">Phone is required </span>
+                </div>
+              </div>
+               <!-- End Phone-->
+               <!-- Button --> 
+               <div class="modal-footer ">
+                  <button type="submit" class="btn btn-default pull-left" [disabled]="form.invalid">Submit</button>
+                  <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
+               </div>
+                    </form>  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="load && !company">
+            Loading ...
+          </div>
+          <div *ngIf="!load && !company">
+              No data
+          </div>         End body
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,178 @@
+<!-- <app-header></app-header> -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#UploadPfc">Risque</button>
+                    <div class="modal fade owerflow-y" id="UploadPfc" role="dialog">
+                        <!-- <div class="modal-dialog modal-sm-8 mt-140"> -->
+                        <div class="modal-dialog modal-lg mt-140">
+                            <div class="modal-content">
+                                <div class="mymodal-header">
+                                    <i style="font-size:17px;" class="fa pull-right" data-dismiss="modal">&#xf00d;</i>
+                                    <h4 class="modal-title white">EDIT - Paramètres optionnels pour la création de l’offre</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="risqueGroup" class="from-group needs-validation" (ngSubmit)="onSubmitRisque(risqueGroup.value)">
+                                        <div class="form-row">
+                                            <div class="col-md-12 mb-4" [ngClass]="{
+                                                        'has-danger': indetifiant.invalid && (indetifiant.dirty || indetifiant.touched),
+                                                        'has-success': indetifiant.valid && (indetifiant.dirty || indetifiant.touched)
+                                                       }">
+                                                <h5 class="cat-head">Indetifiant du client</h5>
+                                                <div class="col-md-6" style="padding-top: 0px !important;">
+                                                  <input class="form-control" formControlName='indetifiant' required>
+                                                </div>
+                                                <div class="valid-feedback" *ngIf="indetifiant.errors && (indetifiant.dirty || indetifiant.touched)">
+                                                    <span *ngIf="indetifiant.errors.required">Indetifiant Id est requi</span>
+                                                    <span *ngIf="indetifiant.errors.pattern">Indetifiant Id is number</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-4" [ngClass]="{
+                                                        'has-danger': nomloffre.invalid && (nomloffre.dirty || nomloffre.touched),
+                                                        'has-success': nomloffre.valid && (nomloffre.dirty || nomloffre.touched)
+                                                      }">
+                                                <h5 class="cat-head">Nom de l'ofer</h5>
+                                                <div class="col-md-6" style="padding-top: 0px !important;">
+                                                  <input class="form-control" formControlName='nomloffre' required>
+                                                </div>
+                                                <div class="valid-feedback" *ngIf="nomloffre.errors && (nomloffre.dirty || nomloffre.touched)">
+                                                    <span *ngIf="nomloffre.errors.required">nomloffre Id est requi</span>
+                                                    <span *ngIf="nomloffre.errors.pattern">nomloffre Id is number</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12  mb-4">  
+                                                <div class="col-md-6" [ngClass]="{
+                                                        'has-danger': dateApp.invalid && (dateApp.dirty || dateApp.touched),
+                                                        'has-success': dateApp.valid && (dateApp.dirty || dateApp.touched)
+                                                        }">
+                                                    <h5 class="cat-head">Date de'aplication</h5>                                              
+                                                    <div class="input-group date">
+                                                        <input class="form-control"
+                                                            ngx-mydatepicker 
+                                                            formControlName="dateApp"
+                                                            [(ngModel)]="model" 
+                                                            [options]="myOptions" 
+                                                            #dp="ngx-mydatepicker"
+                                                            (dateChanged)="onDateChanged($event)"
+                                                            required>
+                                                        <span class="input-group-addon" (click)="dp.toggleCalendar()"> <i class="fa fa-calendar"></i> </span> 
+                                                    </div>
+                                                </div>                                            
+                                                <div class="col-md-6" class="col-md-6" [ngClass]="{
+                                                    'has-danger': jusqu.invalid && (jusqu.dirty || jusqu.touched),
+                                                    'has-success': jusqu.valid && (jusqu.dirty || jusqu.touched)
+                                                    }"> 
+                                                    <h5 class="cat-head">jusqu'au</h5>                                              
+                                                    <div class="input-group date">
+                                                        <input class="form-control"
+                                                            ngx-mydatepicker 
+                                                            formControlName="jusqu"
+                                                            [(ngModel)]="jusqumodel" 
+                                                            [options]="myOptions" 
+                                                            #dpa="ngx-mydatepicker"
+                                                            (dateChanged)="onDateChanged($event)"
+                                                            required>
+                                                        <span class="input-group-addon" (click)="dpa.toggleCalendar()"> <i class="fa fa-calendar"></i> </span> 
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                            <div class="table-responsive pd-top-20 col-md-12">
+                                                    <table class="tableR table-bordered table-decore2">
+                                                      <tr>
+                                                        <td class="colorback">ct/kWh</td>
+                                                        <th *ngFor="let y of yearList">{{y}}</th>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="colorback" style="text-align:right;">Primes de risque,dont:</td>
+                                                        <td><input class="form-control" formControlName="primesRisq1" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="primesRisq2" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="primesRisq3" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="primesRisq4" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="primesRisq5" min="0" step="1" type="number" ></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                        <tr>
+                                                        <td class="colorback" style="text-align:right;">-PwB</td>
+                                                        <td><input class="form-control" formControlName="pwb1" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="pwb2" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="pwb3" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="pwb4" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="pwb5" min="0" step="1" type="number" ></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="colorback" style="text-align:right;">- Risque Volume</td>
+                                                        <td><input class="form-control" formControlName="volumeRisq1" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="volumeRisq2" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="volumeRisq3" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="volumeRisq4" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="volumeRisq5" min="0" step="1" type="number" ></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                        <tr>
+                                                        <td class="colorback" style="text-align:right;">-Risque Prix</td>
+                                                        <td><input class="form-control" formControlName="prixRisq1" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="prixRisq2" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="prixRisq3" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="prixRisq4" min="0" step="1" type="number" ></td>
+                                                        <td><input class="form-control" formControlName="prixRisq5" min="0" step="1" type="number" ></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="colorback">Liste des GO</td>
+                                                        <td><input class="form-control" formControlName="desGo1" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="desGo2" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="desGo3" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="desGo4" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="desGo5" min="0" step="1" type="number" required></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                       <tr>
+                                                        <td class="colorback">Produits & services</td>
+                                                        <td><input class="form-control" formControlName="prod1" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="prod2" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="prod3" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="prod4" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="prod5" min="0" step="1" type="number" required></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                       <tr>
+                                                        <td class="colorback" style="text-align:right;">Marges</td>
+                                                        <td><input class="form-control" formControlName="marges1" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="marges2" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="marges3" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="marges4" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="marges5" min="0" step="1" type="number" required></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                        <tr>
+                                                        <td class="colorback" style="text-align:right;">Lissage</td>
+                                                        <td><input class="form-control" formControlName="lissage1" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="lissage2" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="lissage3" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="lissage4" min="0" step="1" type="number" required></td>
+                                                        <td><input class="form-control" formControlName="lissage5" min="0" step="1" type="number" required></td>
+                                                        <td><img src="../../../assets/images/ccdashboard.png"></td>
+                                                      </tr>
+                                                    </table>
+                                                  </div>
+                                                </div><br>  
+                                                <div class="text-center">
+                                                    <button class="btn btn-sm btn-primary text-uppercase">Recalculer Offre</button>
+                                                    <button class="btn btn-sm nom text-uppercase">Cancel</button>
+                                                 </div>
+                                    <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary pull-left" [disabled]="risqueGroup.invalid">Submit</button>
+                                        </div>
+                                    </form> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

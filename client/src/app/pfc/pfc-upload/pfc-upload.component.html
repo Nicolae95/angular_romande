@@ -1,0 +1,65 @@
+      <!-- modal small -->
+			<div class="modal fade" id="UploadPfc" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" style="z-index: 34234234; margin-top: 125px;" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="smallmodalLabel">Upload pfc files</h5>
+                <button type="button" class="close"  id="cancel-btn" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="uploadForm" class="from-group" (ngSubmit)="onSubmit(uploadForm.value)">
+                  <div [ngClass]="{'has-danger': date.invalid && (date.dirty || date.touched),
+                                    'has-success': date.valid && (date.dirty || date.touched)}">
+                    <div>
+                      <div class="cat-head">Date</div>
+                        <div class="text-right col-md-12" style="padding-left:0;padding-right:0;">
+                          <div class="input-group date" id="datetimepicker3">
+                              <input class="form-control reference"
+                                      ngx-mydatepicker 
+                                      formControlName="date"
+                                      [(ngModel)]="currentDate" 
+                                      [options]="myOptions" 
+                                      #dp="ngx-mydatepicker"
+                                      (dateChanged)="onDateChanged($event)"
+                                      required>
+                            <span class="input-group-addon" class="input-group-addon pointer" (click)="dp.toggleCalendar()"> <i class="fa fa-calendar"></i>
+                            </span> 
+                          </div>
+                      </div>
+                  </div>
+                </div>
+               <div class="cat-head m-b-5" for="data_file">Fichier à télécharger:</div>
+                <div class="file-area myselect" (change)="fileEvent($event.target.files)" style="width: 100%">                            
+                      <input type="file" 
+                             id="data_file"
+                             multiple="multiple" 
+                             required="required" 
+                             name="file" 
+                             (change)="fileEvent($event.target.files)" 
+                             multiple 
+                             required
+                             accept=".xlsx"/>
+                          <div class="file-dummy">
+                              <span class="success">Les fichiers ont été uploadés.</span>
+                              <span class="default">Sélection du fichier à charger</span>
+                          </div>
+                  </div> 
+              </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit"
+                        value="Upload"
+                        name="submit"
+                        (click)="onSubmit(uploadForm.value);"
+                        [disabled]="uploadForm.invalid || !fileValid || loading"
+                        class="btn btn-primary">
+                        Télécharger
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end modal small -->

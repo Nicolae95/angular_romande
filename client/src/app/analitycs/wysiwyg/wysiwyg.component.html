@@ -1,0 +1,11 @@
+
+
+<div class="col-md-6">
+  <app-ngx-editor  [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="htmlContent"></app-ngx-editor>
+  <div class="saves" title="Save" (click)="ngSubmit()"> <i class="fa fa-save iconS"></i></div>
+</div>
+
+
+<br>
+<br>
+<div class="col-md-6" [innerHtml]="viewHtml"></div>

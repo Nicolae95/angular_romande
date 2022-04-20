@@ -1,0 +1,490 @@
+<!-- <div id="main-wrapper"> 
+  <div *ngIf="currentUser">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"> 
+      Brand and toggle get grouped for better mobile display
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> 
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          [routerLinkActive]="['active']"><a [routerLink]="['data']"
+          <a class="navbar-brand" [routerLink]="['cc']">
+          <h1 class="logo xs-text-center"><img src="../../assets/images/logos/energie.png">
+            <span class="logo-text" style="top: 36px;">Plateforme <span style="color: #ce0129;">e</span>-kWh
+              <small class="text-muted">Votre espace client accessible 24/24h 7/7j</small>
+            </span></h1>
+          </a> 
+      </div>
+      <ul class="nav text-center xs-text-center hidden-xs pull-right">
+          <li class="curve-bg">
+              <span style="margin-left: 0px; font-family: 'Open Sans', sans-serif;;font-size: 16px;">  Bienvenue {{currentUser.username}} !</span>
+              <span class="fa fa-sign-out"> <a class="logout" [routerLink]="['/login']" style="font-family: 'Open Sans', sans-serif;" >Logout</a></span> 
+          </li>
+      </ul>
+      Sidebar Menu Items - These collapse to the responsive navigation menu on small screens
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+          (click)="account()"
+          <li [ngClass]="{'active': accountUrl}"><a routerLink="/accounts"><i class="fa fa-user"></i>ACCOUNT</a></li> 
+          <li [routerLinkActive]="['active']"><a routerLink="/cockpit"><i class="fa fa-dashboard"></i>COCKPIT</a></li>                 
+          <li [routerLinkActive]="['active']"><a routerLink="/offers"><i class="fa fa-file-text"></i>OFFRES</a></li>               
+        <li class="dropdown" ><a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-line-chart"></i>DATA</a>
+            <ul class="dropdown-menu" >             
+                <li [routerLinkActive]="['active']"><a routerLink="/pfc">PFC</a></li>
+                <li [routerLinkActive]="['active']"><a routerLink="/pfc">PFC Brute</a></li>
+                <li [routerLinkActive]="['active']"><a routerLink="/market">PFC Ajusté</a></li>
+                <li [routerLinkActive]="['active']"><a routerLink="/risque">Primes de risque</a></li>  
+                <li [routerLinkActive]="['active']"><a routerLink="/ecoenergies">Eco-énergies</a></li>
+                <li [routerLinkActive]="['active']"><a routerLink="/datahub">Data hub</a></li>
+            </ul>
+          </li>
+          <li [routerLinkActive]="['active']"><a routerLink="/analytics"><i class="fa fa-bar-chart"></i>ANALYTICS</a></li>
+          <li class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-signal"></i> COURBES DE CHARGES </a>
+            <ul class="dropdown-menu">
+             <li [routerLinkActive]="['active']"><a [routerLink]="['/pondere']">Profils CC Types</a></li>
+             <li><a>Conversion Tool</a></li>
+            </ul>
+          </li>               
+          <li class="nav hidden-small"><a [routerLink]="['/login']"><i class="fa fa-sign-out"></i>Logout</a></li>          
+        </ul>
+      </div>  
+    </nav>       
+  </div>     
+</div>
+
+<div *ngIf="topUser">
+    <div class="bellbell pointer" 
+    (click)="showNotifications=!showNotifications;">
+            <i class="fa fa-bell animated" [ngClass]="{'pulse': alarm_A}" style="font-size:250%;padding-top:24%;"></i>
+            <div class="notification"
+            [ngStyle]="{'width':      topUser.nr > '99' ? '28px':'20px',
+                        'height':     topUser.nr > '99' ? '28px':'20px',
+                        'padding-top':topUser.nr > '99' ? '4px':'0px',
+                        'margin-left':topUser.nr > '99' ? '-16px' : '0',
+                        'margin-top': topUser.nr > '99' ? '16px': '0'}">{{topUser.nr}}</div>
+    </div>
+    <div id="notification_element" *ngIf="showNotifications" class="animated"
+         style="background: white; position: fixed; bottom: 112px; right: 12px; z-index: 5;border-radius: 5px;"
+                    [ngClass]="{'fadeInUp': showNotifications, 'fadeOutDown': !showNotifications}">
+        <div class="arrow-down animated" [ngClass]="{'fadeInUp': showNotifications}" style="bottom: -20px; right: 28px;"></div>
+        <div class="notification_box animated" 
+        [ngClass]="{'bottom5': topUser.logs.length == 5,
+                    'bottom4': topUser.logs.length == 4, 
+                    'bottom3': topUser.logs.length == 3, 
+                    'bottom2': topUser.logs.length == 2, 
+                    'bottom1': topUser.logs.length == 1, 
+                    'bottom0': topUser.logs.length == 0}">
+                Notifications
+            <div class="notification1" style="position: relative"
+            [ngStyle]="{'width':      topUser.nr > '99' ? '28px':'20px',
+                        'height':     topUser.nr > '99' ? '28px':'20px',  
+                        'padding-top':topUser.nr > '99' ? '4px' :'0px',
+                        'top':        topUser.nr > '99' ? '-3px':'0'}">{{topUser.nr}}</div>
+        </div>
+        <div *ngFor="let item of topUser.logs; let i=index">
+            <div class="notification_content animated" [ngClass]="{'fadeInUp': topUse }">
+
+                <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté l'offre.</span>
+                <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                        <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                        <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                </span>
+                <span *ngIf="item.log_type === 'refuse'"> <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+
+                <div>
+                    <div class="time pull-right">{{item.created | date: 'HH:mm'}} </div>
+                    <a *ngIf="i == topUser.logs.length-1" (click)="voirAll();"  href="javascript:;" routerLink="/analytics/tableau">Voir Tous</a>
+                </div>
+            </div> 
+        </div>             
+    </div>
+</div> -->
+<div  id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tabs-wrapper"> 
+          <!-- <ul class="nav nav-tabs" role="tablist">     
+            <li role="presentation" [routerLinkActive]="['active']"><a [routerLink]="['./tableau']"  role="tab" data-toggle="tab">TABLEAU DE BORD</a></li>
+            <li role="presentation" [routerLinkActive]="['active']"><a [routerLink]="['./offres']"   role="tab" data-toggle="tab">OFFRES         </a></li>           
+            <li role="presentation" [routerLinkActive]="['active']"><a [routerLink]="['./activite']" role="tab" data-toggle="tab">ACTIVITÉ CLIENT</a></li>           
+          </ul> -->
+          <ul class="nav nav-pills m-b-20" role="tablist" style="border-bottom: 1px solid #0c82f9;">     
+            <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['./tableau']"  role="tab" data-toggle="tab">TABLEAU DE BORD</a></li>
+            <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['./offres']"   role="tab" data-toggle="tab">OFFRES         </a></li>           
+            <li class="nav-item"><a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['./activite']" role="tab" data-toggle="tab">ACTIVITÉ CLIENT</a></li>           
+          </ul>
+          <!-- <ul class="nav nav-pills  m-b-15" id="myTab" role="tablist" style="border-bottom: 1px solid #0c82f9;">
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" id="home-tab" [routerLink]="['offers/', company.id]" (click)="send(null)"
+               aria-controls="home" aria-selected="true">Tableau de bord</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" id="profile-tab"  [routerLink]="['upload/', company.id]" (click)="send(null)"
+              aria-controls="profile" aria-selected="false">Profils CC Historiques</a>
+            </li>
+          </ul> -->
+          <div class="tab-content">  
+            <div role="tabpanel" class="row tab-pane active">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- <div id="page-wrapper">
+    <div class="row">
+      <div class="col-md-11">
+            <div class="wrapper-all">
+              <div class="client-user-wrapper clearfix" style="padding:0">
+                <div class="container">
+                  <div class="tabs-section">
+                          <div class="client-user-block">
+                            <div class="row row-collapse">
+                              <div class="right-panel col-sm-12">
+                                <div class="right-panel-content">
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <div class="top-menu-itmes"> 
+                                        <a  href="javascript:void(0)" rel="LogsCustomerPageNew" title="Summary" class="btn btn-warning"><b>Summary</b></a> 
+                                        <a rel="LogsList"  href="javascript:void(0)" title="Last Activity" class="btn btn-primary"><b>Last Activity</b></a> 
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="filter-buttons-wrap">
+                                    <ul class="list-inline filter-buttons">
+                                          <li class="active"><a href="javascript:void(0)">All</a></li>
+                                          <li><a href="javascript:void(0)">Last 12 month</a></li>
+                                          <li><a href="javascript:void(0)">Last 30 days</a></li>
+                                          <li><a href="javascript:void(0)">Last 7 days</a></li>
+                                          <li><a href="javascript:void(0)">Today</a></li>
+                                          <li><a href="javascript:void(0)">Ascending</a></li>
+                                          <li><a href="javascript:void(0)">Descending</a></li>
+                                          <li style="position:relative; top:3px; background-color:#88aa00; float:right; margin-top:1px; border-radius:6px; padding:0px 5px 2px 0px" id="vaseaboss"><span style="margin-top:5px; border-radius:4px 0 0 4px; cursor:pointer; font-size:17px; color:white; padding:9px 15px 8px 15px; position:relative; top:3px; background-color:orange;"><i class="fa fa-calendar"></i></span><a style="background-color:#88aa00; padding-top:5px;">Choose Date</a></li>
+                                    </ul> 
+                                    <input id="datedif" name="datedif" type="hidden">
+                                  <div class="daterangepicker dropdown-menu ltr show-calendar openscenter">
+                                    <div class="calendar left"><div class="daterangepicker_input">
+                                      <input class="input-mini form-control" name="daterangepicker_start" value="" type="text"><i class="fa fa-calendar glyphicon glyphicon-calendar"></i><div class="calendar-time" style="display: none;">
+                                        <div></div><i class="fa fa-clock-o glyphicon glyphicon-time"></i></div></div><div class="calendar-table"></div></div><div class="calendar right">
+                                        <div class="daterangepicker_input"><input class="input-mini form-control" name="daterangepicker_end" value="" type="text"><i class="fa fa-calendar glyphicon glyphicon-calendar"></i>
+                                        <div class="calendar-time" style="display: none;">
+                                          <div></div>
+                                          <i class="fa fa-clock-o glyphicon glyphicon-time"></i>
+                                        </div></div><div class="calendar-table"></div></div><div class="ranges"><div class="range_inputs"><button class="applyBtn btn btn-sm btn-success" disabled="disabled" type="button">Apply</button> <button class="cancelBtn btn btn-sm btn-default" type="button">Cancel</button></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="startdiv">
+                                      <div class="divforname">
+                                              Client Name
+                                      </div>
+                                  </div>
+                                </div>
+            <div class="divfordate"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Friday, May 15, 2018</div>
+            <div class="leftsidediv">
+                <div class="halfleftside">
+                    <div class="leftsideclock">11:23</div>
+                        <div class="leftsidedots">
+                            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+                            <span class="glyphicon glyphicon-dot"></span>
+                            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+                            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot" style="font-size: 22px; padding-left:10px; text-shadow: 0 0 8px rgb(92,189,235)"></span>
+                        </div>
+            <div class="divbutton">
+            <div><button class="trackbuttonleft"><span class="glyphicon glyphicon-envelope spanleft"></span></button><br>
+            </div>
+            <div class="lefttitlediv">
+            <p>Opened Email</p>
+            <div class="vertbar">&nbsp;</div>
+            </div>
+            <div class="leftsidetext">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>Accessed Email<br> From: Desktop</p></div>
+            </div>
+            <div class="vertdots" style="padding-top:5px;">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            &nbsp;&nbsp;<span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:23 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:23 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:23 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:23 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            </div></div>
+            <div class="divfordate"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Thursday, May 10, 2018</div>
+            <div class="leftsidediv">
+                <div class="halfleftside">
+                    <div class="leftsideclock">11:36
+                    </div>
+                        <div class="leftsidedots">
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot" style="font-size: 22px; padding-left:10px; text-shadow: 0 0 8px rgb(92,189,235)"></span>
+                        </div>
+            <div class="divbutton">
+            <div><button class="trackbuttonleft"><span class="glyphicon glyphicon-envelope spanleft"></span></button><br>
+            </div>
+            <div class="lefttitlediv">
+            <p>Opened Email</p>
+            <div class="vertbar">&nbsp;</div>
+            </div>
+            <div class="leftsidetext">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>Accessed Email<br> From: Desktop</p></div>
+            </div>
+            <div class="vertdots" style="padding-top:5px;">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            &nbsp;&nbsp;<span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:36 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:36 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:36 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>11:36 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            </div></div>
+            <div class="divfordate"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Wednesday, May 9, 2018</div>
+            <div class="leftsidediv">
+                <div class="halfleftside">
+                    <div class="leftsideclock">12:55
+                    </div>
+                        <div class="leftsidedots">
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot" style="font-size: 22px; padding-left:10px; text-shadow: 0 0 8px rgb(92,189,235)"></span>
+                        </div>
+            <div class="divbutton">
+            <div><button class="trackbuttonleft"><span class="glyphicon glyphicon-envelope spanleft"></span></button><br>
+            </div>
+            <div class="lefttitlediv">
+            <p>Opened Email</p>
+            <div class="vertbar">&nbsp;</div>
+            </div>
+            <div class="leftsidetext">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>Accessed Email<br> From: Desktop</p></div>
+            </div>
+            <div class="vertdots" style="padding-top:5px;">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            &nbsp;&nbsp;<span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:55 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:55 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:55 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:55 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            </div></div>
+            <div class="divfordate"><span class="glyphicon glyphicon-calendar"></span>&nbsp;&nbsp;Tuesday, May 8, 2018</div>
+            <div class="leftsidediv">
+            <div class="halfrightside">
+                    <div style="color: #8f9aaa;" class="rightsidedots">&nbsp;&nbsp;<span class="glyphicon  glyphicon-dot" style="font-size: 22px; text-shadow: 0 0 8px #8f9aaa; padding-right: 10px;"></span>&nbsp;&nbsp;
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+                    </div>
+            <div class="rightsideclock" style="color:#8f9aaa;">&nbsp;&nbsp;&nbsp;&nbsp;15:07</div>
+            <br>
+            <div class="vertdotsright" style="color:#8f9aaa; padding-top:7px;">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            <div class="divbuttonright">
+            <button style="background-color:#8f9aaa; border:1px solid #8f9aaa; border-radius:35px; height:70px; padding:14px;" class="buttonright"><i class="fa fa-line-chart" style="color:white; font-size:30px;"></i><span style="padding-left:7px;"></span></button><br><br>
+            <p class="righttitle">Checked Cockpit</p>
+            <div style="border-right: 3px solid #8f9aaa;" class="vertbarright">&nbsp;</div>
+            <div style="background-color: #8f9aaa;" class="rightsidetext"><p>Accessed Cockpit: Prix_France</p>&nbsp;&nbsp;
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="leftsidediv">
+                <div class="halfleftside">
+                    <div class="leftsideclock">12:06
+                    </div>
+                        <div class="leftsidedots">
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot"></span>
+            <span class="glyphicon glyphicon-dot"></span><span class="glyphicon glyphicon-dot" style="font-size: 22px; padding-left:10px; text-shadow: 0 0 8px rgb(92,189,235)"></span>
+                        </div>
+            <div class="divbutton">
+            <div><button class="trackbuttonleft"><span class="glyphicon glyphicon-envelope spanleft"></span></button><br>
+            </div>
+            <div class="lefttitlediv">
+            <p>Opened Email</p>
+            <div class="vertbar">&nbsp;</div>
+            </div>
+            <div class="leftsidetext">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>Accessed Email<br> From: Desktop</p></div>
+            </div>
+            <div class="vertdots" style="padding-top:5px;">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            &nbsp;&nbsp;<span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:06 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:06 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            <div class="leftsidediv">
+            <div class="leftborderbar"><span class="glyphicon glyphicon-dot"></span> </div>
+            <div class="leftsecond">
+            <div class="desktopspan"><i class="fa fa-desktop"></i>
+            <span></span></div><p>12:06 - Accessed Email<br>From: Desktop</p>
+            </div>
+            <div class="vertdots">
+            <span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br><span class="glyphicon glyphicon-dot"></span><br>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="showmorediv"> Show More </div>
+
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+      </div>
+  </div>
+</div> -->
+
+

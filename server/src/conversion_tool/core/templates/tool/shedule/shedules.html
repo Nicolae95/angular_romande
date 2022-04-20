@@ -1,0 +1,78 @@
+{% extends 'tool/base.html' %}
+
+{% block tool_content %}
+
+
+        <div class="row">
+            <div class="col-md-2" style="font-size: 29px;padding-left: 31px;">
+                Schedules
+            </div>
+            <div class="col-md-6">
+                <a href="/schedule/add/"><button class="btn btn-success">Add Schedule</button></a>
+                <a href="/locations/"><button class="btn btn-success">Locations</button></a>
+                <a href="/holidays/"><button class="btn btn-success">Holidays</button></a>
+            </div>
+
+        </div>
+        <div class="container">
+            <br>
+            <form action="" method="GET">
+                <input type="text" name="name" placeholder='Search shedules' value="{{ name.name }}">
+                <input type="submit" name="" value="Search">
+            </form>
+        <div class="row">
+            <div class="col-md-12">
+                {% if schedules %}
+                <table class="table table-striped">
+                    <thead>
+                    <td>Name</td>
+                    <td>Country</td>
+                    <td>Edit</td>
+                    <td>Delete</td>
+                    </thead>
+                    <tbody>
+                    {% for schedule in schedules%}
+                        <tr>
+                            <td>{{schedule.title}}</td>
+                            <td>{{schedule.country}}</td>
+                            <td><a href="/schedule/edit/{{schedule.id}}/"><button class="btn btn-warning">Edit</button></a></td>
+                            <td><a class="confirm-delete" href="/schedule/delete/{{schedule.id}}/"><button class="btn btn-danger">Delete</button></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h2 style="color:red">There are no schedules !!!</h2>
+                {% endif %}
+            </div>
+            {% if schedules.has_other_pages %}
+            <ul class="pagination">
+                {% if schedules.has_previous %}
+                <li><a href="?page={{ schedules.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in shedules_range %}
+                {% if schedules.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if schedules.has_next %}
+                <li><a href="?page={{ schedules.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this?');
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,100 @@
+        <div *ngIf="empty" id="scoresection" class='col-sm-12 cp-news-div' [ngStyle]="{ 'backgroundColor' : colors[0] }">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="subtitle" [ngStyle]="{ 'color' : colors[1] }">{{ score }}</span>
+                    <div class="action_bar" (click)='action = !action'>
+                        <p [ngStyle]="{ 'color' : colors[1] }">Action
+                            <i class="fa" [ngClass]="{'fa-caret-up': action, 'fa-caret-down': !action }"></i>
+                        </p>
+                        <div *ngIf="action" class='action_menu'>
+                            <span (click)="active = !active">Edit section</span>
+                            <span (click)="acolor = !acolor; offMe()">Edit color scheme</span>
+                            <span (click)='sdelete = !sdelete; offMee()'>Delete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                  <div *ngFor = "let scoring of results" class ='cell col-sm-4'>
+                      <div class='title-block'>{{ scoring.name }}</div>
+                       <table class='topcons-data-table scoring-table'>
+                            <tr>
+                                 <td><b>Energy Spend</b></td>
+                                 <td>{{ scoring.ab }}</td>
+                                 <td>{{ scoring.curr }}</td>
+                            </tr>
+                  
+                            <tr>
+                                 <td><b>Energy Spent Spot</b></td>
+                                 <td>{{ scoring.sspot }}</td>
+                                 <td>{{ scoring.curr }}</td>
+                            </tr>
+
+                            <tr>
+                                 <td><b>Energy Spent Avg</b></td>
+                                 <td>{{ scoring.savg }}</td>
+                                 <td>{{ scoring.curr }}</td>
+                            </tr>
+
+                        	<tr>
+                                 <td><b>Optimum Spend</b></td>
+                                 <td>{{ scoring.opt }}</td>
+                                 <td>{{ scoring.curr }}</td>
+                            </tr>
+
+                    		<tr>
+                                 <td><b>Savings Opportunity</b></td>
+                                 <td>{{ scoring.saving }}</td>
+                                 <td>{{ scoring.curr }}</td>
+                            </tr>
+                            <tr>
+                            	<td colspan="3" class="title-block">best strategy</td>
+                            </tr>
+                            <tr>
+                            	<td colspan="3" style="padding: 10px 0;background-color: #00b0f0;">
+                            	<img src="https://www.energymarketprice.com/ivan/images/scoring_img_white.png">
+                            	<div>{{ scoring.best }}</div>
+                            	</td>
+                            </tr>
+                       </table>
+                        <div class="topcons-link">
+                          <a href="https://www.energymarketprice.com/new/Performances.asp?Company=IvanEnergyMP&ContractID={{ scoring.id }}" target="_blank"><button class="seemore-btn">See more »</button></a>
+                        </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <button style="display: none;" class='closeallbtn' (click)='active=false'></button>
+        <div id='fancybox-overlay'  [ngStyle]="{ 'display' : active ? 'block' : 'none'}"></div>
+
+        <div *ngIf="active" class="news_edit" [ngStyle]="{ 'display' : active ? 'block' : 'none'}">
+            <div class="popup-title"><b>Edit hedge section</b><i class="fa fa-times closeme" (click)="active = !active"></i></div>
+            <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+                <div class="form-group">
+                    <label for="name"><b>Edit section name:</b></label>
+                    <input type="text" class="form-control" required minlength="4" (change)='verify()' [(ngModel)]="score" name='score-name' #scoreName='ngModel'>
+
+                    <div *ngIf="scoreName.invalid && (scoreName.dirty || scoreName.touched)" class="alert alert-danger">
+                        <div *ngIf="scoreName.errors.required">
+                          Field is required.
+                        </div>
+                        <div *ngIf="scoreName.errors.minlength">
+                          Field must be at least 4 characters long.
+                        </div>
+                    </div>
+
+                </div> 
+
+                <input type="hidden" required name="ckid" value="23"> 
+
+                <hr>
+
+                <div class="form-group" style="text-align: right">
+                    <button type="reset" class='reset-btn'>Cancel</button>
+                    <button type="submit" class="submit-btn"  [disabled]="!editForm.form.valid">Save Settings</button>
+                </div>
+            </form>
+
+        </div>

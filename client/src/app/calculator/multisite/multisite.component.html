@@ -1,0 +1,24 @@
+<div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tab-content">
+					<div id="menu1" class="tab-pane" style="display: inline-block; width: 100%;margin-bottom: 8rem;">
+						<h3><b>Choisissez l’opération souhaitée:</b></h3>
+						<div class="col-md-12" style="    margin-bottom: 1.5rem;margin-top: 1.5rem;padding-left:0">
+							<div class="col-md-12 col-lg-10" style="padding-left:0">
+								<div id="calcmultisite" class="time-btns2 list-inline col-md-12 " style="padding-left:0">
+									<button [class.active]="step=='upload-convert'" (click)="step='upload-convert'" class="btn  col-md-2 btn  " value="Convertir CC 1/4h en 1h"> <i class="fa fa-check display"></i> CC 1/4h en 1h </button>
+									<button [class.active]="step=='upload-sum'" (click)="step='upload-sum'" class="btn  col-md-2 btn " value="Convertir CC 1/4h en 1h et faire la somme"> <i class="fa fa-check display"></i> CC + </button>
+								</div>
+							</div>
+						</div>
+						<h2 *ngIf="step!=='upload-diff'" style="width: 100%;display: inline-block;margin-bottom: 1.5rem;"><b>Télécharger des fichiers </b></h2>
+						<app-calculator [steps]="step" [steps2]="step2" *ngIf="step=='upload-convert'" style="margin-bottom: 8rem;"></app-calculator>
+						<app-calculator [steps]="step" [steps2]="step2" *ngIf="step=='upload-sum'" style="margin-bottom: 8rem;"></app-calculator>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

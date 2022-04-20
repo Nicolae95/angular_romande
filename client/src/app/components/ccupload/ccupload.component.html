@@ -1,0 +1,420 @@
+<form *ngIf="curentCompany" [formGroup]="tabOfferForm"  class="from-group needs-validation">
+    <div role="tabpanel" class="tab-pane active"  id="tableau_de_bord">
+      <div class="row">
+
+          <div class="col-md-12" style="position: absolute;margin-top: -58px; left: 65.5%;">
+              <div class="col-md-6 page-hedder-metas">
+                <div class="row row-small">
+                  <div class="col-sm-6">
+                      <div class="form-group">
+                          <div class="input-group">
+                            <input  class="form-control input-sm"
+                                    formControlName="ccProfilHistorique"                    
+                                    [(ngModel)] = "nameOffer"
+                                    placeholder="Nom du profil"/>
+                            <span class="input-group-addon pointer"><i class="fa fa-search"></i></span> 
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-sm-6 p-l-0 p-r-0">                                                                                     
+                    <!-- <button (click)="translate = false" class="btn btn-sm btn-danger">SUPPRIMER</button> -->
+                    <button (click)="translate = false" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Update">Nouveau</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        <div *ngIf="translate&&curentCompany" style="padding-left: 18px; height: 35px; margin-top: -5px;">
+            <span class="pull-left pointer"(click)="translate=false; observableSource(''); send(null)" >
+                <div><a href="javascript:void(0)"><i class="fa fa-chevron-circle-left pointer"></i> Retour</a> </div>
+            </span>
+        </div>
+      </div>
+      <div *ngIf="!site" class="text-center">
+          <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+          </div>
+        </div>
+
+        <div *ngIf="site&&!translate" class="table-responsive table--no-card m-b-30" style="max-height: calc(100vh - 250px);">
+          <table class="table table-borderless table-striped table-earning">
+              <thead>
+                  <tr>
+                    <th> Profil Historique</th>
+                    <th> PODs inclus      </th>
+                    <th> CC Translation   </th>          
+                    <th> CC Dashboard     </th>
+                    <th> CC Consommation  </th>            
+                    <th> Delete           </th>    
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let site of site.result;let d=index">
+                      <td class="text-uppercase">
+                        <span>{{site.name}}</span>
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="site.meters.length==1">
+                          <p *ngFor="let met of site.meters;let i=index" >
+                          {{met.meter_id}} - <br *ngIf="met.meter_id.length > 10||met.address.length > 10"/> {{met.address}}
+  
+                          </p>
+                        </span>
+                        <span *ngIf="site.meters.length>1" class="pointer text-center" (click)="tous[d] = !tous[d]" >
+                            <div style="padding: 0px 0px; padding-bottom: 10px;">
+                              <span class="voirTous" *ngIf="!tous[d]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #8799AC"></i></span>
+                              <span class="fermerTous" *ngIf="tous[d]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #8799AC"></i></span>
+                            </div>
+                          </span>
+                        <span *ngIf="site.meters.length>1&&tous[d]">
+                          <p *ngFor="let met of site.meters;let i=index">{{met.meter_id}} -<br *ngIf="met.meter_id.length > 10||met.address.length > 10"/> {{met.address}}</p>
+                        </span>
+                    </td>
+                      <td class="text-center">
+                        <img class="pointer" style="height:30px" (click)="send(site);translate = true" [routerLink]="['translate']" 
+                              src="../../../assets/images/translateicon.png"></td>
+                      <td class="text-center">
+                        <img class="pointer" style="height:30px" (click)="send(site);translate = true" [routerLink]="['dashboard']" 
+                              src="../../../assets/images/dashboardicon.png"></td>
+                      <td>
+                        <div *ngIf="site.sfile">
+                            <i class="fa fa-download" style="font-size: 20px; padding-right: 10px; margin-left: 20px;" (click)="media(site.sfile)"></i>
+                            <a (click)="media(site.sfile)">{{site.sfile}}</a>
+                        </div>
+                        
+                        <div *ngIf="!site.sfile">
+                            <i class="fa fa-download" style="font-size: 20px; padding-right: 10px; margin-left: 20px; color:#a2a1a1;"></i>
+                            <span style="color:#a2a1a1;" >Aucun fichier</span>
+                        </div>
+                      
+                      </td>
+                      <td class="text-center" style="padding: 4px;">
+                        <button type="button" (click)="deleteConfirm(site)" class="center btn btn-default btn-lg" [disabled]="site.exists_offer"
+                          data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>      
+              </tbody>
+          </table>
+      </div>
+      <div *ngIf="site&&!translate" class="text-center">
+          <ul class="pagination" style="display: inline-flex; height: 34px;">
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag>1&&site.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag>1&&site.pages>5"><a><i class="material-icons">..</i></a></li>                
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag>2" (click)="pags(site.pag-2)"><a>{{site.pag-2}}</a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag>1" (click)="pags(site.pag-1)"><a>{{site.pag-1}}</a></li>
+            <li class="btn btn-primary m-l-5"><a>{{site.pag}}</a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag<site.pages" (click)="pags(site.pag+1)"><a>{{site.pag+1}}</a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag+1<site.pages" (click)="pags(site.pag+2)"><a>{{site.pag+2}}</a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag<site.pages&&site.pages>5"><a><i class="material-icons">..</i></a></li>
+            <li class="btn btn-outline-primary m-l-5" *ngIf="site.pag<site.pages&&site.pages>1" (click)="pags(site.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+            <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+              <option [selected]="nr == 10"  [value]="10"> 10 </option>
+              <option [selected]="nr == 25"  [value]="25"> 25 </option>
+              <option [selected]="nr == 50"  [value]="50"> 50 </option>
+              <option [selected]="nr == 100" [value]="100">100</option>
+            </select>
+            <p style="margin: 5px;">Objets par page</p>
+          </ul>
+        </div>
+    </div>
+  </form>
+<div *ngIf="translate&&curentCompany">
+  <router-outlet></router-outlet>
+</div>
+  <!-- Modal -->
+  
+			<!-- modal large -->
+			<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg"  style="min-width: 1000px;" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="Update">Ajouter nouvelle CC historique</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+              <form [formGroup]="myform" class="from-group" (ngSubmit)="onSubmit(myform.value)" enctype="multipart/form-data">            
+                <div class="form-row">
+                  <div class="col-md-12 d-i m-b-1" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched),
+                                                          'has-success': name.valid && (name.dirty || name.touched)}">
+                      <div class="form-group col-md-6">
+                        <div class="cat-head">Nom:</div>
+                          <input class="form-control" type="text" formControlName="name">
+                          <div *ngIf="name.errors && (name.dirty || name.touched)">
+                            <span class="text-danger" *ngIf="name.errors.required">Nom est requis</span>
+                          </div>
+                      </div>
+                  <div class="col-md-6" [ngClass]="{'has-danger': yearf.invalid && (yearf.dirty || yearf.touched),
+                                                    'has-success': yearf.valid && (yearf.dirty || yearf.touched)}">
+                      <div class="cat-head">Veuillez choisir l’année de référence:</div>
+                      <div>
+                        <div class="input-group date" id="datetimepicker3">
+                            <input class="form-control reference" min="2010" step="1" max="2050" type="number" formControlName="yearf">
+                            <span class="input-group-addon"> <i class="fa fa-calendar"></i> </span> 
+                        </div>
+                        <div *ngIf="yearf.errors && (yearf.dirty || yearf.touched)">
+                            <span class="text-danger" *ngIf="yearf.errors.required">Year est requis</span>
+                        </div>
+                      </div>
+                  </div>
+                </div> 
+
+              </div><input class="form-control" type="hidden" readonly [(ngModel)]="curentCompany" formControlName="company">
+              <div class="col-md-12">
+                  <angular2-multiselect
+                              [data]="podsList"
+                              [(ngModel)]="selectedpods" 
+                              [settings]="primesSettings" 
+                              (onSelect)="onItemSelect($event)" 
+                              (onDeSelect)="OnItemDeSelect($event)"
+                              (onSelectAll)="onSelectAll($event)"
+                              (onDeSelectAll)="onDeSelectAll($event)"
+                              formControlName='pods'
+                              required>
+                  </angular2-multiselect>
+                </div><br>
+              <div style="display: inline-flex; color: #262626;">
+                <span style="margin-top:3px;margin-left:10px;">Souhaitez vous utilisez une CC historique&nbsp;&nbsp;</span>
+                <input style="margin-top: 7px;" type="checkbox" (change)="bifa2 = !bifa1; hphc = false;mensue = !bifa1;onlyname = false;"
+                       [(ngModel)]="bifa1" formControlName="fBifa1"/>
+                </div>
+              <div style="display: inline-flex; color: #262626; margin-bottom: 10px;">
+                <span style="margin-top:3px;margin-left:10px;">ou une CC type pondérée&nbsp;&nbsp;</span>
+                <input style="margin-top: 7px;" type="checkbox" (change)="bifa1 = !bifa2;mensue = true;changeBoxM(mensue);" [(ngModel)]="bifa2" formControlName="fBifa2"/>
+              </div>
+    
+              <div class="row">
+                  <div class="col-md-12 d-i" *ngIf="bifa2"> <!-- chechbox  -->
+                      <div class="col-md-5"> <div class="cat-head">Utiliser CC profil type pondéré:</div></div>
+                      <div class="col-md-2">
+                        <div class="cat-head">Mensuel&nbsp;<input type="checkbox" [(ngModel)]="mensue" formControlName="mensuef" (change)='changeBoxM(mensue)'></div>
+                      </div>
+                      <div class="col-md-2"> 
+                        <div class="cat-head">ou Annuel&nbsp;<input type="checkbox" [(ngModel)]="onlyname" formControlName="onlynamef" (change)='changeBoxO(onlyname)'></div>
+                      </div> 
+                  </div><!-- chechbox -->
+              </div>
+
+                <div style="padding-left: 15px;" *ngIf="mensue || hphc">&nbsp;
+                    <div class="input-group">
+                      <div class="cat-head"> Téléchargez les volumes mensuels, en kWh </div>
+                      <span>
+                        <!-- <span class="btn btn-sm btn-danger btn-file">
+                        <input type="file" placeholder="Upload file" accept=".xlsx">
+                          <br>
+                        </span> -->
+                        
+                        <div class="box m-l-10 m-r-10">
+                          <input accept=".xlsx" class="inputfile inputfile-1" (change)="incomingfile($event);Upload()" hidden="hidden" id="file-1" name="file-1[]" type="file">
+                          <label class="btn btn-outline-danger btn-sm" for="file-1"><i class="fas fa-upload m-r-5"></i><span> Veuillez choisir votre fichier</span></label>
+                          <button type="button"class="btn btn-sm btn-outline-info" (click)="media('volume')" style="margin-top: -8px;">
+                            Télécharger un exemple de fichier à uploader
+                          </button>
+                        </div>
+
+
+
+
+    
+                      </span> 
+                      <p *ngIf="myFileEx">{{myFileEx[0].name}}</p>
+                    </div>
+                        <!-- Ends Files -->
+                  <div class="table-responsive">
+                    <table class="table table-borderless table-data1">
+                      <tr>            
+                          <th class="be_Color">kWh</th>
+                          <th class="be_Color text-center" *ngFor="let y of monthList">{{y}}</th>
+                      </tr> 
+                        <tr>
+                          <th class="p0 text-center be_Color" *ngIf="hphc">Vol. HP</th>
+                          <th class="p0 text-center be_Color" *ngIf="mensue" >Volume</th>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth1"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth2"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth3"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth4"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth5"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth6"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth7"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth8"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth9"  placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth10" placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth11" placeholder="0" required></td>
+                          <td class="p0 text-center"><input class="form-control" formControlName="hpmonth12" placeholder="0" required></td>
+                        </tr>
+    
+                        <!-- <tr *ngIf="hphc">
+                          <th>Vol. HC</th>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth1" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth2" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth3" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth4" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth5" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth6" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth7" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth8" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth9" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth10" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth11" min="0" step="1" type="number" required></td>
+                          <td class="pdLR0"><input class="form-control b0" formControlName="hcmonth12" min="0" step="1" type="number" required></td>
+                        </tr> -->
+                    </table>
+                  </div>        
+                  <p *ngIf="mensue" class="pull-right" style="margin-right: 20px;">Total: {{sumaMonths}}</p>          
+                </div>
+             
+                <div class="m-t-5" *ngIf="onlyname" [ngClass]="{
+                            'has-danger': volume.invalid && (volume.dirty || volume.touched),
+                            'has-success': volume.valid && (volume.dirty || volume.touched)}">
+                    <div class="cat-head" style="margin-left: 15px;">Volume &nbsp; <span style="color: #7f7f7f;"> kWh</span></div>
+                    <div class="form-group col-sm-4">
+                        <input class="form-control " type="number" min="0" formControlName="volume">
+                        <div *ngIf="volume.errors && (volume.dirty || volume.touched)">
+                          <span *ngIf="volume.errors.required" style="position: absolute;">Volume est requis</span>
+                        </div>
+                    </div>
+                </div>   
+                <div class="col-md-12" *ngIf="bifa1">
+                  <div class="text-center inalert">
+                    <div class="text-center m-b-10" style="margin-left: calc(50% - 256px);">
+                      <table class="text-center">
+                        <tr class="text-center">
+                          <td>
+                            <label for="x"><input type="checkbox" (change)="boxMultiSite = !boxSite" id="x" formControlName="siteform" [(ngModel)]="boxSite"/>
+                              <span style="margin-top:3px;margin-left:10px;" class="colorred">Un POD</span>
+                            </label>
+                        </td>
+                          <td>
+                            <label for="y"><input type="checkbox" (change)="boxSite = !boxMultiSite" id="y" formControlName="multisite" [(ngModel)]="boxMultiSite"/>
+                              <span style="margin-top:3px;margin-left:10px;" class="colorred">Plusieurs PODs</span>
+                            </label>
+                          </td>                              
+                        </tr>
+                        <tr>
+                          <td>
+                            <button type="button"class="btn btn-sm btn-outline-info" style="margin-top:-10px;margin-left:5px;margin-right: 5px;"  (click)="media('Un_POD')">
+                              Télécharger un exemple de fichier à uploader
+                            </button>
+                          </td>
+                          <td>
+                            <button type="button"class="btn btn-sm btn-outline-info" style="margin-top:-10px;margin-left:5px;margin-right: 5px;" (click)="media('Multi_PODs')">
+                              Télécharger un exemple de fichier à uploader
+                            </button>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                      <div class="center mt-10">
+                        <div class="file-area" style="margin-left: 25%;">                            
+                            <input type="file" id="data_file" multiple="true" required="required" name="files" id="fileToUpload" 
+                            style="height: 86px;" accept=".xlsx"
+                            (change)="fileEvent($event.target.files)" multiple/>
+                            <div class="file-dummy"(change)="fileEvent($event.target.files)" >
+                              <span class="success">Fichiers choisis</span>
+                              <span class="default">Veuillez choisir les fichiers souhaités</span>
+                            </div>
+                        </div>
+                      </div>
+                    <!-- <p *ngFor="let f of myFile">{{f.name}} </p> -->
+                  </div>
+                </div>
+                <!-- <span *ngIf="onlyname"><br><br></span>  -->
+    
+                <div class="table-responsive col-md-12">
+                  <div class="cat-head">Tableau de variation de la consommation par rapport à l'année précédente (n-1), en %</div>                                 
+                  <table class="table table-borderless table-data3">
+                    <thead>
+                        <tr>
+                            <th class="be_Color">&nbsp;</th>
+                            <th class="be_Color" *ngFor="let y of yearList">{{y}}</th>
+                          </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="be_Color">%</th>
+                            <td><input class="form-control b0" type="number" formControlName="data1" required></td>
+                            <td><input class="form-control b0" type="number" formControlName="data2" required></td>
+                            <td><input class="form-control b0" type="number" formControlName="data3" required></td>
+                            <td><input class="form-control b0" type="number" formControlName="data4" required></td>
+                            <td><input class="form-control b0" type="number" formControlName="data5" required></td>
+                            <td><input class="form-control b0" type="number" formControlName="data6" required></td>
+                          </tr>  
+                    </tbody>
+                  </table>
+                </div> 
+    
+    <!-- data1:{{data1.valid}}<br>
+    data2:{{data2.valid}}<br>
+    data3:{{data3.valid}}<br>
+    data4:{{data4.valid}}<br>
+    data5:{{data5.valid}}<br>
+    data6:{{data6.valid}}<br>
+    hpmonth1:{{hpmonth1.valid}}<br>
+    hpmonth2:{{hpmonth2.valid}}<br>
+    hpmonth3:{{hpmonth3.valid}}<br>
+    hpmonth4:{{hpmonth4.valid}}<br>
+    hpmonth5:{{hpmonth5.valid}}<br>
+    hpmonth6:{{hpmonth6.valid}}<br>
+    hpmonth7:{{hpmonth7.valid}}<br>
+    hpmonth8:{{hpmonth8.valid}}<br>
+    hpmonth9:{{hpmonth9.valid}}<br>
+    hpmonth1:{{hpmonth10.valid}}<br>
+    hpmonth1:{{hpmonth11.valid}}<br>
+    hpmonth1:{{hpmonth12.valid}}<br>
+    pods:{{pods.valid}}<br> -->
+              </form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button *ngIf="!loading" type="button" class="btn btn-primary" (click)="onSubmit(myform.value)" [disabled]="myform.invalid || !fileValid">SAUVEGARDER</button>
+              <button *ngIf="loading" type="button" class="btn btn-primary">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>SAUVEGARDER
+              </button>           
+						</div>
+					</div>
+				</div>
+			</div>
+      <!-- end modal large -->
+      
+  <div class="modal fade owerflow-y" id="Update" role="dialog">
+    <div class="modal-dialog modal-lg mt-140">
+      <div class="modal-content pd-bottom-200" [ngClass]="{'pd-bottom-400':bifa1}">
+        <div class="mymodal-header">       
+          <i class="close_popup fa pull-right" data-dismiss="modal" >&#xf00d;</i>
+          <h4 class="modal-title white">Ajouter nouvelle CC historique</h4>
+        </div>
+        <div class="modal-body"><!-- Body -->
+    <br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+	<!-- modal medium -->
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Delete CC profil historique</h4>
+            <button type="button" id="dels" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p *ngIf="deleteCC">Souhaitez-vous supprimer ce CC profil historique?  </p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">NON</button>
+							<button type="button" class="btn btn-primary" [disabled]="loading" (click)="delete(pkDelete)">OUI</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end modal medium -->

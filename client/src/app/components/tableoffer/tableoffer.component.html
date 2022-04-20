@@ -1,0 +1,399 @@
+<form  *ngIf="company" [formGroup]="tabOfferForm" class="from-group needs-validation">
+    <div class="table-data__tool">
+        <div  class="table-data__tool-left d-i">
+            <span *ngFor="let y of yearList">
+                <button class="btn m-r-5" [ngClass]="{'btn-secondary': y === year, 'btn-outline-secondary': y !== year}" 
+                (click)="getOffer(company.id,ccProfilHistorique.value,nameO.value,y,1)">{{y}}</button>
+              </span>
+            <select style="min-width: 180px;" *ngIf="!offerPagination" class="m-r-5 m-l-5 form-control"></select>
+            <select style="min-width: 180px;" *ngIf="offerPagination" (change)="voir(ccProfilHistorique.value);"
+                    class="m-r-5 m-l-5 form-control" 
+                    formControlName="ccProfilHistorique">
+              <option class="form-control" hidden [selected]="true">Voir l'offre</option>
+              <option class="form-control" *ngFor="let offer of offerPagination.result;let d=index" [value]="offer.id">{{offer.name}}</option>            
+            </select>
+        </div>
+        <div  class="table-data__tool-right d-i" style="margin-right: -10px;">
+            
+
+              <div class="input-group" (click)="openDropDown()" (clickOutside)="closeDropDown()">
+                  <input  class="form-control input-sm"
+                          formControlName="nameO"                    
+                          [(ngModel)] = "nameOffer"
+                          placeholder="Recherche"/>
+                  <button class="au-btn--submit" type="submit">
+                      <i class="fa fa-search"></i>
+                  </button>
+                </div>
+                
+            <button  id="openModalButton"  type="button" class="btn btn-sm btn-primary m-l-5 pull-right" 
+            (click)="goOffert = true" [disabled]="stop"
+                      data-toggle="modal"  data-target="#creeOffer,#afterOffer" data-parent="#creeOffer">Nouvelle Offre</button>
+              <app-offer *ngIf="goOffert == true"></app-offer>
+        </div>
+    </div>
+  <div role="tabpanel" class="tab-pane active"  id="tableau_de_bord">
+    <!-- <div class="row">
+      <div class="col-md-12" style="padding-left: 5px;">
+        <div class="col-md-6 page-hedder-metas">
+          <div class="row row-small">
+            <div class="col-sm-6">
+              <span *ngIf="offerPagination " class="pointer" style="position: absolute; color: #2994eb" (click)="tabOrInf=false;send(null);">
+                  <i class="fa fa-chevron-circle-left pointer"></i>
+                  <span class="txtHoverUnderline">Retour</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div *ngIf="!offerPagination" class="text-center">
+      <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="offerPagination">
+        <div class="col-lg-12">
+            <div class="table-responsive table--no-card m-b-30"  style="max-height: calc(100ch - 230px);">
+                <table class="table table-borderless table-striped table-earning" style="width: 100%">
+                    <thead>
+                        <tr>
+                          <th>ID Offre</th>
+                          <th style="min-width: 150px;">Nom de l’offre</th>
+                          <th>Pour le compte de                       </th>              
+                          <th>PODs inclus                             </th>
+                          <th style="min-width: 141px;">Année         </th>
+                          <th>CC Email                                </th>          
+                          <th>Cockpit Options                         </th>          
+                          <th>Statut                                  </th>
+                          <th>Valide jusqu'au                         </th>      
+                          <th>Envoi                                   </th>
+                          <th>Documents envoyés                       </th>
+                          <th>Documents signés                        </th>
+                          <th>Eligibilité                             </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let offer of offerPagination.result;let y=index">
+                            <td>{{offer.emp_id}}</td>
+                            <td>
+                              <div *ngIf="offer.offer_type==='Standart'">
+                                <div style="padding-left: 10px;">
+                                    <span style="display: inline-flex; width: max-content;">
+                                      <i  [routerLink]="['/offer/', offer.id, 'account',company.id]"  class="fa fa-eye pointer" style="font-size: 18px;">&nbsp;</i>
+                                      <span [routerLink]="['/offer/', offer.id, 'account',company.id]" class="text-uppercase txtHoverUnderline pointer"><b>{{offer.name}}</b></span>
+                                     
+                                    </span>
+                                    <p>Créé le {{offer.created  | date: 'dd/MM/yyyy' }}</p>
+                                </div>
+                                <div *ngIf="offer.offer_status == 'indicative'" style="margin-top: -10px; padding-left: 10px;">
+                                  <span class="pointer" (click)="editOffer(offer);edit=true" data-toggle="modal" data-target="#editO"  style="height: 29px; color: #0c82f9;">
+                                    <a><i class="fas fa-pencil-alt" >&nbsp;</i>Edit</a> 
+                                  </span>
+                                </div> 
+                              </div> 
+              
+                              <div *ngIf="offer.offer_type==='SME'" style="padding-left:10px;"> 
+              
+                                  <div *ngIf="offer.pfc_market">                      
+                                      <span style="display: inline-flex;  width: max-content;">
+                                        <i class="fa fa-eye pointer" style="font-size: 18px;" [routerLink]="['/offer/', offer.id, 'account',company.id]">&nbsp;</i>
+                                        <span class="text-uppercase txtHoverUnderline pointer" [routerLink]="['/offer/', offer.id, 'account',company.id]"><b>{{offer.name}}</b></span>
+                                      </span>
+                                      <p>Créé le {{offer.created | date:'dd/MM/y' }}</p>
+                                  </div>
+                
+                                  <div *ngIf="!offer.pfc_market">                      
+                                      <span class="text-uppercase txtHoverUnderline pointer"><b>{{offer.name}}</b></span>
+                                      <p>Créé le {{offer.created | date:'dd/MM/y'}}</p>
+                                  </div>
+                
+                                  <div style="margin-top:-10px;" *ngIf="!offer.pfc_market">
+                                    <span class="pointer" (click)="selSMEOffer(offer);" data-toggle="modal" data-target="#editSME">
+                                      <a style="color:red;">
+                                        <i class="fas fa-pencil-alt" >&nbsp;</i>Edit
+                                      </a> 
+                                    </span>
+                                  </div>
+                              </div> 
+                            </td>   
+                            <td>{{offer.admin_data.first_name}} {{offer.admin_data.last_name}}</td>           
+                            <td style="width: 108px;">
+                              <div *ngIf="offer.meters"> 
+                                <div *ngIf="offer.meters.length == 1">
+                                  <div *ngFor="let y of offer.meters"><p>{{y.meter_id}} - <br *ngIf="y.meter_id.length > 10||y.address.length > 10"/> {{y.address}}</p></div>
+                                </div>
+                              </div>
+                              <span *ngIf="offer.meters.length>1" class="pointer" (click)="show[y] = !show[y]">
+                                <div style="padding: 0px 0px; padding-bottom: 10px;">
+                                  <span class="btn btn-outline-primary" *ngIf="!show[y]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #0c82f9"></i></span>
+                                  <span class="btn btn-outline-primary" *ngIf="show[y]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #0c82f9"></i></span>
+                                </div>
+                              </span>
+                              <span *ngIf="offer.meters.length>1&&show[y]"><p *ngFor="let y of offer.meters;">{{y.meter_id}} -<br *ngIf="y.meter_id.length > 10||y.address.length > 10"/>{{y.address}}</p></span>
+                            </td>   
+                            <td class="text-center" >
+                              <p style="min-width: 90px;" *ngIf="offer.pfc_first_date || offer.pfc_last_date">{{offer.pfc_first_date | slice:0:10}} - {{offer.pfc_last_date | slice:0:10}}</p>
+                            </td>
+                            <td class="text-center">
+                              <img class="pointer"  
+                                    style="width:50px; vertical-align: text-top;" 
+                                    src="../../../assets/images/envelope+0.png" 
+                                    data-toggle="modal" 
+                                    data-target="#addMail" (click)="addMoreMails(offer);addmails = true"/> 
+                            </td>
+                            <td class="text-center">
+                                <label class="switch switch-3d switch-primary mr-3" *ngIf="offer.offer_status=='indicative'">
+                                    <input type="checkbox" 
+                                           id="{{y}}" 
+                                           class="switch-input" 
+                                           [checked]="offer.cockpit" 
+                                           (change)="cock(offer.id, !offer.cockpit)"  
+                                           formControlName="cockpit">                   
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                                <label class="switch switch-3d switch-primary mr-3" *ngIf="offer.offer_status!='indicative'">
+                                    <input type="checkbox" 
+                                           id="{{y}}" 
+                                           class="switch-input" 
+                                           [checked]="offer.cockpit" 
+                                           (change)="cock(offer.id, !offer.cockpit)"  
+                                           formControlName="cockpitDisabled">   
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </td>
+                            <td>
+                              <div *ngIf="!loadingStatus[y]" class="dropdown show" style="width: max-content; display: inline-flex; width: 143px;">
+                                  <a *ngIf="offer.lissage&&offer.offer_status=='signee'||offer.offer_status=='confirmer'" style="cursor: text;"
+                                      class="statusDesing">
+                                    <div [ngClass]="{'text-warning': offer.offer_status==='signer',
+                                                      'text-success': offer.offer_status==='signee',
+                                                      'text-danger': offer.offer_status==='supprimer'}" style="margin-top: -10px;">
+                                      <div *ngIf="offer.offer_status=='signee'"><b>Signee</b></div>
+                                      <div *ngIf="offer.offer_status=='confirmer'&&offer.fonction != currentUser.fonction"><b>A Confirmer</b></div>
+                                    </div>
+                                  </a>    
+                                  <a *ngIf="!offer.lissage || offer.offer_status!='signee'"
+                                      class="statusDesing"
+                                      (click)="offer.showStatusPopup = !offer.showStatusPopup;"  
+                                      (clickOutside)="offer.showStatusPopup = false">
+                                    <div [ngClass]="{'text-warning': offer.offer_status==='signer',
+                                                      'text-success': offer.offer_status==='signee',
+                                                      'text-danger': offer.offer_status==='supprimer'}">
+                                        <div *ngIf="offer.offer_status=='supprimer'">A supprimer  &nbsp;<i class="fas fa-pencil-alt"></i></div>
+                                        <div *ngIf="offer.offer_status=='indicative'" style="margin-top: -10px;">PRIX Proposés &nbsp;<i class="fas fa-pencil-alt"></i></div>
+                                        <div *ngIf="offer.offer_status=='signer'" style="margin-top: -10px;">A signer &nbsp;<i class="fas fa-pencil-alt"></i></div>
+                                        <div *ngIf="offer.offer_status=='signee'" style="margin-top: -10px;">
+                                          <b *ngIf="offer.status_lisse != true">Signee</b>
+                                          <b *ngIf="offer.status_lisse == true">LISSEE</b>&nbsp;<i *ngIf="offer.status_lisse != true" class="fas fa-pencil-alt"></i></div>
+                                        <div *ngIf="offer.offer_status=='confirmer'&&offer.fonction === currentUser.fonction"><b>A Confirmer</b>&nbsp;<i class="fas fa-pencil-alt"></i> </div>
+                                    </div>
+                                  </a>
+                                  <i *ngIf="offer.offer_status=='supprimer'" (click)="delOff = offer;" data-toggle="modal" data-target="#delOf" class="fa fa-trash m-t-5 text-danger"></i>
+                                  <div class="statusDesing" *ngIf="offer.offer_status=='pending'">Pending</div>   
+                
+                                  <div class="dropdown-menu show" *ngIf="offer.showStatusPopup && offer.status_lisse == false"
+                                        [ngStyle]="{'margin-top': offerPagination.result[offerPagination.result.length - 1].showStatusPopup && offerPagination.result.length != 1 ? '-120px' : '0px'}">
+                                      <div class="pointer statusElem" *ngIf="offer.offer_status!='supprimer' && offer.offer_status!='confirmer'" (click)="changeStatus(offer,'supprimer', y)" >A supprimer</div>
+                                      <div class="pointer statusElem" *ngIf="offer.offer_status!='indicative'                                  " (click)="changeStatus(offer,'indicative', y)" >PRIX Proposés</div>
+                                      <div class="pointer statusElem" *ngIf="offer.offer_status!='signer'    && offer.offer_status!='confirmer'" (click)="changeStatus(offer,'signer', y)" >A signer</div>
+                                      <div class="pointer statusElem" *ngIf="offer.offer_status!='signee'    && offer.offer_status!='confirmer'" (click)="changeStatus(offer,'signee', y)" >Signée</div>
+                                  </div>
+                                </div>   
+                                <div *ngIf="loadingStatus[y]" class="lds-ring blue"><div></div><div></div><div></div><div></div></div>         
+                            </td>
+                            <td>
+                                  <p *ngIf="offer.offer_type == 'Standart'">{{offer.expiration_date | slice:0:10}} {{offer.expiration_date | slice:11:16}}</p>
+                                  <p *ngIf="offer.offer_type == 'SME'">{{offer.date_fin | slice:0:10}} {{offer.date_fin | slice:11:16}}</p>
+                            </td>
+                            <td class="text-center" style="padding:10px;" *ngIf="stop"><img src="../../../assets/images/pushicongrey.png" class="img_Envoi defaultC"></td>
+                            <td class="text-center" style="padding:10px;" *ngIf="!stop">      
+                              <div *ngIf="offer.offer_status=='indicative'&&!loadingPush[y]">
+                                <img (click)="sendMail(offer.id, offer.offer_status, y)" src="../../../assets/images/pushicongreen.png" class="img_Envoi">
+                              </div>
+                              <div *ngIf="offer.offer_status=='signer'&&!loadingPush[y]">
+                                <img (click)="sendMail(offer.id, offer.offer_status, y)" src="../../../assets/images/push yellow.png" class="img_Envoi">
+                              </div>
+              
+                              <div *ngIf="offer.offer_status=='signee'||offer.offer_status=='supprimer'||offer.offer_status=='pending'||offer.offer_status=='confirmer'">
+                                <img  src="../../../assets/images/pushicongrey.png" class="img_Envoi defaultC">
+                              </div>
+
+                              <div *ngIf="loadingPush[y]" class="lds-ring blue"><div></div><div></div><div></div><div></div></div>
+                            </td>
+            
+                            <td style="position: relative;">
+                                <div style="display: table-cell;"> 
+                                  <div style="width: 100%;overflow: hidden;  height: auto;"  *ngIf="offer.unsigned_file && offer.name_unsigned"> 
+                                          <div style="width:100%; max-height: 33px;">    
+                                            <a class="pointer" style="width: max-content;"
+                                            (click)="getPdf('unsigned', offer, offer.name_unsigned)">
+                                              <img src="../../../assets/images/pdf_icon.png" style="width:25px;" />
+                                              {{offer.name_unsigned.split('/')[1] | slice:0:15}}...
+                                            </a> 
+                                            
+                                            <br *ngIf="offer.signed_file && offer.unsigned_file || offer.signed_file && !offer.unsigned_file">
+                                            <br *ngIf="offer.signed_file && offer.unsigned_file || offer.signed_file && !offer.unsigned_file">
+                                            <br *ngIf="offer.unsigned_file && !offer.signed_file">
+                                            <br *ngIf="offer.unsigned_file && !offer.signed_file">
+                                          </div>
+                                    </div>
+                                    <!--Sent time email-->
+                                    <div style="width: 110px;"> 
+                                        <div style="margin-top:5px;" *ngIf="offer.mail_date">
+                                            <b>Envoy&#233; le:</b><br/>                        
+                                           <span style="display: inline-flex; width: max-content;"> {{offer.mail_date | date: 'dd/MM/yyyy HH:mm'}}</span>
+                                        </div>
+                                    </div>
+                                  </div>
+                              </td>      
+
+                            <td>
+                           
+                                  <div *ngIf="offer.signed_file && offer.name_signed != ''">  
+                                    <a class="pointer">
+                                      <img src="../../../assets/images/pdf_icon.png" style="width: 30px;"/>
+                                      <span (click)="getPdf('signed', offer, offer.name_signed)">  {{offer.name_signed.split('/')[1] | slice:0:15}}&hellip;</span> 
+                                    </a>
+                                  </div>
+                                    <!--Signed File upload-->
+                                    <div *ngIf="offer.offer_status=='signee'">
+                                
+                                        <form class="form-inline upload-offer-files" (ngSubmit)="onSubmit(offer.id, y);" > 
+                                          <div class="box m-t-5 m-b-5" *ngIf="!offer.uploadedFile">
+                                            <input type="file" hidden="hidden" name="file-1[]" id="file-1" class="inputfile inputfile-1" accept=".pdf"
+                                                   (change)="fileEvent($event.target.files);offer.uploadedFile=$event.target.files[0].name;" (click)="offer.uploadedFile=''"/>
+                                            <label class="btn btn-outline-danger btn-sm" for="file-1"><i class="fas fa-upload m-r-5"></i><span>Choose a file&hellip;</span></label>
+                                          </div> 
+                                          <button type="submit" [disabled]="loadingSendingEmail[y]" class="btn btn-outline-success btn-block m-t-5 m-b-5" *ngIf="offer.uploadedFile">
+                                            <i class="fas fa-file-upload m-r-5"></i>{{offer.uploadedFile | slice:0:15}} 
+                                            <i (click)="offer.uploadedFile=''" class="m-l-5 far fa-times-circle text-danger"></i>
+                                          </button>
+                                        </form>
+                                    </div>
+                                 
+                              </td>
+                            <td>
+                                <div style="width:100%; margin-bottom: 3px;">    
+                                    <a class="pointer tooltip" style="width: max-content;" *ngIf="offer.eligibilite"
+                                    (click)="getPdf('eligibilite', offer, offer.name_eligib)">
+                                    <img src="../../../assets/images/pdf_icon.png" style="width:25px;" />
+                                    {{offer.name_eligib.split('/')[1]  | slice:0:15}}...
+                                    <span data-toggle="tooltip" class="tooltiptext">{{offer.name_eligib.split('/')[1]}}</span>
+                                  </a> 
+                                </div>
+                              <div *ngIf="offer.offer_status=='signee'&&!offer.marche" style="width:170px;">
+                                <div class="row row-no-margin">
+                                  <form class="form-inline upload-offer-files" (ngSubmit)="onSubmitEligibilit(offer.id, y);" >  
+                                      <div class="box m-t-5 m-b-5" *ngIf="!offer.fileEligibilit">
+                                          <input type="file" hidden="hidden" name="file-2[]" id="file-2" class="inputfile inputfile-1"
+                                                (change)="fileEvent($event.target.files);offer.fileEligibilit=$event.target.files[0].name;" accept=".pdf"/>
+                                          <label class="btn btn-outline-danger btn-sm" for="file-2"><i class="fas fa-upload m-r-5"></i><span>Choose a file&hellip;</span></label>
+                                        </div> 
+                                        <button type="submit" [disabled]="loadingEligibilit[y]" class="btn btn-outline-success btn-block m-t-5 m-b-5" *ngIf="offer.fileEligibilit">
+                                          <i class="fas fa-file-upload m-r-5"></i> {{offer.fileEligibilit  | slice:0:15}} 
+                                          <i (click)="offer.fileEligibilit=''" class="m-l-5 far fa-times-circle text-danger"></i>
+                                        </button>
+                                  </form>                       
+                                </div>
+                              </div>
+                            </td>
+                          </tr> 
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="offerPagination" class="text-center">
+              <ul class="pagination" style="display: inline-flex; height: 34px;">
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1&&offerPagination.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1&&offerPagination.pages>5"><a><i class="material-icons">..</i></a></li>                
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>2" (click)="pags(offerPagination.pag-2)"><a>{{offerPagination.pag-2}}</a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag>1" (click)="pags(offerPagination.pag-1)"><a>{{offerPagination.pag-1}}</a></li>
+                <li class="btn btn-primary m-l-5"><a>{{offerPagination.pag}}</a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages" (click)="pags(offerPagination.pag+1)"><a>{{offerPagination.pag+1}}</a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag+1<offerPagination.pages" (click)="pags(offerPagination.pag+2)"><a>{{offerPagination.pag+2}}</a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages&&offerPagination.pages>5"><a><i class="material-icons">..</i></a></li>
+                <li class="btn btn-outline-primary m-l-5" *ngIf="offerPagination.pag<offerPagination.pages&&offerPagination.pages>1" (click)="pags(offerPagination.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+                <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                  <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                  <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                  <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                  <option [selected]="nr == 100" [value]="100">100</option>
+                </select>
+                <p style="margin: 5px;">Objets par page</p>
+              </ul>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="edit"> <app-edit-offer></app-edit-offer> </div>
+    <div *ngIf="smeOffer"><app-edit-offer-sme [offer]="smeOffer"></app-edit-offer-sme></div>
+    
+  </div>
+</form>
+
+<div class="modal fade owerflow-y" id="thanksMail" role="dialog"  style="background:transparent;">
+    <div class="modal-dialog modal-sm-6 mt-140">
+      <div class="modal-content">
+        <div class="mymodal-header">
+          <i class="close_popup fa pull-right" id="cancel-btn-delete" data-dismiss="modal" >&#xf00d;</i>       
+          <h4 class="modal-title white">Remerciement</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <h4>Souhaitez-vous envoyer un email de remerciement au client?</h4><br>
+            <div *ngIf="!loading">
+                <button class="pull-right btn btn-danger" data-dismiss="modal"> Non </button>
+                <button class="pull-right btn btn-primary" style="margin-right: 10px;" (click)="merciBocu()">Oui</button><br><br><br>
+            </div>
+            <div *ngIf="loading">
+                <button class="pull-right btn btn-danger" data-dismiss="modal" [disabled]="true"> Non </button>
+                <button class="pull-right btn btn-primary" style="margin-right: 10px;"  [disabled]="true">Oui 
+                    <img class="pull-right" class="redload" src="../../../assets/images/load.gif">
+                </button><br><br><br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <app-add-more-mail *ngIf="addmails"></app-add-more-mail> 
+
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="row">
+            <div class="modal fade owerflow-y" id="delOf" role="dialog">
+              <div class="modal-dialog modal-sm-6 mt-140">
+                <div class="modal-content">
+                  <div class="mymodal-header">
+                    <i class="close_popup fa pull-right" id="delsOff" data-dismiss="modal" >&#xf00d;</i>       
+                    <h4 class="modal-title white">Supprimer offre</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <h4 *ngIf="delOff" style="margin-bottom: 0px;">Souhaitez-vous supprimer cette offre?</h4><br>
+                      <button class="pull-right btn btn-primary" data-dismiss="modal"> NON </button>
+                      <button *ngIf="!loadingSm" class="pull-right btn btn-danger" style="margin-right: 10px;" (click)="delOf()">OUI</button>
+                      <button *ngIf="loadingSm" class="pull-right btn btn-danger" style="margin-right: 10px;" disabled>OUI
+                        <img *ngIf="loadingSm" class="pull-right" class="redload" src="../../../assets/images/load.gif"> 
+                      </button>
+                      <br><br><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div *ngIf="offerPagination && tabOrInf"><div *ngIf="idOffer" class="m-t-30"><app-inf-offer [idOffer]="idOffer"></app-inf-offer></div></div> -->

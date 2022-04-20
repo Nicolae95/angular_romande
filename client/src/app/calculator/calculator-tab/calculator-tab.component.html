@@ -1,0 +1,72 @@
+
+<div *ngIf="topUser">
+    <div class="bellbell pointer" 
+    (click)="showNotifications=!showNotifications;">
+            <i class="fa fa-bell animated" [ngClass]="{'pulse': alarm_A}" style="font-size:250%;padding-top:24%;"></i>
+            <div class="notification"
+            [ngStyle]="{'width':      topUser.nr > '99' ? '28px':'20px',
+                        'height':     topUser.nr > '99' ? '28px':'20px',
+                        'padding-top':topUser.nr > '99' ? '4px':'0px',
+                        'margin-left':topUser.nr > '99' ? '-16px' : '0',
+                        'margin-top': topUser.nr > '99' ? '16px': '0'}">{{topUser.nr}}</div>
+    </div>
+    <div id="notification_element" *ngIf="showNotifications" class="animated"
+         style="background: white; position: fixed; bottom: 112px; right: 12px; z-index: 5;border-radius: 5px;"
+                    [ngClass]="{'fadeInUp': showNotifications, 'fadeOutDown': !showNotifications}">
+        <div class="arrow-down animated" [ngClass]="{'fadeInUp': showNotifications}" style="bottom: -20px; right: 28px;"></div>
+        <div class="notification_box animated" 
+        [ngClass]="{'bottom5': topUser.logs.length == 5,
+                    'bottom4': topUser.logs.length == 4, 
+                    'bottom3': topUser.logs.length == 3, 
+                    'bottom2': topUser.logs.length == 2, 
+                    'bottom1': topUser.logs.length == 1, 
+                    'bottom0': topUser.logs.length == 0}">
+                Notifications
+            <div class="notification1" style="position: relative"
+            [ngStyle]="{'width':      topUser.nr > '99' ? '28px':'20px',
+                        'height':     topUser.nr > '99' ? '28px':'20px',  
+                        'padding-top':topUser.nr > '99' ? '4px' :'0px',
+                        'top':        topUser.nr > '99' ? '-3px':'0'}">{{topUser.nr}}</div>
+        </div>
+        <div *ngFor="let item of topUser.logs; let i=index">
+            <div class="notification_content animated" [ngClass]="{'fadeInUp': topUse }">
+
+                <span *ngIf="item.log_type === 'signee'" ><b>{{item.client.nom_entrepise}}</b> a signé l'offre.</span>
+                <span *ngIf="item.log_type === 'signer'" ><b>{{item.client.nom_entrepise}}</b> a accepté les prix proposés.</span>
+                <span *ngIf="item.log_type === 'click'"  ><b>{{item.client.nom_entrepise}}</b> a cliqué sur l'un des liens.</span>
+                <span *ngIf="item.log_type === 'send'"   >L'offre pour <b>{{item.client.nom_entrepise}}</b>  a été envoyée.</span>
+                <span *ngIf="item.log_type === 'open'"   ><b>{{item.client.nom_entrepise}}</b> a ouvert son mail.</span>
+                <span *ngIf="item.log_type === 'aconfirmer'||item.log_type === 'confirmer'">
+                        <span *ngIf="item.offer_type === 'SME'"> Une offre SME est en attente pour <b>{{item.client.nom_entrepise}}</b></span>
+                        <span *ngIf="item.offer_type === 'Standart'"> Offre <b>{{item.offer_name}}</b> a été créée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+                </span>
+                <span *ngIf="item.log_type === 'refuse'"> <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a réfusé l'offre <b>{{item.offer_name}}</b>.</span>
+                <span *ngIf="item.log_type === 'created'">L'offre pour <b *ngIf="item.client">{{item.client.surname}} {{item.client.name}}</b> a été confirmée par <b *ngIf="item.admin">{{item.admin.first_name}} {{item.admin.last_name}}</b>.</span>
+
+                <div>
+                    <div class="time pull-right">{{item.created | date: 'HH:mm'}} </div>
+                    <a *ngIf="i == topUser.logs.length-1" (click)="voirAll();"  href="javascript:;" routerLink="/analytics/tableau">Voir Tous</a>
+                </div>
+            </div> 
+        </div>             
+    </div>
+</div>
+<div  id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tabs-wrapper"> 
+          <ul class="nav nav-pills m-b-20" role="tablist" style="border-bottom: 1px solid #0c82f9;">     
+            <li class="nav-item " ><a  class="nav-link"  [routerLinkActive]="['active']" [routerLink]="['./site']"  (click)="newMessage('false', 'true')" role="tab" data-toggle="tab">SITE </a></li>
+            <li class="nav-item " ><a  class="nav-link"  [routerLinkActive]="['active']" [routerLink]="['./multisite']" (click)="newMessage('true', null)"  role="tab" data-toggle="tab">MULTISITE</a></li>  
+          </ul>
+          <div class="tab-content">  
+            <div role="tabpanel" class="tab-pane active">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</div>

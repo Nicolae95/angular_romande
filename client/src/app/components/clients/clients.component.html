@@ -1,0 +1,117 @@
+<div class="table-data__tool col-lg-12">
+  <div class="table-data__tool-left">
+    <h2 class="title-1 fs-44">Clients</h2>
+  </div>
+  <div class="table-data__tool-right">
+    <form class="form-header" [formGroup]="headForm">
+      <input class="au-input header-button" 
+        type="text"
+        name="search"
+        [(ngModel)] = "keyword"
+        formControlName="search"
+        placeholder="Recherche">
+      <button class="au-btn--submit" type="submit"><i class="fa fa-search"></i></button>
+      <button data-toggle="modal" data-target="#modal" (click)="nouveau_client = true" type="button" class="btn btn-primary m-l-5 pull-right">Nouveau Client</button>
+  </form>
+  </div>
+</div>
+   
+<div class="row" *ngIf="companyPagination">
+    <div class="col-lg-12">
+        <div class="table-responsive table--no-card m-b-30" style="max-height: calc(100vh - 170px);">
+            <table class="table table-borderless table-striped table-earning">
+                <thead>
+                    <tr>
+                      <th> Nom du client </th>
+                      <th> Nom du contact</th>                  
+                      <th> Type          </th> 
+                      <th> Email         </th>        
+                      <th> Statut        </th>        
+                      <th> Energy Cockpit</th>   
+                      <th> Offre         </th>   
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let company of companyPagination.result;let y=index">               
+                        <td> 
+                          <div class="txtHoverUnderline pointer" style="min-width: 250px;" (click)="saveCompany(company)">{{company.nom_entrepise}}</div>
+                          <p>ID CRM: {{company.crm_id}}</p>
+                        </td>
+                        <td>
+                          <div class="txtHoverUnderline pointer"  style="min-width: 250px;" (click)="saveCompany(company)">{{company.surname}} {{company.name}}</div>
+                        </td>
+                        <td>{{company.func}}</td>            
+                        <td><div style="min-width: 150px;">{{company.email}}</div></td>
+                        <td><div style="min-width: 65px;">{{company.statut}}Inactif</div></td>
+                        <td class="text-center" style="width: 108px;">
+                            <p style="height: 0px; margin-bottom: 5px;">&nbsp;</p>
+                          <div  *ngIf="company.cockpits"> 
+                            <div *ngIf="company.cockpits.length == 1">
+                              <div *ngFor="let y of company.cockpits">{{y}}</div>
+                            </div>
+                           
+                            <span *ngIf="company.cockpits.length>1" class="pointer" (click)="voirCok[y] = !voirCok[y]">
+                              <div style="padding: 0px 0px; padding-bottom: 10px;">
+                                <span class="btn btn-outline-primary" *ngIf="!voirCok[y]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #0c82f9"></i></span>
+                                <span class="btn btn-outline-primary" *ngIf="voirCok[y]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #0c82f9"></i></span>
+                              </div>
+                            </span>
+                            <span *ngIf="company.cockpits.length>1&&voirCok[y]">
+                              <p *ngFor="let y of company.cockpits;">{{y}}</p>
+                            </span>
+                          </div>
+                        </td>
+                        <td class="text-center" style="width: 108px;">
+                            <p style="height: 0px; margin-bottom: 5px;">&nbsp;</p>
+                            <div  *ngIf="company.offers"> 
+                              <div *ngIf="company.offers.length == 1">
+                                <div *ngFor="let y of company.offers">{{y}}</div>
+                              </div>
+                              <span *ngIf="company.offers.length>1" class="pointer" (click)="voirAllO[y] = !voirAllO[y]">
+                                <div style="padding: 0px 0px; padding-bottom: 10px;">
+                                  <span class="btn btn-outline-primary" *ngIf="!voirAllO[y]">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #0c82f9"></i></span>
+                                  <span class="btn btn-outline-primary" *ngIf="voirAllO[y]">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #0c82f9"></i></span>
+                                </div>
+                              </span>
+                              <span *ngIf="company.offers.length>1&&voirAllO[y]">
+                                <p *ngFor="let y of company.offers;">{{y}}</p>
+                              </span>
+                            </div>
+                          </td>
+                      </tr> 
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="companyPagination" class="text-center">
+            <ul class="pagination" style="display: inline-flex; height: 34px;">
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag>1&&companyPagination.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag>1&&companyPagination.pages>5"><a><i class="material-icons">..</i></a></li>                
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag>2" (click)="pags(companyPagination.pag-2)"><a>{{companyPagination.pag-2}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag>1" (click)="pags(companyPagination.pag-1)"><a>{{companyPagination.pag-1}}</a></li>
+              <li class="btn btn-primary m-l-5"><a>{{companyPagination.pag}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag<companyPagination.pages" (click)="pags(companyPagination.pag+1)"><a>{{companyPagination.pag+1}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag+1<companyPagination.pages" (click)="pags(companyPagination.pag+2)"><a>{{companyPagination.pag+2}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag<companyPagination.pages&&companyPagination.pages>5"><a><i class="material-icons">..</i></a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="companyPagination.pag<companyPagination.pages&&companyPagination.pages>1" (click)="pags(companyPagination.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+              <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                <option [selected]="nr == 100" [value]="100">100</option>
+              </select>
+              <p style="margin: 5px;">Objets par page</p>
+            </ul>
+          </div>
+    </div>
+    <!-- <div class="col-lg-25"><app-home></app-home></div> -->
+</div>
+
+<div *ngIf="!companyPagination" class="text-center">
+  <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+  </div>
+</div>
+
+  <app-add-new-client [companyEdit]="false" *ngIf="nouveau_client == true"></app-add-new-client>

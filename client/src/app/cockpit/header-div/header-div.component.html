@@ -1,0 +1,15 @@
+<div class="col-sm-12 cp-name-div">
+    <span class="cockpit-name">Daily Cockpit</span>
+    <button class="button button-blue">Save changes</button>
+    <button class="button button-white">Preview</button>
+</div>
+<div class='col-sm-12'>
+    <ul class="menu-ul">
+        <li class='menu-li' [ngClass]="{active:active=='newssection'}"   (click)="active = 'newssection';jump()">  <i class='fa fa-file-alt'></i>  <span>market news            </span></li>
+        <li class='menu-li' [ngClass]="{active:active=='statssection'}"  (click)="active = 'statssection';jump()"> <i class='fa fa-chart-pie'></i> <span>statistics             </span></li>
+        <li class='menu-li' [ngClass]="{active:active=='marketsection'}" (click)="active = 'marketsection';jump()"><i class='fa fa-bolt'></i>      <span>market prices & trends </span></li>
+        <li class='menu-li' [ngClass]="{active:active=='hedgesection'}"  (click)="active = 'hedgesection';jump()"> <i class='fa fa-chart-bar'></i> <span>hedge reporting        </span></li>
+        <li class='menu-li' [ngClass]="{active:active=='scoresection'}"  (click)="active = 'scoresection';jump()"> <i class='fa fa-dot-circle'></i><span>precurement scoring    </span></li>
+        <li class='menu-li' [ngClass]="{active:active=='libsection'}"    (click)="active = 'libsection';jump()">   <i class='fa fa-book'></i>      <span>library                </span></li>
+    </ul>
+</div>

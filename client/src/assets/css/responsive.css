@@ -1,0 +1,181 @@
+@media (max-width: 767px) {
+body {
+	font-size: 0.8rem;
+}	
+.mainmenu {
+	display: block;
+	text-align: center;
+	padding: 0;
+}
+.mainmenu li.nav-item {
+	display: inline-block;
+	margin:0px 5px !important;
+}
+.mainmenu li a.btn {
+	margin-left: 0;
+}
+.nav-link {
+	display: block;
+	padding: .4rem 0.6rem;
+	font-size: 14px;
+}
+
+
+
+
+.pb-5, .py-5 {
+	padding-bottom: 2rem !important;
+}
+.pt-5, .py-5 {
+	padding-top: 2rem !important;
+}
+.topmenu {
+	margin: 0 !important;
+	padding: 0;
+	display: block;
+}
+.navbar-brand {
+	margin: 0;
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 0 0px 10px 5px;
+	border-bottom: 1px solid #cccccc;
+}
+.navbar-brand img {
+	width: 80px;
+}
+.navbar {
+	padding: .5rem 0rem;
+}
+#wrapper #content-wrapper {
+	padding: 10px 0px;
+}
+.page-heading {
+	font-size: 1.2rem;
+	margin: 0px 0px 20px 0px;
+}
+.btn-filter {
+	float: left;
+}
+.btn-filter .btn {
+	margin-right: 10px !important;
+	margin-left: 0px !important;
+	font-size: 0.7rem;
+}
+.card-body {
+	padding: 1rem;
+}
+.card-info span {
+	font-size: 2rem;
+}
+.card-body-custom {
+	min-height: auto;
+}
+.btn-action {
+	margin: 0px 0px 10px 0px;
+	padding: 0.6rem 1rem;
+	font-size: 1rem;
+	display: block;
+}
+#stepWizard .nav {
+	width: 100%;
+}
+#stepWizard .nav a {
+	padding: 0px 10px;
+	font-size: 0.8rem;
+}
+.white-box {
+	padding:20px;
+	margin:20px 0px;
+}
+.sidebar {
+	width: 0px !important;
+}
+.sidebar .nav-item .user-profile-pic {
+	display:none !important;
+}
+.sidebar.toggled {
+	width: 220px !important;
+	overflow:visible;
+}
+.sidebar.toggled .nav-item .user-profile-pic {
+	display:inline-block !important;
+}
+.sidebar.toggled .nav-item .nav-link {
+	width: 220px !important;
+	text-align:left;
+	padding: 0.75rem 1rem;
+}
+.sidebar.toggled .nav-item .nav-link span {
+	font-size: 0.9rem;
+	display: inline-block;
+}
+.filter-drp {
+	float: left;
+}
+.page-offer {
+	padding: 0;
+}
+.side-sign-text {
+	position:static;
+	background: #ffffff;
+	border-radius: 3px;
+	margin-top: 10px;
+	text-align: center;
+	padding: 5px;
+}
+.side-sign-text span img {
+	display: inline-block;
+	margin: 0;
+}
+.offer-section {
+	padding-right: 0;
+	margin-top: 15px;
+}
+.label-hint {
+	width: auto !important;
+}
+.box-white {
+	padding: 15px;
+}
+.pro-box {
+	padding: 15px;
+	margin: 15px 0;
+}
+.step-navigation {
+	margin-bottom:15px;
+}
+.step-navigation .d-flex {
+	display:block !important;
+}
+.step-navigation .flex-fill {
+	text-align: left;
+	display: block;
+}
+.login-setup {
+	position:relative;
+	height: auto;
+	margin: 50px 0;
+	padding-bottom:50px;
+}
+
+
+
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 990px) {
+.login-setup h3 {
+	font-size: 1.2rem;
+}
+.card-body-custom {
+	min-height: auto;
+}
+.btn-action {
+	margin: 0px 5px 20px 5px;
+	padding: 0.6rem 0.6rem;
+	font-size: 0.8rem;
+}
+
+}

@@ -1,0 +1,288 @@
+<div  class="table-data__tool">
+  <div  class="table-data__tool-left">
+      <h2 class="title-1 fs-44">Admins</h2>
+  </div>
+  <div  class="table-data__tool-right">
+      <form class="form-header col-lg-95" [formGroup]="adminsForm">
+          <input class="au-input header-button" 
+            type="text"
+            formControlName="searchAdmin"
+            placeholder="Recherche">
+          <button class="mx-h au-btn--submit" type="submit"><i class="fa fa-search"></i></button>
+          <button (click)="add()" data-toggle="modal" data-target="#add" type="button" class="mx-h btn btn-primary m-l-5 m-r-5 ">Nouveau</button>
+          <button *ngIf="!stop"  [disabled]="loadingButtAlarm" class="mx-h btn btn-warning m-l-5 m-r-5" (click)="putalarm_Stop_Star(true)" style="padding: 0px 25px;">
+            <i class="fa fa-ban" style="padding-right: 6px;"></i>Activer l'arret d'urgence
+          </button>
+          <button *ngIf="stop" class="mx-h btn btn-success m-l-5" (click)="putalarm_Stop_Star(false)" [disabled]="loadingButtAlarm">
+            <i class="fa fa-check" style="padding-right: 6px;"></i>Desactiver l'arret d'urgence
+          </button>
+            <!-- <button style="margin-right: 5px;" type="button" 
+            class="btn btn-sm btn-danger pull-right" 
+            (click)="adminsMail= true"
+            data-toggle="modal" 
+            data-target="#addMail">Distribution SME</button>        -->
+      </form>
+    </div>
+  </div>
+
+<div>  
+  <div class="col-md-12">
+    <div *ngIf="!admins && !loading">Aucune donnée trouvée</div>
+    <div *ngIf="loading && !admins" class="text-center">
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="row" *ngIf="admins">
+    <div class="col-lg-12">
+        <div class="table-responsive table--no-card m-b-30" style="max-height: calc(100ch - 241px);">
+            <table class="table table-borderless table-striped table-earning">
+                <thead>
+                    <tr>
+                      <th> Prénom Nom   </th> 
+                      <th> Email        </th> 
+                      <th> Type         </th> 
+                      <th class="text-center"> Mot de passe </th> 
+                      <th class="text-center"> Edit         </th> 
+                      <th class="text-center"> Delete       </th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let admin of admins.result">
+                        <td>{{admin.first_name}} {{admin.last_name}}</td>    
+                        <td>{{admin.email}}</td>
+                        <td class="center">
+                          <span style="min-width: 100px;" *ngIf="admin.role===1">Admin</span>
+                          <span style="min-width: 100px;" *ngIf="admin.role===2">Conseiller</span>
+                        </td> 
+                        <td class="text-center" style="padding: 4px;"><button type="button" id="pass" (click)="keyConfirm(admin)"    class="btn btn-primary50" data-toggle="modal" data-target="#key"><i class="fa fa-key"></i></button></td>
+                        <td class="text-center" style="padding: 4px;"><button type="button" id="edit" (click)="edit(admin)"          class="btn btn-primary50" data-toggle="modal" data-target="#add"><i class="fa fa-edit"></i></button></td>
+                        <td class="text-center" style="padding: 4px;"><button type="button" id="dell" (click)="deleteConfirm(admin)" class="btn btn-primary50" data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i></button></td>
+                      </tr> 
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="admins" class="text-center">
+            <ul class="pagination" style="display: inline-flex; height: 34px;">
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag>1&&admins.pages>1" (click)="pags(1)"><a><i class="material-icons fa fa-angle-left"></i></a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag>1&&admins.pages>5"><a><i class="material-icons">..</i></a></li>                
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag>2" (click)="pags(admins.pag-2)"><a>{{admins.pag-2}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag>1" (click)="pags(admins.pag-1)"><a>{{admins.pag-1}}</a></li>
+              <li class="btn btn-primary m-l-5"><a>{{admins.pag}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag<admins.pages" (click)="pags(admins.pag+1)"><a>{{admins.pag+1}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag+1<admins.pages" (click)="pags(admins.pag+2)"><a>{{admins.pag+2}}</a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag<admins.pages&&admins.pages>5"><a><i class="material-icons">..</i></a></li>
+              <li class="btn btn-outline-primary m-l-5" *ngIf="admins.pag<admins.pages&&admins.pages>1" (click)="pags(admins.pages)"><a><i class="material-icons fa fa-angle-right"></i></a></li>
+              <select class="btn btn-outline-primary myselect select-wrap form-group slectPg" (change)="setNumberperPag($event.target.value);">
+                <option [selected]="nr == 10"  [value]="10"> 10 </option>
+                <option [selected]="nr == 25"  [value]="25"> 25 </option>
+                <option [selected]="nr == 50"  [value]="50"> 50 </option>
+                <option [selected]="nr == 100" [value]="100">100</option>
+              </select>
+              <p style="margin: 5px;">Objets par page</p>
+            </ul>
+          </div>
+    </div>
+</div>
+			<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="smallmodalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 *ngIf="!editBoolean" class="modal-title">Nouveau Admin</h4>
+                <h4 *ngIf="editBoolean" class="modal-title">Editer Admin</h4>
+                <button type="button" class="close" id="cancel-btn" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form [formGroup]="userGroup" class="from-group" (ngSubmit)="onSubmit(userGroup.value)">
+                      <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="cat-head">ID Admin/Conseiller CRM</div>
+                            <input type="number" class="form-control" formControlName='crm_id'>
+                          </div>
+                        <div class="col-md-12 mb-2" [ngClass]="{'has-danger': username.invalid && (username.dirty || username.touched),
+                                                                'has-success': username.valid && (username.dirty || username.touched)}">
+                            <div class="cat-head">Nom de l'utilisateur</div>
+                           
+                            <input *ngIf="!editBoolean" class="form-control" formControlName='username' [(ngModel)]="usName" required>
+                            <input *ngIf="editBoolean" class="form-control" formControlName='username' required readonly>
+                            <div class="valid-feedback" *ngIf="username.errors && (username.dirty || username.touched)">
+                                <span *ngIf="username.errors.required">Username  est requis</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 mb-2" [ngClass]="{'has-danger': last_name.invalid && (last_name.dirty || last_name.touched),
+                                                                'has-success': last_name.valid && (last_name.dirty || last_name.touched)}">
+                            <div class="cat-head">Nom</div>
+                            <input class="form-control" formControlName='last_name' required>
+                            <div class="valid-feedback" *ngIf="last_name.errors && (last_name.dirty || last_name.touched)">
+                                <span *ngIf="last_name.errors.required">Nom  est requis</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2" 
+                                [ngClass]="{'has-danger': first_name.invalid && (first_name.dirty || first_name.touched),
+                                            'has-success': first_name.valid && (first_name.dirty || first_name.touched)}">
+                            <div class="cat-head">Prénom</div>
+                            <input class="form-control" formControlName='first_name'  required>
+                            <div class="valid-feedback" *ngIf="first_name.errors && (first_name.dirty || first_name.touched)">
+                                <span *ngIf="first_name.errors.required">Prénom est requis</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2"  [ngClass]="{'has-danger': fonction.invalid && (fonction.dirty || fonction.touched),
+                                                                 'has-success': fonction.valid && (fonction.dirty || fonction.touched)}">
+                            <div class="cat-head">Fonction</div>
+                            <select class="form-control myselect" (change)="other();" style="padding-top: 0px !important; height: 30px;" formControlName='fonction' required>
+                                <option  class="form-control" value="1">Account Manager</option>
+                                <option  class="form-control" value="2">Responsable Marchés</option>
+                                <option  class="form-control" value="3">Directeur</option>
+                                <option  class="form-control" value="4">CEO</option>
+                                <option  class="form-control" value="5">Autre</option>
+                            </select>
+                            <div class="valid-feedback" *ngIf="fonction.errors && (fonction.dirty || fonction.touched)">
+                                <span *ngIf="fonction.errors.required">Fonction est requis</span>
+                            </div>
+                        </div>
+  
+                        <div class="col-md-12 mb-2" [ngClass]="{'has-danger': other_fonction.invalid && (other_fonction.dirty || other_fonction.touched),
+                                                                'has-success': other_fonction.valid && (other_fonction.dirty || other_fonction.touched)}"
+                                                                 *ngIf="fonction.value==5">
+                            <div class="cat-head">Autre</div>
+                            <input class="form-control" formControlName='other_fonction' required>
+                            <div class="valid-feedback" *ngIf="other_fonction.errors && (other_fonction.dirty || other_fonction.touched)">
+                                <span *ngIf="other_fonction.errors.required">Autre est requis</span>
+                            </div>
+                        </div>
+  
+                        <div class="col-md-12 mb-2" [ngClass]="{'has-danger': email.invalid && (email.dirty || email.touched),
+                                                                'has-success': email.valid && (email.dirty || email.touched)}">
+                          <div class="cat-head">Email</div>
+                            <input type="email"
+                                  class="form-control"
+                                  formControlName="email"
+                                  required>
+                          <div class="valid-feedback"
+                            *ngIf="email.errors && (email.dirty || email.touched)">
+                            <span  *ngIf="email.errors.required">Email est requis</span>
+                            <span *ngIf="email.errors.pattern">L'addresse email devrait contenir au moins "@" </span>
+        
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                          <div class="cat-head">Type</div>
+                          <select class="form-control myselect" style="padding-top: 0px !important; height: 30px;" formControlName='role' name="select" required       
+                                  [ngStyle]="{'border-color':role.value === 'true' || role.value === 'false' ? 'green' : '' }">
+                              <option  class="form-control" value="1">Admin</option>
+                              <option  class="form-control" value="2">Conseiller</option>
+                          </select>
+                        </div>
+                        <!-- gen -->
+                        <div class="col-md-12 mb-2">
+                          <div class="cat-head">Civilité</div>
+                          <select class="form-control" formControlName='sex' required>
+                              <option class="form-control" value="F">Madame</option>
+                              <option class="form-control" value="M">Monsieur</option>
+                          </select>
+                        </div>
+                        <!--  end gen -->
+                      </div>
+                      <div *ngIf="editBoolean" class="col-md-12 mb-2" style="padding-left: 0px;">
+                        <div class="cat-head">
+                          <p style=" height: 5px;">Souhaitez-vous changer la signature?
+                            <input  formControlName='chSign' (change)="myFile = [];" [(ngModel)]="changeS" type="checkbox">
+                          </p>
+                        </div>
+                      </div>
+  
+                      <p *ngIf="editAdmin&&editBoolean&&!changeS" style="margin-bottom: 0px;">
+                        <span *ngIf="editAdmin.signature">
+                          <img *ngIf="signatur_B64" src="data:image/png;base64,{{signatur_B64}}" style="margin: 10px; width: 150px; height: 75px; margin-bottom: -53px;"/>
+                         </span> 
+   
+                       </p>
+                        <!--  Files -->
+                      <div *ngIf="changeS">
+                        <div class="box">
+                            <input (change)="fileEvent($event.target.files)" accept=".png" class="inputfile-1" hidden="hidden" id="file-2" name="file-2[]" type="file">
+                            <label class="btn btn-outline-danger btn-block" for="file-2"><i class="fas fa-upload m-r-5"></i><span>Signature…</span></label>
+                          </div>
+                        <p *ngIf="myFile&&myFile.length != 0" style="margin-left: 5px; margin-top: 3px;">
+                            <span *ngIf="myFile[0]">
+                               <span *ngIf="myFile[0].name">{{myFile[0].name}}</span>
+                            </span>
+                        </p>
+                      </div>
+                       <!-- Ends Files -->
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" (click)="onSubmit(userGroup.value)" [disabled]="userGroup.invalid || loading" class="btn btn-primary">Sauvegarder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end modal small -->
+
+ 
+
+  
+
+
+        <!-- modal medium -->
+			<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Supprimer un utilisateur</h4>
+                <button type="button" class="close" id="dels" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <h5 *ngIf="del">Souhaitez-vous supprimer l'utilisateur {{pkDelete.username}}?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">NON</button>
+                <button [disabled]="loadingSm" type="button" class="btn btn-primary" (click)="delete(pkDelete)">OUI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end modal medium -->
+    
+  
+
+    <!-- modal medium -->
+			<div class="modal fade" id="key" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="mediumModalLabel">Envoyer mot de passe</h4>
+              <button type="button" class="close" id="keys" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h5 *ngIf="setkeyAdmin">Souhaitez-vous envoyer à l'adresse indiquée un e-mail de création de mot de passe associé à ce compte?</h5>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">NON</button>
+              <button [disabled]="loadingSm" type="button" class="btn btn-primary" (click)="setPs()">OUI</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end modal medium -->
+  
+  
+    <app-add-more-mail *ngIf="adminsMail" [type]="'adminT'"></app-add-more-mail>  
+  </div>

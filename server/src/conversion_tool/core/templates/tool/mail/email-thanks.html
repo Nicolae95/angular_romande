@@ -1,0 +1,64 @@
+<!DOCTYPE HTML><html><head><meta http-equiv='Content-Type' content='text/html;charset=UTF-8' /></head>
+<body>
+<table width='100%'>
+  <tr>
+    <td>
+      <table cellpadding='0' cellspacing='0' width='100%'>
+        <tr>
+           <!-- <td width='160'><img src='{{ url }}/assets/images/logos/romande-energie.png' width='140'></td> -->
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td align='center'>
+      <table cellpadding='0' cellspacing='0' style='border:8px solid white; color:#333; font-size: 14px;'>
+        <tr>
+          {% if offer.company.sex == 'F' %}
+            <td height='40'><p style='margin:0'>Madame {{ surname }} {{ customer }},</p></td>
+          {% else %}
+            <td height='40'><p style='margin:0'>Monsieur {{ surname }} {{ customer }},</p></td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td height='40'><p style='margin:0'>Par la présente, nous tenons à vous remercier très sincèrement pour votre commande relative à l’objet cité en titre.</p></td>
+        </tr>
+        {% if offer.company.sex == 'F' %}
+          <tr>
+            <td height='40'>
+              <p style='margin:0'>Vous pouvez être assurée que nous mettons un soin particulier à la fourniture de nos prestations et à la concrétisation
+               de notre engagement et que vous trouverez en Romande Energie Commerce un véritable partenaire de proximité.</p></td>
+          </tr>
+        {% else %}
+          <tr>
+            <td height='40'>
+              <p style='margin:0'>Vous pouvez être assuré que nous mettons un soin particulier à la fourniture de nos prestations et à la concrétisation
+                de notre engagement et que vous trouverez en Romande Energie Commerce un véritable partenaire de proximité.</p>
+            </td>
+          </tr>
+        {% endif %}
+        <tr>
+          {% if offer.company.sex == 'F' %}
+            <td height='40'>
+              <p style='margin:0'>Réitérant nos remerciements pour la confiance témoignée à l’égard de Romande Energie, nous vous prions de croire, Madame, à l'assurance de notre parfaite considération.
+              </p>
+            </td>
+          {% else %}
+            <td height='40'>
+              <p style='margin:0'>Réitérant nos remerciements pour la confiance témoignée à l’égard de Romande Energie, nous vous prions de croire, Monsieur, à l'assurance de notre parfaite considération.
+              </p>
+            </td>
+          {% endif %}
+        </tr>
+        <!-- <tr>
+          <td height='40'><p style='margin:0'>Romande Energie Commerce SA </p></td>
+        </tr> -->
+        <tr>
+          <td height='40'><p style='margin:0'>{{ offer.user.first_name }} {{ offer.user.last_name }}</p></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

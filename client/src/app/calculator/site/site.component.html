@@ -1,0 +1,156 @@
+<div id="page-wrapper" class="page-wrapper">
+	<div class="container-fluid">
+	  <div class="row">
+		<div class="col-md-12">
+  
+   <div class="tab-content">
+  
+	 <div id="menu1" class="tab-pane" style="display: inline-block; width: 100%;margin-bottom: 8rem;">
+  
+   
+  
+  
+		 <h3><b>Choisissez l’opération souhaitée:</b></h3>
+  
+		 <div  class="col-md-12" style="    margin-bottom: 1.5rem;margin-top: 1.5rem;padding-left:0">
+		   <div  class="col-md-12 col-lg-10" style="padding-left:0">
+			   <div id="calcmultisite" class="time-btns2 list-inline col-md-12 " style="padding-left:0">
+				 
+				   <button [class.active]="step=='upload-convert'" (click)="step='upload-convert'; step2='site'" class="col-md-2 btn  " value="Convertir CC 1/4h en 1h">
+					 <i class="fa fa-check display"></i> CC 1/4h en 1h
+				   </button>
+				   <button [class.active]="step=='upload-sum'" (click)="step='upload-sum'" class="col-md-2 btn " value="Convertir CC 1/4h en 1h et faire la somme">
+					   <i class="fa fa-check display"></i>  CC +
+					 </button>
+					 <button [class.active]="step=='upload-diff'" (click)="step='upload-diff'" class="col-md-2 btn " value="Convertir CC 1/4h en 1h et faire la difference (C)">
+						 <i class="fa fa-check display"></i>  CC -
+					   </button>
+					  <button [class.active]="step=='upload-translate'" (click)="step='upload-translate'" class="col-md-2 btn " value="Convertir CC 1/4h en 1h + %">
+						   <i class="fa fa-check display"></i>CC + x %
+						 </button>
+						
+		   </div>
+		   </div>
+	   
+	   </div>
+	   
+	   <div [class.activee]="step=='upload-translate'"  id="calccc" style="display: none;">
+	   
+	   <h3><b>Choisissez l’opération souhaitée:</b></h3>
+	   <div class="col-md-6"   style="margin-bottom: 1.5rem;margin-top: 1.5rem;margin-left: 0;padding-left: 0;">
+	   
+		<button type="button" (click)="translateyearminus()" class="btn btn-primary" style="display: inline-block; float: left;border-radius: 3px 0 0 3px;"><i class="fa fa-minus" aria-hidden="true"></i></button>
+		<input class="form-control ng-invalid ng-touched" style="display: inline-block;width: 50%;text-align: center;margin: 0;height: 100%;border-radius: 0;"
+		 type="number"  step="1"  [(ngModel)]="translateyear">
+		<button type="button" (click)="translateyearplus()" class="btn btn-primary" style="    display: inline-block;margin: 0;position: absolute;float: right;padding: .375rem .75rem;border-left: 0;border-radius: 0 3px 3px 0px;"><i class="fas fa-plus"></i></button>
+	  </div>
+	   <h3><b>Veuillez choisir le nombre d'années translatées: </b></h3>
+	   <div  class="col-md-12"   style="    margin-bottom: 1.5rem;margin-top: 1.5rem;padding-left:0 ">
+		 <div  class="col-md-12" style="padding-left: 0;">
+			 <div id="calcmultisite2" class="time-btns2 list-inline col-md-12 " style="padding-left: 0;">
+			   
+				 <button [class.active]="ans=='one'" (click)="ans='one'; translateyearap(1)" class="btn-md btn active" value="Convertir CC 1/4h en 1h">
+				   <i class="fa fa-check  display"></i> +1 ans
+				 </button>
+				 <button [class.active]="ans=='two'" (click)="ans='two'; translateyearap(2)"  class="btn-md btn " value="Convertir CC 1/4h en 1h et faire la somme">
+					 <i class="fa fa-check display"></i> +2 ans
+				   </button>
+				   <button [class.active]="ans=='three'" (click)="ans='three'; translateyearap(3)" class="btn-md btn " value="Convertir CC 1/4h en 1h et faire la difference (C)">
+					   <i class="fa fa-check display"></i> +3 ans
+					 </button>
+					 <button [class.active]="ans=='four'" (click)="ans='four'; translateyearap(4)" class="btn-md btn" value="Convertir CC 1/4h en 1h + %">
+						 <i class="fa fa-check display"></i> +4 ans
+					   </button>
+					   <button [class.active]="ans=='five'" (click)="ans='five'; translateyearap(5)" class="btn-md btn" value="Convertir CC 1/4h en 1h + %">
+						 <i class="fa fa-check display"></i> +5 ans
+					   </button>    
+					   <button [class.active]="ans=='six'" (click)="ans='six'; translateyearap(6)" class="btn-md btn" value="Convertir CC 1/4h en 1h + %">
+						 <i class="fa fa-check display"></i> +6 ans
+					   </button>        
+	   
+		 </div>
+		 </div>
+	   
+	   </div>
+	   
+	   <h3><b>Tableau de variation de la consommation par rapport à l'année précédente (n-1), en %</b></h3>
+	   
+	   <div  class="col-md-9"   style="    margin-bottom: 3.5rem;margin-top: 1.5rem;padding-left: 0;">
+	   
+	   
+			 <div style="max-height: calc(100vh - 325px);">
+				 <table id="tabldevariat" class="table">
+					 <thead class="thead-dark">
+					   <tr>
+						 <th scope="col"></th>
+						 <th scope="col" *ngIf="translateyears[0]=='true'" >{{translateyear+1}}</th>
+						 <th scope="col" *ngIf="translateyears[1]=='true'" >{{translateyear + 2}}</th>
+						 <th scope="col" *ngIf="translateyears[2]=='true'" >{{translateyear + 3}}</th>
+						 <th scope="col" *ngIf="translateyears[3]=='true'" >{{translateyear + 4}}</th>
+						 <th scope="col" *ngIf="translateyears[4]=='true'" >{{translateyear + 5}}</th>
+						 <th scope="col" *ngIf="translateyears[5]=='true'" >{{translateyear + 6}}</th>
+					   </tr>
+					 </thead>
+					 <tbody>
+					  <tr>
+						<td scope="row" style="text-align: center">%</td>
+						<td *ngIf="translateyears[0]=='true'"  >
+						  <input [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 0)" [ngModel]="values2[0]">
+						</td>
+  
+						<td *ngIf="translateyears[1]=='true'" >
+						  <input [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 1)" [ngModel]="values2[1]">
+						</td>
+  
+						<td *ngIf="translateyears[2]=='true'" >
+						  <input  [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 2)" [ngModel]="values2[2]">
+						</td>
+  
+						<td *ngIf="translateyears[3]=='true'">
+						  <input  [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 3)" [ngModel]="values2[3]">
+						</td>
+  
+						<td *ngIf="translateyears[4]=='true'" >
+						  <input  [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 4)" [ngModel]="values2[4]">
+						</td>
+  
+						<td *ngIf="translateyears[5]=='true'" >
+						  <input  [type]="type" [min]="0" [max]="100" style="width: 100%;" (keyup)="change($event.target.value, 5)" [ngModel]="values2[5]">
+						</td>
+  
+  
+					  </tr>
+				 
+					 </tbody>
+				   </table>
+				   
+				
+	   
+			 </div>
+	   
+	   
+	   </div>
+	   </div>
+	   
+	   <h2 *ngIf="step!=='upload-diff'" style="width: 100%;display: inline-block;margin-bottom: 1.5rem;"><b>Télécharger des fichiers </b></h2>
+  
+	   <app-calculator [steps]="step" [steps2]="step2" *ngIf="step=='upload-convert'" style="margin-bottom: 8rem;" ></app-calculator>
+  
+	   <app-calculator [steps]="step" [steps2]="step2" *ngIf="step=='upload-sum'" style="margin-bottom: 8rem;" ></app-calculator>
+	   <app-calculator-diff [steps]="step" [steps2]="step2" *ngIf="step=='upload-diff'" style="margin-bottom: 8rem;" ></app-calculator-diff>
+	   <app-calculator [steps]="step" [steps2]="step2" [steps3]="translateyear" [translateyearapp]="finaltranslateyear" *ngIf="step=='upload-translate'" style="margin-bottom: 8rem;" ></app-calculator>
+  
+  
+	 </div>
+  
+  
+  
+		  </div>
+		</div>
+	  </div>
+	 
+  </div>
+  
+  
+  </div>
+  

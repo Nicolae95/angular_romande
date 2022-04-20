@@ -1,0 +1,77 @@
+<div class="upload col-lg-6 col-sm-6 col-md-6 col-xs-6" style="padding-left: 0;flex: 1;height: 25rem;display: inline-block;">
+	<div id="div" class="upload-files" style="height: 100%;width: 100%;display: table;background: #ffffff;">
+		<div class="body" id="drop" style="pointer-events: none;height: 100%;width: 100%;display: table-cell;vertical-align: middle;"> <img style="width: 15%;" src="../../assets/images/uploadicon.png">
+			<h4 class="up">
+        <b>Glisser et Déposer des fichiers ici</b>
+      </h4>
+			<p class="up">Ou</p>
+			<div type="button" style="pointer-events: visible;position: relative;" id="triggerFile" class="btn btn-default load file-area2 col-md-6" aria-hidden="true"> <img style="width: 7%;margin-right: 1rem;" src="../../assets/images/pluscircleicon.png"> Ajouter des fichiers
+				<input type="file" style="visibility: visible;height: 100%;width: 100%;" id="data_file" required="required" name="file" (change)="fileEvent($event.target.files)" required accept=".xlsx" /> </div>
+			<div class="file-dummy"> <span class="success">Les fichiers ont été uploadés.</span> <span class="default">Sélection du fichier à charger</span> </div>
+			<p class="load"> Uploader <b>jusqu'à 20 fichiers .CSV</b> de type CC 1/4h et les convertir en format horaire </p>
+		</div>
+	</div>
+</div>
+<form [formGroup]="uploadForm" class="from-group  col-lg-6 col-sm-12 col-md-12 col-xs-12" (ngSubmit)="onSubmit(uploadForm.value)" style="flex: 1;height: 25rem;display: inline-block;
+
+position: absolute;">
+	<div id="divstatiscs" *ngIf="fileValid" style="background: #f6f7fb;height: 100%;" class="file-dummy upload h-100" type="submit" value="Upload" name="submit">
+		<div class="upload-files p-2" style=" background: #f6f7fb;padding-top: 1rem;padding-left: 2.0rem;padding-right: 2.0rem;">
+			<div class="header ">
+				<h4 class="up text-left " style="float: left;">
+        <b>TÉLÉCHARGEMENT:</b>
+      </h4>
+				<p id="loadedfiles" class="load text-right " style="float: right;margin-top: 10px;">{{filescounter}} fichiers ajoutés</p>
+			</div>
+			<div class="body" id="drop" style="padding-bottom: 0;">
+				<ul id="dropedfiles" class="dropul" style="border-top: 1px solid #d9dfe8;">
+					<li *ngFor='let items of selectedMarketsList;let y=index' class="filelist">
+						<div style="width: 20%;"> <i *ngIf="!uploaded" class="fa displaynone uploaded" style="color: #2ecc71;margin-right: 0;margin-right: 1rem;font-size: 2rem;"></i>
+							<div *ngIf="uploaded" class="circle-border display noupload" style="width: 2rem; height: 2rem;margin-right: 1rem;"></div>
+							<div> <img src="../../assets/images/csvfiles.png"> </div>
+						</div>
+						<div class="upldfiles" style="width: 79%;">
+							<div style="width: 100%;">
+								<div style="display: inline-block;"> <b style="display: block;" class="name">{{items.name}}</b>
+									<p class="size" style="padding: 0;display: inline;">{{(items.size)/1024/1024 }} MB</p>
+								</div>
+								<div style="float: right;">
+									<div style="float: right;"> <span class="closed" (click)='removeSelMarket(y);fileexist= false'></span> </div>
+								</div>
+							</div>
+							<div class="holder" style="width: 100%;">
+								<div class="progress-wrap progress" style="margin: 0;border-radius: 0.6rem;height: 0.6rem;">
+									<div [ngStyle]="{width: progressbar + '%'}" class="box progress-bar" style="margin: 0;"></div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<footer style="text-align: center; height: auto; float: left;"> <span *ngIf="!uploaded && fileexist" style="pointer-events: none;"><button  class="btn btn-danger pull-center calculatorcheck" >
+            <i class="fa fa-check" style="padding-right: 0.5rem;"></i>Succès</button>
+          </span> <span *ngIf="loading">
+            
+                <img  class="pull-right" class="redload" style="width: 80px; height: 80px;" src="../../../assets/images/uploadfiles.gif">
+              </span> <span *ngIf="fileValid && !loading && uploaded " [class.active]="ecount=='upload-convert'" (click)="file = null; data_file = null" class="inactive">
+            <button  type="submit" class="btn btn-danger pull-center calculatortype" value="Upload" name="submit" >	<i class="fa fa-refresh convertplus" aria-hidden="true"></i> Convertir CC 1/4h en 1h</button>
+            </span> <span *ngIf="fileValid && !loading && uploaded " [class.active]="ecount=='upload-sum'" (click)="file = null; data_file = null" class="inactive">
+              <button  type="submit" class="btn btn-danger pull-center calculatortype" value="Upload" name="submit" >	<i class="fa fa-refresh convertplus" aria-hidden="true"></i> Convertir CC 1/4h en 1h et faire la somme</button>
+              </span> <span *ngIf="fileValid && !loading && uploaded" [class.active]="ecount=='upload-diff'" (click)="file = null; data_file = null" class="inactive">
+                <button  type="submit" class="btn btn-danger pull-center calculatortype" value="Upload" name="submit" >	<i class="fa fa-refresh convertplus" aria-hidden="true"></i> Convertir CC 1/4h en 1h et faire la difference (C)</button>
+                </span> <span *ngIf="fileValid && !loading && uploaded" [class.active]="ecount=='step4'" (click)="file = null; data_file = null" class="inactive">
+                  <button  type="submit" class="btn btn-danger pull-center calculatortype" value="Upload" name="submit" >	<i class="fa fa-refresh convertplus" aria-hidden="true"></i> Convertir CC 1/4h en 1h + %</button>
+                  </span>
+				<div *ngIf="!uploaded" id="dropedfiles" class="dropul" style="padding: 0; list-style-type: none; height: unset;margin-top: 2rem;">
+					<div *ngFor='let items of selectedMarketsList;let y=index' class="filelist">
+						<a (click)='downloadsubmit();' style="cursor: pointer;">
+							<div style="display: inline-block;"> <img src="../../assets/images/excelicon.jpg"> </div>
+							<div style="display: inline-block;"> <b style="display: block;margin-left: 0.5rem;margin-right: 0.5rem;color: #0645bc" class="name">CC Difference.csv</b> </div>
+							<div style="display: inline-block;"> <img style="width: 1.5rem;" src="../../assets/images/downloadicon.png"> </div>
+						</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+</form>

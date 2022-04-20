@@ -1,0 +1,56 @@
+.icons {
+    border-radius: 50%;
+    height: 42px;
+    text-align: center;
+    top: auto;
+    transform: translate(0, 0);
+    width: 42px;
+    font-size: 20px;
+    padding-top: 5px;
+    margin-top: 2px;
+}
+
+.i_signee{ 
+    background: #ffe7d9;
+    border: 2px solid #fc8962;
+    color: #fc8962;
+    padding-left: 5px;
+ }  
+.i_signer{ 
+    background: #F8E8F8;
+    border: 2px solid #682267;
+    color: #682267;
+ }  
+.i_click{ 
+    background: #E1F7FF;
+    border: 2px solid #00B0F0;
+    color: #00B0F0;
+    padding-left: 5px;
+ }   
+.i_send{ 
+    background: #FFE7EC;
+    border: 2px solid #C50027;
+    color: #C50027;
+ }    
+.i_open{ 
+    background: #f2f2f2;
+    border: 2px solid #595959;
+    color: #595959;
+ }    
+.i_created{ 
+    background: #DFF9F8;
+    border: 2px solid #157976;
+    color: #157976;
+ }
+ .i_aconfirmer{ 
+    background: #fff7e0;
+    border: 2px solid #FF9800;
+    color: #FF9800;
+
+ }
+
+ .i_refused{ 
+    background: #ececec;
+    border: 2px solid black;
+    color: black;
+ } 

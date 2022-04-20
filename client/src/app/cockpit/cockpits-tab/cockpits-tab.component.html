@@ -1,0 +1,127 @@
+<div>
+
+  <!-- <div class="tabs-wrapper col-md-12" style="margin-bottom: 10px;"> 
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="pointer" [routerLink]="['/cockpit']"  style="width: 100px;text-align: center;">
+        <a role="tab" data-toggle="tab">Offres</a>
+      </li>
+      <li role="presentation" class="pointer active" [routerLink]="['cockpits']" style="width: 100px;text-align: center;">
+        <a ole="tab" data-toggle="tab">Cockpits cockpits</a>
+      </li> 
+      <button data-toggle="modal" data-target="#createNewCockpitB" (click)="cockpitB()"
+        class="btn btn-sm btn-primary text-uppercase col-md-3 pull-right"
+        style="max-width: 160px;">Créer un nouveau</button>     
+    </ul>
+  </div> -->
+  <ul class="nav nav-pills m-b-20" role="tablist" style="border-bottom: 1px solid #0c82f9;">     
+    <li class="nav-item"><a class="nav-link" [routerLink]="['/cockpit']"  role="tab" data-toggle="tab">Offres</a></li>
+    <li class="nav-item"><a class="nav-link active" [routerLink]="['/cockpits']"  role="tab" data-toggle="tab">Cockpits</a></li>   
+    <button data-toggle="modal" data-target="#createNewCockpitB" (click)="cockpitB()"
+            class="btn btn-sm btn-primary text-uppercase col-md-3 pull-right"
+            style="max-width: 160px; position: absolute; right: 45px;">Créer un nouveau</button>       
+  </ul>
+ 
+  <app-add-cockpit></app-add-cockpit>
+
+  <div *ngIf="!cockpitNews" class="text-center m-t-50">
+      <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+      </div>
+  </div>
+
+    <div class="table-responsive" *ngIf="cockpitNews">
+      <table class="table table-borderless table-striped table-earning">
+        <thead>
+            <tr>
+                <th>COCKPIT NAME    <!-- <div> COCKPIT NAME    </div> --> </th>
+                <th>ATTACHED USERS  <!-- <div> ATTACHED USERS  </div> --> </th>
+                <th>ADD OWN CONTENT <!-- <div> ADD OWN CONTENT </div> --> </th>
+                <th>Add charts      <!-- <div style="padding-left: 34px;"> Add charts</div> --> </th>  
+                <th>Edit            <!-- <div style="padding-left: 37px;"> Edit      </div> --> </th>  
+                <th>SEND VIA EMAIL  <!-- <div> SEND VIA EMAIL  </div> --> </th>   
+              </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cockpit of cockpitNews;let y=index">
+              <td> <a href="" target="_blank" [routerLink]="['/cockpits/view/', cockpit.id]">{{cockpit.name}}</a></td>
+              <td> 
+                <div style="display: inline-flex">
+                  <style>.mx{max-height: 42px !important;}</style>
+                  <button class="btn btn-sm btn-outline-info mx" style="margin-right: 15px;" (click)="attachedUser(cockpit)" data-toggle="modal" data-target="#createNewCockpitB"><i class="fa fa-paperclip p-r-5"></i> Attach</button>
+                  <span *ngIf="cockpit.clients">  
+                      <div *ngIf="cockpit.clients.length == 1">
+                        <div *ngFor="let y of cockpit.clients">{{y.nom_entrepise}}</div>
+                      </div>
+                      <p style="height: 0px; margin-bottom: 5px;">&nbsp;</p>
+                      <span *ngIf="cockpit.clients.length>1" class="pointer" (click)="voirClients[y] = !voirClients[y]">
+                        <div style="padding: 0px 0px;">
+                          <span style="height: 37px;" class="voirTous"   *ngIf="!voirClients[y]">Voir Tous &nbsp;<i class="pull-right fa fa-angle-down" style="margin: 4px 0px 0px 0px;color: #8799AC"></i></span>
+                          <span style="height: 37px;" class="fermerTous" *ngIf="voirClients[y]">Fermer     &nbsp;<i class="pull-right fa fa-angle-up"   style="margin: 4px 0px 0px 0px;color: #8799AC"></i></span>
+                        </div>
+                      </span>
+
+
+                      <!-- <div class="usel" style="display: table;" *ngIf="cockpit.clients.length>1&&voirClients[y]">
+                        <span class="sel_desel_all"><input type="checkbox" class="regular-checkbox" style="margin-bottom:0px;"></span>
+                        <span>{{count[y]}} selected</span>
+                        <span class="withpopup" popup="reqdel">
+                        <a>REMOVE</a></span>
+                      </div> -->
+
+                      <ul class="hedgelist mcockpitlist" style="display:block;" *ngIf="cockpit.clients.length>1&&voirClients[y]">
+                        <li *ngFor="let client of cockpit.clients;">
+                          <!-- <input type="checkbox" [(ngModel)]="clients[client.id]" (click)="clientSelected(y)" class="regular-checkbox usercheckbox"> -->
+                          <span class="withcheck"><a >{{client.nom_entrepise}}</a></span>
+                          <a class="withpopup pointer" (click)="delCock = cockpit; delCli = client;"><i class="fa fa-trash-o trashfa" data-toggle="modal" data-target="#deleteClients"></i></a>
+                        </li>
+                      </ul>
+              
+
+                    </span>
+                </div>
+              </td>
+              <!-- <td><button class="boxx atachcockpit"><i class="fa fa-paperclip"></i>Attach</button></td> -->
+              <td><button class="btn btn-sm btn-outline-info mx">  <i class="fa fa-plus p-r-5"></i>Add content</button></td>
+              <td><button class="btn btn-sm btn-outline-info mx" [routerLink]="['/cockpits/charts/', cockpit.id]"><div class="fas fa-chart-line p-r-5"></div>Attach</button></td>
+              <td><button class="btn btn-sm btn-outline-info mx" [routerLink]="['/cockpits/edit/', cockpit.id]"><div class="fa fa-edit p-r-5"></div> Edit</button></td>
+              <td><button class="btn btn-sm btn-outline-warning mx" (click)="sendCockpitOnMail(cockpit.id)" >          <i class="fa fa-envelope p-r-5"></i>Send now</button></td>   
+          </tr>  
+        </tbody>    
+      </table>
+  </div>
+</div>
+<!-- <router-outlet></router-outlet> -->
+<app-add-cockpit></app-add-cockpit>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="modal fade owerflow-y" id="deleteClients" role="dialog">
+            <div class="modal-dialog modal-sm-6 mt-140">
+              <div class="modal-content">
+                <div class="mymodal-header">
+                  <i class="close_popup fa pull-right" id="canceldeleteClients" data-dismiss="modal" >&#xf00d;</i>       
+                  <h4 class="modal-title white">Supprimer un utilisateur</h4>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <h4 *ngIf="delCli">Souhaitez-vous supprimer l'utilisateur {{delCli.nom_entrepise}}?</h4><br>
+                    <button class="pull-right btn btn-primary" data-dismiss="modal"> NON </button>
+                    <button *ngIf="!loadingSm" class="pull-right btn btn-danger" style="margin-right: 10px;" (click)="delClient()">OUI</button>
+                    <button *ngIf="loadingSm" class="pull-right btn btn-danger" style="margin-right: 10px;" disabled>OUI
+                      <img *ngIf="loadingSm" class="pull-right" class="redload" src="../../../assets/images/assets/load.gif"> 
+                    </button>
+                    <br><br><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

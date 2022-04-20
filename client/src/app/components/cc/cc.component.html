@@ -1,0 +1,421 @@
+<!-- <app-header></app-header> -->
+<div>
+  <div>
+    <div class="row">
+      <div class="col-lg-95">
+        <div class="col-md-6 page-hedder-metas row" *ngIf="infoOffer">
+            <span class="pull-left">
+              <button class="btn btn-sm btn-primary" (click)="infoOffer=false;send(null);">< BACK </button> 
+            </span>
+        </div>
+        <div *ngIf="company" class="tabs-wrapper"> 
+            <ul class="nav nav-pills m-b-15" id="myTab" role="tablist" style="border-bottom: 1px solid #0c82f9;">
+                <li class="nav-item">
+                  <a class="nav-link" [routerLinkActive]="['active']" id="home-tab" [routerLink]="['offers/', company.id]" (click)="send(null)"
+                   aria-controls="home" aria-selected="true">Tableau de bord</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" [routerLinkActive]="['active']" id="profile-tab"  [routerLink]="['upload/', company.id]" (click)="send(null)"
+                  aria-controls="profile" aria-selected="false">Profils CC Historiques</a>
+                </li>
+
+              </ul>
+          <!-- <ul class="nav nav-tabs" role="tablist">     
+            <li role="presentation"><a [routerLink]="['offers/', company.id]" (click)="send(null)" role="tab" data-toggle="tab">Tableau de bord</a></li>
+            <li role="presentation"><a [routerLink]="['upload/', company.id]" (click)="send(null)" role="tab" data-toggle="tab">Profils CC Historiques</a></li>           
+          </ul> -->
+          <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active">
+                <router-outlet></router-outlet>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+      <aside class="col-lg-25 sidebar" *ngIf="company && !site && !volume && !offer" style="padding: 0px;">
+          <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
+              <div class="au-card-title" style="background-image:url('../../../assets/images/bg-title-01.jpg');">
+                  <div class="bg-overlay bg-overlay--blue text-center">
+                  </div>
+              </div>
+              <div class="au-task js-list-load">
+                  <div class="au-task-list js-scrollbar3" style="height: auto">
+                      <div class="au-task__item">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">Nom d'entreprise</a></h5>
+                              <span class="time">{{company.nom_entrepise}}</span>
+                          </div>
+                      </div>  
+
+                      <div class="au-task__item">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">Contact</a></h5>
+                              <span class="time"><span *ngIf="company.surname">{{company.surname}} {{company.name}}</span></span>
+                          </div>
+                      </div>            
+                      <div class="au-task__item">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">Adresse email</a></h5>
+                              <span class="time">{{company.email}}</span>
+                          </div>
+                      </div>                    
+                      <div class="au-task__item">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">Type</a></h5>
+                              <span class="time">{{company.func}}</span>
+                          </div>
+                      </div>     
+                      <div class="au-task__item">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">ID Client CRM</a></h5>
+                              <span class="time">{{company.crm_id}}</span>
+                          </div>
+                      </div>   
+  
+
+
+                      <div class="au-task__item"  *ngIf="meters.length != 0">
+                          <div class="au-task__item-inner">
+                              <h5 class="task"><a href="javascript:void(0)">POD - Adresse</a></h5>
+                              <span class="time">
+                                  <span *ngFor="let item of meters; let i=index"> 
+                                    <span *ngIf="i<2 || showPods" class="fadeInDown">
+                                      <div>{{item.meter_id | slice:0:36}} - {{item.address}}</div>
+                                    </span>
+                                  </span>
+                                  <span *ngIf="meters.length>2">
+                                      <span class="btn btn-outline-primary" *ngIf="!showPods"(click)="showPods = !showPods">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #0c82f9"></i></span>
+                                      <span class="btn btn-outline-primary" *ngIf="showPods" (click)="showPods = !showPods">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #0c82f9"></i></span>
+                                  </span>
+                              </span>
+                          </div>
+                      </div>   
+                  </div>
+
+                  <div class="au-task__footer" *ngIf="company" >
+                      <button data-toggle="modal" data-target="#modal" (click)="edit()" [disabled]="loading" class="btn  btn-outline-secondary"> &nbsp; Editer &nbsp;</button>
+                      <button data-toggle="modal" data-target="#delete_modal" class="btn  btn-outline-danger">Suprimer</button>
+                  </div>
+              </div>
+          </div>
+        <!-- 
+              <div>
+                <h3 class="cat-head">POD - Adresse</h3>
+                <p *ngFor="let item of meters; let i=index"> 
+                  <span *ngIf="i<2 || showPods" class="fadeInDown">
+                   <div class="tooltip">{{item.meter_id | slice:0:36}} - {{item.address}}
+                   <span *ngIf="item.meter_id.length>36" data-toggle="tooltip" class="tooltiptext" style="margin-top: -24px">
+                     <div>{{item.meter_id}}</div>
+                    </span>
+                  </div>
+
+                  </span>
+                </p>
+                <span>
+                  <span *ngIf="meters.length>2">
+                    <span class="pointer" *ngIf="!showPods"(click)="showPods = !showPods">Voir Tous &nbsp;<i class="fa fa-angle-down" style="color: #8799AC"></i></span>
+                    <span class="pointer" *ngIf="showPods" (click)="showPods = !showPods">Fermer   &nbsp;<i class="fa fa-angle-up" style="color: #8799AC"></i></span>
+                </span>
+                </span>                
+              </div>
+              <div style="margin-top: 25px;">
+                  <button data-toggle="modal" data-target="#modal" (click)="edit()" class="btn btn-sm btn-default text-uppercase" style="width: 124px">Editer</button>
+                  <button *ngIf="company" data-toggle="modal" data-target="#delete_modal" class="btn btn-sm btn-danger text-uppercase pull-right" style="width: 124px">SUPPRIMER</button>
+              </div>
+              
+            </div>
+          </div> -->
+        </aside>
+
+        <aside class="col-lg-25 sidebar" *ngIf="company && site || volume && !offer">
+            <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
+                <div class="au-card-title" style="background-image:url('../../../assets/images/bg-title-01.jpg');">
+                    <div class="bg-overlay bg-overlay--blue text-center">
+                    </div>
+                </div>
+                <div class="au-task js-list-load">
+                    <div class="au-task-list js-scrollbar3" style="height: auto">
+
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">Profils CC Historiques</a></h5>
+                                <span class="time" *ngIf="site.name">{{site.name}}</span>
+                            </div>
+                        </div>  
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">Année Source</a></h5>
+                                <span class="time">2017</span>
+                            </div>
+                        </div> 
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">CC translatée</a></h5>
+                                <span class="time">{{year}}</span>
+                            </div>
+                        </div> 
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">Format des données</a></h5>
+                                <span class="time" *ngIf="interval == 'pondere'">CC type pondérée</span>
+                                <span class="time" *ngIf="interval == '3600.0'" >Horaire </span>
+                                <span class="time" *ngIf="interval == '900.0'"  >Quart horaire  </span>
+                            </div>
+                        </div> 
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">Volume Annuel Total</a></h5>
+                                <span class="time" *ngIf="volume">{{volume.Total.value__sum}} kWh</span>
+                            </div>
+                        </div> 
+                        <div class="au-task__item">
+                            <div class="au-task__item-inner">
+                                <h5 class="task"><a href="javascript:void(0)">Répartition des volumes</a></h5>
+                                <span class="time"> Volume HC, kWh: {{volume.OffPeak.value__sum }} </span>
+                                <span class="time"> Volume HP, kWh: {{volume.Peak.value__sum}}     </span>
+                            </div>
+                        </div> 
+   
+                    </div>
+                </div>        
+              </div>        
+          </aside>
+          <!-- <app-aside-offer *ngIf="offer" [aside]="offer.id"></app-aside-offer> -->
+      </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="row">
+
+
+  <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" *ngIf="company">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Effacer utilisateur</h4>
+          <button type="button" id="cancel-btn-delete" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Souhaitez-vous effacer {{company.name}}?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">NON</button>
+            <button type="button" class="btn btn-primary" [disabled]="loading" (click)="deleteCompany()">OUI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+                      			<!-- modal medium -->
+			<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 *ngIf="add_edit" class="modal-title white">Ajouter Nouveau Client</h4>
+                <h4 *ngIf="!add_edit" class="modal-title white">Editer client</h4>     
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">  
+                    <div class="form-group" [ngClass]="{'has-danger': func.invalid && (func.dirty || func.touched),
+                                                        'has-success': func.valid && (func.dirty || func.touched)}">
+                      <div class="control-label">Type</div>
+                      <select class="form-control" formControlName='func' required>
+                          <option class="form-control" value="basic">Basic</option>
+                          <option class="form-control" value="advanced">Advanced</option>
+                      </select>
+                  </div>
+  
+                  <!-- Nom du Client -->
+                  <div class="form-group" [ngClass]="{ 'has-danger': nom_entrepise.invalid && (nom_entrepise.dirty || nom_entrepise.touched),
+                                                        'has-success': nom_entrepise.valid && (nom_entrepise.dirty || nom_entrepise.touched)}">
+                    <div>Nom du client</div>
+                      <input class="form-control" type="text" formControlName="nom_entrepise" required>
+                      <div *ngIf="nom_entrepise.errors && (nom_entrepise.dirty || nom_entrepise.touched)">
+                        <span class="text-danger"  *ngIf="nom_entrepise.errors.required">Nom du client est requis</span>
+                    </div>
+                  </div>
+                <!-- end Nom du Client  -->
+                  <div class="form-group" [ngClass]="{ 'has-danger': name.invalid && (name.dirty || name.touched),
+                                                        'has-success': name.valid && (name.dirty || name.touched)}">
+                    <div>Nom du contact</div>
+                      <input class="form-control" type="text" formControlName="name" required>
+                      <div  *ngIf="name.errors && (name.dirty || name.touched)">
+                        <span class="text-danger" *ngIf="name.errors.required">Nom est requis</span>
+                    </div>
+                  </div>
+  
+                <!-- Surname -->
+                <div class="form-group" [ngClass]="{
+                    'has-danger': surname.invalid && (surname.dirty || surname.touched),
+                    'has-success': surname.valid && (surname.dirty || surname.touched)
+                    }" >
+                    <div>Prénom du contact</div>      
+                    <input class="form-control" type="text" formControlName="surname" required>
+                    <div  *ngIf="surname.errors && (surname.dirty || surname.touched)">
+                    <span class="text-danger" *ngIf="surname.errors.required">Prénom est requis</span>
+                  </div>
+                  </div>
+                    <!-- gen -->
+                  <div  class="form-group" [ngClass]="{'has-danger': sex.invalid && (sex.dirty || sex.touched),
+                                                        'has-success': sex.valid && (sex.dirty || sex.touched)}">
+                    <div>Civilité</div>
+                    <select class="form-control myselect" formControlName='sex' required>
+                        <option class="form-control" value="F">Madame</option>
+                        <option class="form-control" value="M">Monsieur</option>
+                    </select>
+                  </div>
+                  <!--  end gen -->
+                  <!--Email  -->
+                  <div class="form-group" [ngClass]="{ 'has-danger': email.invalid && (email.dirty || email.touched),
+                                                        'has-success': email.valid && (email.dirty || email.touched) }">
+                    <div>Email du contact</div>
+                      <input type="email" class="form-control" formControlName="email" required>
+                  </div>
+                  <div *ngIf="email.errors && (email.dirty || email.touched)">
+                    <span class="text-danger" *ngIf="email.errors.required">Email est requis</span>                                    
+                    <span class="text-danger" *ngIf="email.errors.pattern">L'addresse email devrait contenir au moins "@"</span>
+                  </div>
+  
+                  <div class="row">
+                    <div [ngClass]="{ 'has-success': address.valid && (address.dirty || address.touched)}" class="col-lg-6 m-b-5">
+                      <div>Adresse</div>
+                      <input class="form-control" type="text" formControlName="address">
+                    </div>
+  
+                    <div [ngClass]="{'has-success': zip_code.valid && (zip_code.dirty || zip_code.touched)}" class="col-lg-6 m-b-5">
+                      <div>NPA Localité</div>
+                      <input class="form-control" type="text" formControlName="zip_code" >
+                    </div>
+                  
+                                    
+                  <!-- Adrese  Add-->
+                    <div *ngIf="add_edit" formArrayName="adresRows" class="col-md-6">
+                      <div class="form-group" *ngFor="let adresrow of form.controls.adresRows.controls; let i=index"  [formGroupName]="i" 
+                      [ngClass]="{'has-success': form.controls.adresRows.controls[i].valid && (form.controls.adresRows.controls[i].dirty || form.controls.adresRows.controls[i].touched)}">
+                        <div>Adresse POD</div>  
+                            <input *ngIf="i+1===form.controls.adresRows.length" class="form-control" formControlName="adresname"/>
+                            <input *ngIf="i+1!==form.controls.adresRows.length" 
+                            class="form-control" readonly="true"  formControlName="adresname"/>
+                      </div>
+                    </div>
+                    <!-- Adrese Pods -->
+                    <!-- Adrese Edit-->
+                  <div *ngIf="!add_edit" formArrayName="adresRows" class="col-md-6">
+                    <div class="form-group"  *ngFor="let adresrow of form.controls.adresRows.controls; let i=index" [formGroupName]="i"
+                    [ngClass]="{'has-success': form.controls.adresRows.controls[i].valid && 
+                                (form.controls.adresRows.controls[i].dirty || form.controls.adresRows.controls[i].touched)}">
+                    <div>Adresse POD</div>                                                      
+                          <input class="form-control" formControlName="adresname"/>
+                          <!-- //<input *ngIf="i+1!==form.controls.adresRows.length" class="form-control input-sm" formControlName="adresname"/> -->
+                    </div>
+                  </div>
+                  <!-- Ends Adrese edit -->
+  
+                  <!-- Pods  Add-->
+                  <div *ngIf="add_edit" formArrayName="podsRows" class="col-md-6">
+                    <div class="form-group" *ngFor="let podsrow of form.controls.podsRows.controls; let i=index"  [formGroupName]="i" [ngClass]="{
+                            'has-danger': form.controls.podsRows.controls[i].invalid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched),
+                            'has-success': form.controls.podsRows.controls[i].valid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched)
+                            }">
+                      <div>POD</div>                                
+                        <div class="input-group" >
+                          <input *ngIf="i+1===form.controls.podsRows.length" class="form-control" formControlName="podsname" required/>
+                          <input *ngIf="i+1!==form.controls.podsRows.length" class="form-control" readonly="true" formControlName="podsname"/>
+                          <button class="btn btn-primary" type="button">
+                              <b *ngIf="i+1===form.controls.podsRows.length" (click)="verifyExistPod(podsrow);"  title="Add pods" class="fa fa-plus"></b> 
+                              <b *ngIf="1!==form.controls.podsRows.length" (click)="deleteRow(i)" title="Delete pods" class="fa fa-trash" style="color:red; margin-left:10px;" ></b>
+                          </button>
+                        </div>                                                                                 
+                        <div *ngIf="form.controls.podsRows.controls[i].invalid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched)">
+                          <div class="text-danger">POD:{{ i + 1 }} est requis</div>
+  
+                        </div>
+  
+                        <!-- <div class="colorred" *ngIf="(podsExist && !form.controls.podsRows.controls[i].invalid  || pods_unique)&&i+1===form.controls.podsRows.length"> déjà.</div>    -->
+                    </div>
+                  </div>
+                  <!-- Ends Pods -->
+                  <!-- Pods Edit-->
+                  <div *ngIf="!add_edit" formArrayName="podsRows" class="col-md-6" >
+                    <div class="form-group"  *ngFor="let podsrow of form.controls.podsRows.controls; let i=index"  [formGroupName]="i" [ngClass]="{
+                            'has-danger': form.controls.podsRows.controls[i].invalid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched),
+                            'has-success': form.controls.podsRows.controls[i].valid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched)
+                            }">
+                    <div>POD</div>                                                               
+                        <div class="input-group" >
+                          <input  class="form-control" formControlName="podsname"/>
+                          <button class="btn btn-primary" type="button">
+                              <b *ngIf="i+1===form.controls.podsRows.length" (click)="verifyExistPod(podsrow);"  title="Add pods" class="fa fa-plus"></b> 
+                              <b *ngIf="1!==form.controls.podsRows.length" (click)="deleteRow(i)" title="Delete pods" class="fa fa-trash" style="color:red; margin-left:10px;" ></b>
+                          </button>
+    
+                        </div>
+                        <div *ngIf="form.controls.podsRows.controls[i].invalid && (form.controls.podsRows.controls[i].dirty || form.controls.podsRows.controls[i].touched)">
+                          <div class="text-danger">POD:{{ i + 1 }} est requis</div>
+                        </div>
+                          <!-- <div class="colorred" *ngIf="(podsExist && !form.controls.podsRows.controls[i].invalid  || pods_unique)&&i+1===form.controls.podsRows.length">Ce numéro de POD existe déjà.</div>                                                                               -->
+  
+                    </div>
+                  </div>
+                </div>
+                  <!-- Ends Pods -->                           
+              </form>  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                
+                <!-- <button type="button" class="btn btn-primary" (click)="onSubmit(form.value)" [disabled]="form.invalid || loading">Sauvegarder</button> -->
+                <button type="button" class="btn btn-primary" (click)="onSubmit(form.value)">Sauvegarder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end modal medium -->
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+  </div> 
+ 
+  <aside class="col-md-25 sidebar" *ngIf="!company&&currentUser.role!=1"  style="margin-top: -49px;">
+    <div *ngIf="curentClient" class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title center">{{curentClient.first_name}} {{curentClient.last_name}}</h1>
+      </div>
+      <div class="panel-body">
+        <div>
+          <h3 class="cat-head">ID:</h3>
+          <p>{{curentClient.pk}}</p>
+        </div>
+        <div>
+          <h3 class="cat-head">Nom d'utilisateur:</h3>
+          <p>{{curentClient.username}}</p>
+        </div>
+        <div>
+          <h3 class="cat-head">Adresse email:</h3>
+          <p>{{curentClient.email}}</p>
+        </div>
+        <button data-toggle="modal" data-target="#editCurentUser"
+         class="btn btn-sm btn-default text-uppercase pull-right">Editer</button> 
+         <div *ngIf="curentClient">
+            <app-edit-curent-user [curentU]="curentClient"></app-edit-curent-user>  
+         </div>
+      </div>
+    </div>
+  </aside>
+
+
+

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8' />
+	<title>PDF export</title>
+	<style type="text/css">
+	* {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+    }
+
+	.pbody{
+		font-size: 14px;
+		margin:5px 0 20px 0;
+	}
+	.ptitle{
+		font-size: 16px;
+		color:#007bff;
+		margin:0;
+		font-weight: bold;
+		text-transform: uppercase;
+		white-space: normal; 
+	}
+
+	.pnumber{
+		margin:10px 0 0 0;
+		font-weight: bold;
+		font-size: 16px;
+	}
+
+	.constanttd td{
+		width: 60px;
+	}
+
+	.wredball{
+		border-top: 1px solid #007bff;
+		border-bottom: 1px solid #007bff;
+		color:#007bff;
+	}
+	.wredbt{
+		border-top: 1px solid #007bff;
+		color:#007bff;
+	}
+	.wredbb{
+		border-bottom: 1px solid #007bff;
+		color:#007bff;
+	}
+	 .bgyellow{
+	 	border-right:1px solid white;
+	 	border-bottom:1px solid white;
+	 	background-color:#ffffcb;
+	 }
+	 .bggrey{
+		background-color:#f1f1f1;
+ 		border-right:1px solid white;
+	 	border-bottom:1px solid white;
+	 }
+	 .bgblack{
+	 	color:white;
+	 	background-color: #333
+	 }
+	 .tabletext{
+	 	text-align: center;
+	 	font-weight: bold;
+	 	max-width: 600px;
+	 }
+	 .tabletext td{
+	 	vertical-align: middle;
+	 }
+	 .yearbg{
+	 	color:white;
+	 	background-color: #007bff;
+	 	border-right: 1px solid #ccc;
+	 	border-bottom: 1px solid #ccc;
+	 }
+	 .numberbg{
+	 	border-right:1px solid #ccc;
+	 	border-bottom: 1px solid #ccc;
+	 }
+
+	 .bordered{
+	 	 border:1px solid #ccc;
+	 }
+	 .pdtable{
+	 	border-color: #333 !important;
+	 }
+	 .pdtable tr,.tabletext tr{
+	 	height: 24px;
+	 }
+	 .pdtable tr>td:first-child{
+	 	border-right:1px solid #333;
+	 	border-bottom: 1px solid #333;
+	 }
+	 .pdtable tr>td:nth-child(2){
+	 	border-bottom: 1px solid #333;
+	 }
+
+	 .title{
+		color:#007bff;
+		font-size: 24pt;
+		font-weight: 700;
+	 }
+
+	 .subtitle{
+		color:#007bff;
+		font-size: 16pt;
+		font-weight: 700;
+	 }
+
+	 .smallred{
+	 	color:#007bff;
+	 	font-size: 10pt;
+	 	height: 26px;
+	 }
+	 .pagenumber{
+	 	padding-right: 40px;
+	 	font-size: 14px;
+	 	font-weight: bold;
+	 	text-align: right;
+	 	height: 40px;
+	 	vertical-align: middle;
+	 }
+	 .artnumber{
+	 	font-size: 14px;
+	 	font-weight: bold;
+	 	text-align: left;
+	 	vertical-align: middle;
+	 }
+
+	</style>
+</head>
+<body>
+<center>
+	<table cellspacing="0" cellpadding="0" width="900" style="text-align: left;font-family: Arial, sans-serif; font-size: 14px;">
+		<tr style="height: 40px">
+				<td colspan="10">&nbsp;</td>
+				<td colspan="2" style='position: relative; vertical-align: top'><span style="position: absolute;right: 0; top: 0"><img src="" height="120"></span></td>
+		</tr>
+		<tr>
+			<td colspan="12" class="title"></td>
+		</tr>
+		<tr>
+			<td  colspan="12" class='subtitle' style="padding: 10px 0; border-bottom:1px solid #007bff;">OFFRE – CONTRAT</td>
+		</tr>
+		<tr>
+			<td height="30" colspan="12" style="padding-top: 20px">Suite à votre demande, nous avons le plaisir de vous remettre notre offre pour la fourniture d'énergie électrique:</td>
+		</tr>
+		 {% if titles > 1 %}
+			<tr style="height: 300px">
+				<td align="center" colspan="12" style="padding: 20px 0">
+					<table class="tabletext">
+						<tr>
+							<td style="color:white; background-color: #333; font-style: italic; font-weight: normal"> Valeurs en ct/kWh </td>
+							<td width="5"></td>
+							<td width="200" colspan="2" class="bgblack"> ÉTÉ </td>
+							<td width="20"></td>
+							<td width="200" colspan="2" class="bgblack"> HIVER </td>
+						</tr>
+						<tr>
+							<td class="bgblack"></td>
+							<td width="5"></td>
+							<td class="bgyellow"> HP </td>
+							<td class="bgyellow"> HC </td>
+							<td width="20"></td>
+							<td class="bggrey"> HP </td>
+							<td class="bggrey"> HC </td>
+						</tr>
+							{% for year in years %}
+								<tr>
+									<td class="bgblack">{{ year }}</td>
+									<td width="5"></td>
+									{% for budget in budget_season %}
+										{% if budget.season == 'Summer' and budget.hp_hc == 'Peak' and budget.year == year  %}
+											{% if budget.value == 0 %}
+												<td class="bgyellow"> --- </td>
+											{% else %}
+												<td class="bgyellow"> {{ budget.value|floatformat:2 }} </td>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									{% for budget in budget_season %}
+										{% if budget.season == 'Summer' and budget.hp_hc == 'OffPeak' and budget.year == year  %}
+											{% if budget.value == 0 %}
+												<td class="bgyellow"> --- </td>
+											{% else %}
+												<td class="bgyellow"> {{ budget.value|floatformat:2 }} </td>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									<td width="20"></td>
+									{% for budget in budget_season %}
+										{% if budget.season == 'Winter' and budget.hp_hc == 'Peak' and budget.year == year  %}
+											{% if budget.value == 0 %}
+												<td class="bggrey"> --- </td>
+											{% else %}
+												<td class="bggrey"> {{ budget.value|floatformat:2 }} </td>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									{% for budget in budget_season %}
+										{% if budget.season == 'Winter' and budget.hp_hc == 'OffPeak' and budget.year == year  %}
+											{% if budget.value == 0 %}
+												<td class="bggrey"> --- </td>
+											{% else %}
+												<td class="bggrey"> {{ budget.value|floatformat:2 }} </td>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						<tr>
+							<td colspan="7" style="height: 30px;font-weight: normal">Heures pleines : Lundi au Vendredi de 8h00 à 20h00   Eté : Avril à Septembre</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		{% endif %}
+
+		 {% if titles > 1 %}
+		 	{% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12">Au vu des caractéristiques de votre site, voici les prix moyens indicatifs, pour la part énergie :</td>
+				</tr>
+			 {% endif %}
+			 {% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12">Au vu des caractéristiques de votre site, voici le prix moyen indicatif, pour la part énergie :</td>
+				</tr>
+			{% endif %}
+		{% endif %} 
+		{% if titles == 1 %}
+		 	{% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12">Au vu des caractéristiques de votre site, voici les prix uniques, pour la part énergie :</td>
+				</tr>
+			{% endif %}
+			 {% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12">Au vu des caractéristiques de votre site, voici le prix unique, pour la part énergie :</td>
+				</tr>
+			{% endif %}
+		{% endif %}
+
+		<tr>
+			<td align="center" colspan="12" style="padding: 20px 0">
+				<table width="600" cellspacing="0" cellpadding="0" class="tabletext bordered">
+					<tr>
+						<td class="numberbg"></td>
+						{% for year in years %}
+							<td class="yearbg">{{ year }}</td>
+						{% endfor %}
+					</tr>
+					<tr>
+						<td class="numberbg">ct/kWh</td>
+						{% for year in years %}
+							{% for price in prices %}
+								{% if price.year == year  %}
+								 	{% if price.value == 0 %}
+										<td class="numberbg"> --- </td>
+									{% else %}
+										<td class="numberbg">{{ price.value|floatformat:2 }}</td>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						{% endfor %}
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		{% if titles > 1 %}
+			 {% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" >Ces prix indicatifs sont basés sur vos consommations {{ offer.cc.site.year }} projetées pour les années mentionnées dans la présente offre.</td>
+				</tr>
+			 {% endif %}
+			 {% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12">Ce prix indicatif est basé sur vos consommations {{ offer.cc.site.year }} projetées pour l'année mentionnée dans la présente offre.</td>
+				</tr>
+			{% endif %}
+		{% endif %}
+
+		{% if titles == 1 %}
+			 {% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" >Ces prix uniques sont basés sur vos consommations {{ offer.cc.site.year }} projetées pour les années mentionnées dans la présente offre.</td>
+				</tr>
+			 {% endif %}
+			 {% if len_years_list == 1 %}
+			<tr>
+				<td colspan="12">Ce prix unique est basé sur vos consommations {{ offer.cc.site.year }} projetées pour l'année mentionnée dans la présente offre.</td>
+			</tr>
+			{% endif %}
+		 {% endif %}
+
+
+		 {% if offer.energy_type == 'energy3' %}
+			<tr>
+				<td colspan="12" style="height: 82px; overflow:hidden;padding: 20px 0 20px"</td>
+			</tr>
+		 {% else %}
+			
+			{% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" style="padding-top: 20px">Ces prix incluent une plus-value écologique pour des {{energy_lower}} qui vous est fournie sous forme de garanties d'origine (" Garanties d'Origine "). Les prix de cette plus-value écologique sont les suivants :</td>
+				</tr>
+			{% endif %}
+			{% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12" style="padding-top: 20px">Ce prix inclut une plus-value écologique pour des {{energy_lower}} qui vous est fournie sous forme de garanties d'origine (" Garanties d'Origine "). Le prix de cette plus-value écologique est le suivant :</td>
+				</tr>
+			{% endif %}
+
+				<tr>
+					<td align="center" colspan="12" style="padding: 18px 0 0 0">
+						<table width="600" cellspacing="0" cellpadding="0" class="tabletext bordered">
+							<tr>
+								<td class="numberbg"></td>
+								{% for year in years %}
+									<td class="yearbg">{{ year }}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<td class="numberbg">ct/kWh</td>
+								{% for year in years %}
+									{% for energy in energies %}
+										{% if energy.year == year  %}
+											<td class="numberbg">{{ energy.value|floatformat:2 }}</td>
+										{% endif %}
+									{% endfor %}
+								{% endfor %}
+							</tr>
+						</table>
+					</td>
+				</tr>
+		 {% endif %}
+
+		<tr>
+			<td colspan="12" style="height: 60px; overflow:hidden;padding: 20px 0 20px">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="height: 40px"><p>{{ offer.comment }}</p></td>
+		</tr>
+		
+		{% if len_years_list == 1 %}
+			<tr>
+				<td colspan="12" style="padding: 10px 0">J'accepte le présent contrat pour l'année {{ fyear }}.</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="12" style="padding: 10px 0">J'accepte le présent contrat pour les années {{ fyear }} à {{ lyear }}.</td>
+			</tr>
+		{% endif %}
+
+		{% if titles == 1 %}
+			<tr style="height: 300px"><td align="center" colspan="12" style="padding: 25px 0"></td></tr>
+		 {% endif %}
+
+		<tr>
+			<td colspan="12" style="font-weight: bold;">Pour accord et commande : {{offer.company.nom_entrepise}} - {{offer.company.zip_code}}</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="padding:10px 0 40px">Ainsi fait à Martigny, le : {{ offer.created|date:'d.m.Y' }}</td>
+		</tr>
+		<tr>
+			<td colspan="2" style='font-style: italic; height: 50px;'>Signature :</td>
+			<td colspan="4"></td>
+			<td colspan="2" style='font-style: italic;'>Signature :</td>
+		</tr>
+		<tr>
+			<td colspan="2" style='font-style: italic; padding: 5px 0'>Nom,Prénom :</td>
+			<td colspan="4"></td>
+			<td colspan="2" style='font-style: italic;'>Nom,Prénom :</td>
+		</tr>
+		<tr>
+			<td colspan="2" style='font-style: italic; padding: 5px 0'>Fonction :</td>
+			<td colspan="4"></td>
+			<td colspan="2" style='font-style: italic;'>Fonction :</td>
+		</tr>
+		<tr>
+			<td colspan="12" height="20px"></td>
+		</tr>
+		<tr>
+			<td  colspan="12" style="font-weight: bold; padding: 10px 0">Martigny EMP</td>
+		</tr>
+		<tr>
+			{% if admin_sig %}
+				<td colspan="2" style="font-weight: bold; height: 50px; vertical-align: middle;">
+					<img style="max-height: 50px; vertical-align: middle;" src="{{ url }}/media/{{ admin_sig }}">
+				</td>
+			{% else %}
+				<td colspan="2" style="font-weight: bold; height: 50px; vertical-align: middle;"><img style="max-height: 50px; vertical-align: middle;" src=""></td>
+			{% endif %}
+
+			<td colspan="4"></td>
+
+			{% if user_sig %}
+				<td colspan="2" style="font-weight: bold; vertical-align: middle;">
+					<img style="max-height: 50px; vertical-align: middle;" src="{{ url }}/media/{{ user_sig }}">
+				</td>
+			 {% else %}
+				<td colspan="2" style="font-weight: bold; vertical-align: middle;">
+					<img style="max-height: 50px; vertical-align: middle;" src="">
+				</td>
+			{% endif %}
+		</tr>
+		<tr>
+			 {% if offer.signer %}
+				<td colspan="2" style='font-weight: bold; padding: 5px 0;padding-bottom: 25px;'>{{ offer.signer.first_name }} {{ offer.signer.last_name }}</td>
+			 {% else %}
+				<td colspan="2" style='font-weight: bold; padding: 5px 0;padding-bottom: 25px;'>EMP</td>
+			 {% endif %}
+			<td colspan="4"></td>
+			<td colspan="2" style='font-weight: bold;'>{{ offer.user.first_name }} {{ offer.user.last_name }}</td>
+		</tr>
+		<tr>
+			 {% if signature %}
+				<td colspan="2" style='font-style: italic; padding: 5px 0;padding-bottom: 25px;'>{{ signature.user_function }}</td>
+			 {% else %}
+				<td colspan="2" style='font-style: italic; padding: 5px 0;padding-bottom: 25px;'></td>
+			 {% endif %}
+			<td colspan="4"></td>
+			<td colspan="2" style='font-style: italic;'>{{ user_sign.user_function }}</td>
+		</tr>
+		<!-- <tr>
+			<td colspan="12" align="right" style="height: 25px; vertical-align: bottom;">Espace Titre. Sélectionnez le vendeur</td>
+		</tr> -->
+		<tr>
+			<td colspan='6' style="border-top: 1px solid #007bff;">{{ identifier }}</td>
+			<td colspan='6' style="text-align: right;border-top: 1px solid #007bff;">1/2</td>
+		</tr>
+
+		<tr>
+			<td colspan="12" style="height: 20px"></td>
+		</tr>
+
+		<tr style="height: 40px">
+			<td colspan="12" style='position: relative; vertical-align: top'><span style="position: absolute;right: 0"><img src="" height="120"></span></td>
+		</tr>
+		<tr>
+			<td colspan="12" style="height: 80px"></td>
+		</tr>
+		<tr>
+			<td  colspan="12"  class="title" style="border-bottom: 1px solid #007bff">Conditions générales de vente</td>
+		</tr>
+
+		<tr>
+			<td colspan="12" style="height: 30px"></td>
+		</tr>
+		<tr>
+			<td colspan="12" style="height: 35px">Le(s) site(s) faisant l’objet de la présente offre représente un volume (kWh) en {{ offer.cc.site.year }} de : 
+				{% for key, value in year_sum.iteritems %}
+					{% if key|stringformat:"i" == offer.cc.site.year|stringformat:"i"  %}
+						{{ value }}
+					{% endif %}
+				{% endfor %}
+			</td>
+		</tr>
+		
+		{% if titles > 1 %}
+			 {% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Les prix indicatifs sont basés sur vos consommations {{ offer.cc.site.year }}, volumes projetés pour les années sous-mentionnées:</td>
+				</tr>
+			 {% endif %}
+			 
+			 {% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Le prix indicatif est basé sur vos consommations {{ offer.cc.site.year }}, volume projeté pour l’année sous-mentionnée:</td>
+				</tr>
+			{% endif %}
+		{% endif %}
+		 
+		{% if titles == 1 %}
+			 {% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Les prix sont basés sur vos consommations {{ offer.cc.site.year }}, volumes projetés pour les années sous-mentionnées:</td>
+				</tr>
+			 {% endif %}
+			 
+			 {% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Le prix est basé sur vos consommations {{ offer.cc.site.year }}, volume projeté pour l’année sous-mentionnée:</td>
+				</tr>
+			{% endif %}
+		{% endif %}
+
+
+		<tr>
+			<td colspan="12" align="center" style="height: 70px">
+				<table width="600" cellpadding="0" cellspacing="0" class="tabletext" style=" border:1px solid #ccc">
+					<tr>
+						<td class="numberbg"></td>
+						{% for year in years %}
+							<td class="yearbg">{{ year }}</td>
+						{% endfor %}
+					</tr>
+					<tr>
+						<td class="numberbg">kWh</td>
+						{% for year in years %}
+							{% for key, value in year_sum.iteritems %}
+								{% if key|stringformat:"i" == year|stringformat:"i"  %}
+									<td class="numberbg">{{ value }}</td>
+								{% endif %}
+							{% endfor %}
+						{% endfor %}
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="height: 35px">Pour bénéficier de cette offre, ce document doit impérativement être signé et renvoyé d'ici le : &nbsp;<b> {{ validation_time }}</b></td>
+		</tr>
+		
+		{% if titles > 1 %}
+			{% if len_years_list > 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Si vous acceptez la présente offre, les grilles de prix seront appliquées à la consommation des sites suivants de {{ offer.company.nom_entrepise }}:</td>
+				</tr>
+		 	{% endif %}
+		 	{% if len_years_list == 1 %}
+				<tr>
+					<td colspan="12" style="height: 35px">Si vous acceptez la présente offre, la grille de prix sera appliquée à la consommation des sites suivants de {{ offer.company.nom_entrepise }}:</td>
+				</tr>
+		 	{% endif %}
+		 {% endif %}
+		
+		{% if titles == 1 %}
+			<tr>
+				<td colspan="12" style="height: 35px">Le prix unique sera appliqué à la consommation des sites suivants de {{ offer.company.nom_entrepise}}:</td>
+			</tr>
+		 {% endif %}
+		
+		<tr>
+			<td colspan="12" style="height: 22px"></td>
+		</tr>
+		<tr  style="height: 236.25px;">
+			<td colspan="12" align="center">
+				<table cellpadding="0" cellspacing="0" class="tabletext bordered pdtable" width="100%">
+					<tr>
+						<td style='width:50%;'>Adresse</td>
+						<td>Numéro de POD</td>
+					</tr>
+						{% if len_pods > 8 %}
+							{% for pod in spods %}
+								<tr>
+									<td>{{ pod.address }}</td>
+									<td>{{ pod.meter_id }}</td>
+								</tr>
+							{% endfor %}
+							{% if eight_pod %}
+								<tr>
+									<td>{{ eight_pod.address }}</td>
+									<td>{{ eight_pod.meter_id }} *</td>
+								</tr>
+							{% endif %}
+						{% endif %}
+						{% if len_pods < 8 %}
+							{% for pod in pods %}
+								<tr>
+									<td>{{ pod.address }}</td>
+									<td>{{ pod.meter_id }}</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+						{% if len_pods == 8 %}
+							{% for pod in pods %}
+								<tr>
+									<td>{{ pod.address }}</td>
+									<td>{{ pod.meter_id }}</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+				</table>
+			</td>
+		</tr>
+		<tr>
+			 {% if len_pods > 8 %}
+				<td colspan="12">* Voir la liste des PODs manquants dans l'annexe au contrat</td>
+			{% else %}
+				<td colspan="12">&nbsp;</td>
+			{% endif %}
+		</tr>
+
+		<tr>
+			<td colspan="12" style="padding:5px 0;">Ces prix ne comprennent pas les coûts du transport, des services systèmes et du tarif d’acheminement local ainsi que les frais de télé-comptage</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="padding:5px 0;">De même, les différentes taxes (communales, cantonales, fédérales et TVA) et toutes autres nouvelles taxes sont facturées en sus.</td>
+		</tr>
+		<tr>
+			<td colspan="12" style="padding:5px 0;">La présente offre porte exclusivement sur l'approvisionnement en énergie électrique du (des) site(s) mentionné(s) ci-dessus, et ce, pour le fonctionnement des installations électriques ordinaires qui y sont présentes. Elle ne porte pas sur l'approvisionnement d'installations électriques utilisées à des travaux de construction ou d'extension des bâtiments ou sur l'infrastructure des sites.</td>
+		</tr>
+		<tr>
+			<td colspan='6' style="border-top: 1px solid #007bff;">{{ identifier }}</td>
+			<td colspan='6' style="text-align: right;border-top: 1px solid #007bff;">2/2</td>
+		</tr>
+	</table>
+
+</center>
+</body>
+</html>

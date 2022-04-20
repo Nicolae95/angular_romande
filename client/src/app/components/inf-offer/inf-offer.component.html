@@ -1,0 +1,395 @@
+<div *ngIf="loading" class="tab-pane text-center">
+  <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+  </div>
+</div>
+
+<div *ngIf="!offer && !loading" class="text-center"><H3>Aucune donnée trouvée.</H3></div>
+
+<div class="row" *ngIf="budgets && offer" style="margin-right: -45px;margin-left: -30px;" >
+	<div class="col-md-12 m-b-10">
+			<div class="text-center pull-right btn btn-outline-secondary  d-i m-r-5" style="min-width: calc(20% - 3px);" (click)="retour();">
+					<i class="text-center fa fa-chevron-circle-left pointer p-t-5 m-r-5" style="margin-left: 41%;"></i>
+					<div class="text-center">Retour</div>
+			</div>
+		<h1 class="page-heading-text">Offre <span> {{offer.name}} </span></h1>
+	</div>
+  	<div class="col-lg-12 d-i">
+  		<div class="col-lg-95">
+			<div class="row">
+				<div class="col-sm-6 user-data m-b-30">
+					<div class="graph-wrap">
+					<h3 class="graph-title text-center">Prix plancher (en ct. CHF/kWh)</h3>
+					<div class="text-right blocdatePfc">
+						<span class="datePfc" *ngIf="budgets.pfc"><i>{{budgets.pfc}}</i></span></div>
+						<div class="table-responsive m-b-20">
+			
+						<!--Season Peak Offpeak-->
+						<div>
+							<table class="table tab0 table-bordered table-decore" >
+							<tr>
+								<th>&nbsp;</th>
+								<th colspan="2">ÉTÉ</th>
+								<th colspan="2">HIVER</th>
+							</tr>
+							<tr>
+								<th>&nbsp;</th>
+								<td>HP</td>
+								<td>HC</td>
+								<td>HP</td>
+								<td>HC</td>
+							</tr>
+							<tr *ngFor="let year of budgets.years">
+								<th scope="row">{{year}}</th>
+								<td style="padding:0">
+								<span *ngFor="let budget of budgets.season" >
+									<span *ngIf="budget.season=='Summer'&&budget.hp_hc=='Peak'&&budget.year==year" class="td-highlight" 
+									style="display:block; height:29px; padding-top:5px;">
+									<span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>                       
+									<span *ngIf="budget.value == 0">---</span>
+									</span>
+								</span>
+								</td>
+								<td style="padding:0">
+								<span *ngFor="let budget of budgets.season">
+									<span *ngIf="budget.season=='Summer'&&budget.hp_hc=='OffPeak'&&budget.year==year" class="td-highlight"
+									style="display:block; height:29px; padding-top:5px;">
+									<span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>                       
+									<span *ngIf="budget.value == 0">---</span>
+									</span>
+								</span>
+								</td>
+								<td style="padding:0">
+								<span *ngFor="let budget of budgets.season">
+									<span *ngIf="budget.season=='Winter'&&budget.hp_hc=='Peak'&&budget.year==year" class="td-highlight1"
+									style="display:block; height:29px; padding-top:5px;">
+									<span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>                       
+									<span *ngIf="budget.value == 0">---</span>
+									</span>
+								</span>
+								</td>
+								<td style="padding:0">
+								<span *ngFor="let budget of budgets.season">
+									<span *ngIf="budget.season=='Winter'&&budget.hp_hc=='OffPeak'&&budget.year==year" class="td-highlight1"
+									style="display:block; height:29px; padding-top:5px;">
+									<span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>                       
+									<span *ngIf="budget.value == 0">---</span>
+									</span>
+								</span>
+								</td>
+							</tr>
+							</table>
+						</div>
+						</div>
+						<div class="table-responsive m-b-20">
+						<table class="table tab0 table-bordered table-decore">
+							<tr>
+							<td>ct/kWh</td>
+							<th class="text-center redbg" scope="col" *ngFor="let y of budgets.years">{{y}}</th>                    
+							</tr>
+							<tr>
+							<td scope="row" class="colorred">
+								<span *ngIf="budgets.offer_type.length===2">Prix moyen indicatif</span>
+								<span *ngIf="budgets.offer_type.length===1">Prix unique</span>
+							</td>
+							<td class="text-center" *ngFor="let y of budgets.years">
+								<span *ngFor="let price of budgets.price_year">
+								<span *ngIf="price.year===y">
+									{{price.value | number : '1.2-2'}}
+								</span>
+								</span>
+							</td>
+							</tr>
+						</table>
+						</div>
+					</div>
+					</div>
+					<div class="col-sm-6">
+					<div class="graph-wrap">
+						<h3 class="graph-title text-center">&nbsp;</h3>
+						<div class="text-center" *ngIf="chartByYears">
+							<app-char-by-years [data]="chartByYears"></app-char-by-years>
+						</div>
+					</div>
+					</div>
+				</div>
+						<div class="row">
+						  <div class="col-sm-6 user-data m-b-30">
+							<div class="graph-wrap">
+							  <h3 class="graph-title text-center m-b-15">Prix finaux (en ct. CHF/kWh)</h3>
+							  <!-- <h3 class="graph-title text-center">&nbsp;</h3> -->
+								<div class="table-responsive m-b-20">
+								  <div *ngIf="budgets.offer_type.length > 1">
+								  <table class="table tab0 table-bordered table-decore">
+								  <tr>
+									<th scope="col">&nbsp;</th>
+									<th scope="col" class="text-center" colspan="2">ÉTÉ</th>
+									<th scope="col" class="text-center" colspan="2">HIVER</th>
+								  </tr>
+								  <tr>
+									<th scope="col">&nbsp;</th>
+									<td class="td-highlight">HP</td>
+									<td class="td-highlight">HC</td>
+									<td class="td-highlight1">HP</td>
+									<td class="td-highlight1">HC</td>
+								  </tr>
+								  <tr *ngFor="let year of budgets.years">
+									<th scope="row">{{year}}</th>
+									<td style="padding:0">
+									  <span *ngFor="let budget of budgets.season_final">
+										<span *ngIf="budget.season=='Summer'&&budget.hp_hc=='Peak'&&budget.year==year" class="td-highlight" 
+										  style="display:block; height:29px; padding-top:5px;">
+										  <span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>
+										  <span *ngIf="budget.value == 0">---</span>
+										  </span>
+									  </span>
+									</td>
+									<td style="padding:0">
+									  <span *ngFor="let budget of budgets.season_final">
+										<span *ngIf="budget.season=='Summer'&&budget.hp_hc=='OffPeak'&&budget.year==year" class="td-highlight" 
+										  style="display:block; height:29px; padding-top:5px;">
+										  <span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>
+										  <span *ngIf="budget.value == 0">---</span>
+										  </span>
+									  </span>
+									</td>
+									<td style="padding:0">
+									  <span *ngFor="let budget of budgets.season_final">
+										<span *ngIf="budget.season=='Winter'&&budget.hp_hc=='Peak'&&budget.year==year" class="td-highlight1" 
+										  style="display:block; height:29px; padding-top:5px;">
+										  <span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>
+										  <span *ngIf="budget.value == 0">---</span>
+										  </span>
+									  </span>
+									</td>
+									<td style="padding:0">
+									  <span *ngFor="let budget of budgets.season_final">
+										<span *ngIf="budget.season=='Winter'&&budget.hp_hc=='OffPeak'&&budget.year==year" class="td-highlight1" 
+										  style="display:block; height:29px; padding-top:5px;">
+										  <span *ngIf="budget.value != 0">{{budget.value | number : '1.2-2'}}</span>
+										  <span *ngIf="budget.value == 0">---</span>
+										  </span>
+									  </span>
+									</td>
+								  </tr>
+								</table>
+								</div>
+							  </div>
+							  <div class="table-responsive m-b-20">
+								<table class="table tab0 table-bordered table-decore">
+								  <tr>
+									<td>ct/kWh</td>
+									<th class="text-center redbg" scope="col" *ngFor="let y of budgets.years">{{y}}</th>                    
+								  </tr>
+								  <tr>
+									<td scope="row" class="colorred">
+										<span *ngIf="budgets.offer_type.length===2">Prix moyen indicatif</span>
+										<span *ngIf="budgets.offer_type.length===1">Prix unique</span>
+									</td>
+									<td class="text-center" *ngFor="let y of budgets.years">
+									  <span *ngFor="let price of budgets.price_final_year">
+										  <span *ngIf="price.year===y">
+											  {{price.value | number : '1.2-2'}}
+										  </span>
+									  </span>
+									</td>
+								  </tr>
+								</table>
+							  </div>
+							</div>
+						  </div>
+						   <div class="graph-wrap user-data m-b-30 p-l-15 p-r-15 m-l-20" style="min-width: 47%;">
+							<h4 class="graph-title text-center">
+							  <div>
+								<span  *ngIf="budgets.eco_date !== '' || budgets.risc_date !== ''" class="datePfc" style="background: white; color: red;border: 1px solid;">
+								  <i *ngIf="budgets.eco_date !== ''">Prix GO du: {{budgets.eco_date}} ;</i><i *ngIf="budgets.risc_date !== ''"> risques du {{budgets.risc_date}}</i>
+								</span>
+							  </div>
+							</h4>
+							<h3 class="graph-title text-center m-b-15">Détails des prix finaux (en ct. CHF/kWh)</h3>
+					
+							<div class="table-responsive m-b-20">
+							  <table class="table tab0 table-bordered table-decore">
+								<tr>
+								  <td>&nbsp;</td>
+								  <th class="text-center redbg" *ngFor="let y of aniiLissge">{{y.year}}</th>                    
+								</tr>
+								<tr>
+									<td>Effort commercial</td>  
+									<td class="text-center pd0"  *ngFor="let y of aniiLissge"
+										[ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2'}"> 
+									  <span *ngFor="let parameter of budgets.parameters_records">
+										<span *ngIf="parameter.parameter__name==='Effort commercial'&&parameter.year===y.year">
+										   <p *ngIf="parameter.value!==0&&y.type === 'lissage'">{{parameter.value | number : '1.2-4'}}</p>
+										   <p *ngIf="parameter.value===0||y.type !== 'lissage'">---</p>
+										</span>
+									  </span> 
+									</td>
+								</tr>
+								<tr>
+									<td>Majoration</td>  
+									<td class="text-center pd0"  *ngFor="let y of aniiLissge"
+										[ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									  <span *ngFor="let parameter of budgets.parameters_records">
+										<span *ngIf="parameter.parameter__name==='Majoration'&&parameter.year===y.year">
+										   <p *ngIf="parameter.value!==0&&y.type === 'lissage'">{{parameter.value | number : '1.2-4'}}</p>
+										   <p *ngIf="parameter.value===0||y.type !== 'lissage'">---</p>
+										</span>
+									  </span> 
+									</td>
+								</tr>
+					
+								<tr *ngIf="exists_ps1">
+								  <td>P&S1</td>  
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge"
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let parameter of budgets.parameters_records">
+									  <span *ngIf="parameter.parameter__name==='P&S1'&&parameter.year===y.year">
+										 <p *ngIf="parameter.value!==0&&y.type === 'lissage'">{{parameter.value | number : '1.2-4'}}</p>
+										 <p *ngIf="parameter.value===0||y.type !== 'lissage'">---</p>
+									  </span>
+									</span> 
+								  </td>
+							  </tr>  
+					
+							  <tr *ngIf="exists_ps2">
+								  <td>P&S2</td>  
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge"
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let parameter of budgets.parameters_records">
+									  <span *ngIf="parameter.parameter__name==='P&S2'&&parameter.year===y.year">
+										 <p *ngIf="parameter.value!==0&&y.type === 'lissage'">{{parameter.value | number : '1.2-4'}}</p>
+										 <p *ngIf="parameter.value===0||y.type !== 'lissage'">---</p>
+									  </span>
+									</span> 
+								  </td>
+							  </tr>  
+							  
+								<tr>
+								<div style="width: max-content;"><td style="padding-top: 15px;">{{nomTypeOffer}}&nbsp;</td></div>
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge" 
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let risc_r of budgets.riscs_records">
+									  <span *ngIf="risc_r.risc__name===nomServ&&risc_r.year===y.year">
+										<p *ngIf="risc_r.value!==0&&y.type === 'lissage'">{{risc_r.value | number : '1.3-4'}}</p>
+										<p *ngIf="risc_r.value===0||y.type !== 'lissage'">---</p>
+										<!-- <p *ngIf="risc_r.value!==0&&y.type === 'lissage'">{{risc_r.value | number : '1.3-4'}}</p>
+										<p *ngIf="risc_r.value===0||y.type !== 'lissage'">---</p> -->
+									  </span>
+									</span> 
+								  </td>
+								</tr>  
+						 
+								
+								<tr>
+									<td>Marge sur GO</td>  
+									<td class="text-center pd0"  *ngFor="let y of aniiLissge"
+										[ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									  <span *ngFor="let parameter of budgets.parameters_records" >
+										<span *ngIf="parameter.parameter__name==='Marge sur GO'&&parameter.year===y.year">
+										   <p *ngIf="parameter.value!==0&&y.type === 'lissage'">{{parameter.value | number : '1.2-4'}}</p>
+										   <p *ngIf="parameter.value===0||y.type !== 'lissage'">---</p>
+										</span>
+									  </span> 
+									</td>
+								</tr>  
+					
+								<tr>
+								  <th scope="col">Total éco-énergies</th>
+								  <td class="td-highlight" *ngFor="let year of aniiLissge">
+									<span *ngFor="let y of budgets.totals_eco">
+									  <span *ngIf="y.year==year.year&&year.type === 'lissage'">{{y.value | number : '1.3-4'}}</span>
+										 <p *ngIf="y.year==year.year&&year.type !== 'lissage'">---</p>
+									</span>
+								  </td>
+								</tr>
+					
+								<tr>
+								  <td style="padding-top: 15px;width:120px;" >Risque PwB</td>   
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge"
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let risc_r of budgets.riscs_records">
+									  <span *ngIf="risc_r.risc__name==='Risque PwB'&&risc_r.year===y.year">
+										<p *ngIf="risc_r.value!==0&&y.type === 'lissage'">{{risc_r.value | number : '1.3-4'}}</p>
+										<p *ngIf="risc_r.value===0||y.type !== 'lissage'">---</p>
+									  </span>
+									</span> 
+								  </td>
+								</tr>  
+								<tr>
+								  <td style="padding-top: 15px;width:120px;" >Risque prix</td>   
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge"
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let risc_r of budgets.riscs_records">
+									  <span *ngIf="risc_r.risc__name==='Risque prix'&&risc_r.year===y.year">
+										<p *ngIf="risc_r.value!==0&&y.type === 'lissage'">{{risc_r.value | number : '1.3-4'}}</p>
+										<p *ngIf="risc_r.value===0||y.type !== 'lissage'">---</p>
+									  </span>
+									</span> 
+								  </td>
+								</tr>  
+								<tr>
+								  <td style="padding-top: 15px;width:120px;" >Risque volume</td>   
+								  <td class="text-center pd0"  *ngFor="let y of aniiLissge"
+									  [ngStyle]="{'background': y.type === 'lissage' ? '' : '#f2f2f2' }"> 
+									<span *ngFor="let risc_r of budgets.riscs_records">
+									  <span *ngIf="risc_r.risc__name==='Risque volume'&&risc_r.year===y.year">
+										<p *ngIf="risc_r.value!==0&&y.type === 'lissage'">{{risc_r.value | number : '1.3-4'}}</p>
+										<p *ngIf="risc_r.value===0||y.type !== 'lissage'">---</p>
+									  </span>
+									</span> 
+								  </td>
+								</tr>  
+								<tr>
+								  <th scope="col">Total Primes de risque</th>
+								  <td class="td-highlight" *ngFor="let year of aniiLissge"
+					>
+									<span *ngFor="let y of budgets.totals">
+									  <span *ngIf="y.year==year.year&&year.type === 'lissage'">{{y.value | number : '1.3-4'}}</span>
+										 <p style="margin: 0" *ngIf="y.year==year.year&&year.type !== 'lissage'">---</p>
+									</span>
+								  </td>
+								</tr>
+								<tr *ngIf="budgets.lissages.length>0">
+								  <td>Lissage</td>
+								  <td class="text-center" *ngFor="let year of aniiLissge; let i=index"  [ngStyle]="{'background': year.type === 'lissage' ? '' : '#f2f2f2' }">   
+									<span *ngFor="let lissage of budgets.lissages; let l=index">
+										<span style="color: #7f7f7f">{{budgets.lissages[l][year.year] | number : '1.2-2'}}</span>
+									</span> <p *ngIf="year.type !== 'lissage'">---</p>
+								  </td>   
+								</tr>
+							  </table>
+							</div>
+						  </div>
+					
+							<div class="col-md-6"></div>
+						  <div class="graph-wrap user-data m-l-15 m-b-30 p-l-15 p-r-15" *ngIf="volumesByOffert" style="width: 47%">
+							  <h3 class="graph-title text-center m-b-15">Volumes projetés (en kWh)</h3>
+							  <div class="table-responsive m-b-20">
+								<table class="table tab0 table-bordered table-decore">
+								  <tr>
+									<td>&nbsp;</td>
+									<th class="text-center redbg" *ngFor="let y of budgets.years">{{y}}</th>                    
+								  </tr>
+								  <tr>
+									<td >Volumes</td>  
+									<td class="text-center pd0"  *ngFor="let y of budgets.years"> 
+									  <span *ngFor="let v of volumesByOffert">
+										<span *ngIf="y==v.year">{{v.value}}</span> 
+									  </span> 
+									</td>
+								  </tr>  
+								</table>
+							  </div>
+							</div>
+						</div>
+    	</div>
+      	<div class="col-lg-25" style="padding: 0;">
+         	<app-aside-offer  *ngIf="idOffer" [aside]="idOffer"></app-aside-offer>
+         	<app-aside-offer  *ngIf="id" [aside]="id"></app-aside-offer>
+    	</div>
+    </div>
+</div>
+

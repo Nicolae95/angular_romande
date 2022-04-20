@@ -1,0 +1,104 @@
+{% extends 'tool/base.html' %}
+
+{% block tool_content %}
+
+        <div class="row">
+            <div class="col-md-2" style="font-size: 29px;padding-left: 31px;">
+                Files
+            </div>
+            <div class="col-md-6">
+                <a href="/upload/"><button class="btn btn-info"><< Upload files</button></a>
+            </div>
+            </div>
+                <form action="" method="GET">
+                    <div class="col-md-2" style="padding-top: 13px;">
+                    <label for="company">Select Company:</label>
+                      <select name="sort" class="form-control" id="sort">
+                          {% for company in companies%}
+                            <option>{{company}}</option>
+                            {% endfor %}
+                      </select>
+                  </div>
+                  <div class="col-md-1" style="padding-top: 41px;">
+                     <input type="submit" name="" class="btn btn-success" value="Sort">
+                 </div>
+              </form>
+              <form action="" method="GET">
+                  <div class="col-md-2">
+                  <label for="meter">Select Meter:</label>
+                    <select name="meter" class="form-control" id="meter">
+                        {% for meter in meters%}
+                          <option>{{meter}}</option>
+                          {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top: 28px;">
+                   <input type="submit" name="" class="btn btn-success" value="Sort Meters">
+               </div>
+            </form>
+        </div>
+        <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% if files %}
+                <form class="" action="" method="GET">
+                    <table class="table table-striped">
+                        <thead>
+                            <td>File</td>
+                            <td>Site</td>
+                            <td>All <input type="checkbox" id="checkAll"></td>
+                            <!-- <td>Delete</td> -->
+                        </thead>
+                        <tbody>
+                                {% for file in files%}
+                                <tr>
+                                    <td>{{file.data_file}}</td>
+                                    <td>{{file.site}}</td>
+                                    <td ><input type="checkbox" id="files" name="files" value="{{file.id}}"></td>
+                                    <!-- <td><a href="?files={{file.id}}&"><button class="btn btn-danger">Delete</button></a></td> -->
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    <tr><td><input type="submit" style = "width: auto;float: right;" name="" class="confirm-delete btn btn-danger" value="Delete Selected files"></td></tr>
+                </form>
+                {% else %}
+                    <h2 style="color:red">There are no files !!!</h2>
+                {% endif %}
+            </div>
+
+            {% if files.has_other_pages %}
+            <ul class="pagination">
+                {% if files.has_previous %}
+                    <li><a href="?page={{ files.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in files_range %}
+                    {% if files.number == i%}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if files.has_next %}
+                    <li><a href="?page={{ files.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $("#checkAll").click(function () {
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Are you sure you want to delete this?');
+        })
+    </script>
+{% endblock %}

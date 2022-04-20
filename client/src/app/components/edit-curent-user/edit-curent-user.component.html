@@ -1,0 +1,78 @@
+
+  	<!-- modal medium -->
+    <div class="modal fade" *ngIf="curentU" id="editCurentUser" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-md" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editCurentUser">Editer</h5>
+							<button type="button" class="close"  id='cancel-btn' data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+          
+                <form [formGroup]="curentUserGroup" class="from-group" (ngSubmit)="onSubmit(curentUserGroup.value)">
+                    <div class="row">
+                      <div class="col-md-12" [ngClass]="{'has-danger': username.invalid && (username.dirty || username.touched),
+                                                         'has-success': username.valid && (username.dirty || username.touched)}">
+                          <div class="cat-head m-t-10">Nom d'utilisateur</div>
+                          <input class="form-control" formControlName='username' required>
+                          <div class="valid-feedback" *ngIf="username.errors && (username.dirty || username.touched)">
+                              <span *ngIf="username.errors.required">Nom d'utilisateur  est requis</span>
+                          </div>
+                      </div>
+                
+                      <div class="col-md-12" [ngClass]="{'has-danger': first_name.invalid && (first_name.dirty || first_name.touched),
+                                                         'has-success': first_name.valid && (first_name.dirty || first_name.touched)}">
+                          <div class="cat-head m-t-10">Nom du contact</div>
+                          <input class="form-control" formControlName='first_name' required>
+                          <div class="valid-feedback" *ngIf="first_name.errors && (first_name.dirty || first_name.touched)">
+                              <span *ngIf="first_name.errors.required">Nom  est requis</span>
+                          </div>
+                      </div>
+                      <div class="col-md-12" [ngClass]="{'has-danger': last_name.invalid && (last_name.dirty || last_name.touched),
+                                                         'has-success': last_name.valid && (last_name.dirty || last_name.touched) }">
+                          <div class="cat-head m-t-10">Prénom du contact</div>
+                          <input class="form-control" formControlName='last_name' required>
+                          <div class="valid-feedback" *ngIf="last_name.errors && (last_name.dirty || last_name.touched)">
+                              <span *ngIf="last_name.errors.required">Prénom est requis</span>
+                          </div>
+                      </div>
+                      <div class="col-md-12" [ngClass]="{'has-danger': email.invalid && (email.dirty || email.touched),
+                                                          'has-success': email.valid && (email.dirty || email.touched)}">
+                        <div class="cat-head m-t-10">Email du contact</div>
+                          <input type="email"
+                                class="form-control"
+                                formControlName="email"
+                                required>
+                        <div class="valid-feedback"
+                          *ngIf="email.errors && (email.dirty || email.touched)">
+                          <span  *ngIf="email.errors.required">Email est requis</span>
+                          <span *ngIf="email.errors.pattern">L'addresse email devrait contenir au moins "@" </span>
+      
+                        </div>
+                      </div>
+
+                    </div>
+                  </form>
+                        </div>
+                        <!-- <div>
+                            username: {{username.invalid}}<br>
+                            sex: {{sex.invalid}}<br>
+                            first_name: {{first_name.invalid}}<br>
+                            last_name: {{last_name.invalid}}<br>
+                            email: {{email.invalid}}<br>
+                            role: {{role.invalid}}<br>
+                            chPassword: {{chPassword.invalid}}<br>
+                        </div> -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button *ngIf="!loading" type="button" class="btn btn-primary" (click)="onSubmit(curentUserGroup.value)" [disabled]="curentUserGroup.invalid">Sauvegarder</button>
+                            <button *ngIf="loading" type="button" class="btn btn-primary">
+                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>SAUVEGARDER
+                            </button>   
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end modal medium -->
